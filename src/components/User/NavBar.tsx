@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { BsMoonStarsFill  } from "react-icons/bs";
+import { BsMoonStarsFill } from "react-icons/bs";
 import { IoSunnyOutline } from "react-icons/io5";
 import { FiMenu, FiX } from "react-icons/fi";
 import {
@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "../theme-provider";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   const { setTheme } = useTheme();
@@ -43,7 +44,7 @@ const NavBar = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
                   <IoSunnyOutline className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                  <BsMoonStarsFill  className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                  <BsMoonStarsFill className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                   <span className="sr-only">Toggle theme</span>
                 </Button>
               </DropdownMenuTrigger>
@@ -59,7 +60,9 @@ const NavBar = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button className="px-4 py-2 text-sm font-medium">Sign In</Button>
+            <Link to="/login">
+              <Button className="px-4 py-2 text-sm font-medium">Sign In</Button>
+            </Link>
           </div>
           <div className="md:hidden flex items-center">
             <button
@@ -96,7 +99,7 @@ const NavBar = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon">
                     <IoSunnyOutline className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <BsMoonStarsFill  className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                    <BsMoonStarsFill className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                     <span className="sr-only">Toggle theme</span>
                   </Button>
                 </DropdownMenuTrigger>
@@ -112,9 +115,11 @@ const NavBar = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Button className="ml-4 px-4 py-2 text-sm font-medium">
-                Sign In
-              </Button>
+              <Link to="/login">
+                <Button className="ml-4 px-4 py-2 text-sm font-medium">
+                  Sign In
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

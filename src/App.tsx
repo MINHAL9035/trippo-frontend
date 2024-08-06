@@ -1,11 +1,17 @@
+import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./components/theme-provider";
-import HomeScreen from "./pages/users/HomeScreen";
+import AppRouters from "./Routes/AppRouters";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const App = () => {
   return (
     <>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-       <HomeScreen/>
-      </ThemeProvider>
+      <BrowserRouter>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <AppRouters />
+          <ToastContainer />
+        </ThemeProvider>
+      </BrowserRouter>
     </>
   );
 };
