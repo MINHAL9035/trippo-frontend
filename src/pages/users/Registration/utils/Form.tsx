@@ -40,8 +40,11 @@ const Form = () => {
       },
       validationSchema: registrationSchema,
       onSubmit: async (values: signupInterface) => {
+        console.log("my values", values);
+
         setIsSubmitting(true);
         try {
+          console.log("hi");
           const response = await signUp(values);
           const userData = {
             firstName: response.firstName,

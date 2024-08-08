@@ -2,7 +2,7 @@ import Api from "@/config/axiosConfig";
 import userEndpoints from "@/endpoints/userEndpoints";
 import { signupInterface } from "@/interface/registerInterface";
 import { SignUpResponse } from "@/interface/registerResponseInterface";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 /**
  * Sends user sign up data to the server and returns the response.
@@ -47,8 +47,21 @@ export const verifyOtp = async (email: string, otp: number): Promise<void> => {
     await Api.post(userEndpoints.verifyOtp, { email, otp });
     console.log("my otp", otp);
   } catch (error) {
-    console.error(error);
-    throw error;
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        throw new Error(
+          error.response.data.message || "An error occurred while verifying OTP"
+        );
+      } else if (error.request) {
+        throw new Error(
+          "No response received from the server. Please try again."
+        );
+      } else {
+        throw new Error("Error setting up the request. Please try again.");
+      }
+    } else {
+      throw new Error("An unexpected error occurred. Please try again.");
+    }
   }
 };
 
@@ -56,10 +69,20 @@ export const resendOtp = async (email: string): Promise<void> => {
   try {
     await Api.post(userEndpoints.resendOtp, { email });
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
+    if (error instanceof AxiosError) {
+      if (error.response) {
+        throw new Error(
+          error.response.data.message || "An error occurred while verifying OTP"
+        );
+      } else if (error.request) {
+        throw new Error(
+          "No response received from the server. Please try again."
+        );
+      } else {
+        throw new Error("Error setting up the request. Please try again.");
+      }
     } else {
-      throw new Error("An unexpected error occurred while sending OTP");
+      throw new Error("An unexpected error occurred. Please try again.");
     }
   }
 };

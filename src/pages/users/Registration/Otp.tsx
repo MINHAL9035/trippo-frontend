@@ -1,7 +1,7 @@
 import Lottie from "lottie-react";
 import otp from "@/assets/animations/otp.json";
 import React, { useEffect, useRef, useState } from "react";
-import { verifyOtp, resendOtp } from "@/api/user";
+import { resendOtp, verifyOtp } from "@/api/user";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -11,58 +11,57 @@ import { RootState } from "@/redux/store/store";
 const Otp = () => {
   const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const [error, setError] = useState("");
-  const [timer, setTimer] = useState(0);
-  const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const [timer, setTimer] = useState(60);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [isResending, setIsResending] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
-  console.log(userInfo);
-  console.log(userInfo.email);
 
   useEffect(() => {
-    const storedEndTime = localStorage.getItem("otpTimerEndTime");
-    if (storedEndTime) {
+    const savedEndTime = localStorage.getItem("otpEndTime");
+    const endTime = savedEndTime ? parseInt(savedEndTime) : Date.now() + 60000;
+
+    if (savedEndTime) {
       const remainingTime = Math.max(
         0,
-        Math.floor((parseInt(storedEndTime) - Date.now()) / 1000)
+        Math.round((endTime - Date.now()) / 1000)
       );
-      if (remainingTime > 0) {
-        setTimer(remainingTime);
-        setIsResendDisabled(true);
-      } else {
-        setIsResendDisabled(false);
+      setTimer(remainingTime);
+      if (remainingTime === 0) {
+        localStorage.removeItem("otpEndTime");
       }
     } else {
-      setIsResendDisabled(false);
+      localStorage.setItem("otpEndTime", (Date.now() + 60000).toString());
     }
+    const interval = setInterval(() => {
+      const remainingTime = Math.max(
+        0,
+        Math.round((endTime - Date.now()) / 1000)
+      );
+      setTimer(remainingTime);
+
+      if (remainingTime === 0) {
+        clearInterval(interval);
+        localStorage.removeItem("otpEndTime");
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    if (timer > 0) {
-      const interval = setInterval(() => {
-        setTimer((prevTimer) => {
-          const newTimer = prevTimer - 1;
-          if (newTimer <= 0) {
-            clearInterval(interval);
-            setIsResendDisabled(false);
-            localStorage.removeItem("otpTimerEndTime");
-          }
-          return newTimer;
-        });
-      }, 1000);
-      return () => clearInterval(interval);
+  const handleResend = async () => {
+    try {
+      console.log("resend",userInfo.email);
+      
+      await resendOtp(userInfo.email);
+      toast.success("OTP resent successfully");
+      const newEndTime = Date.now() + 60000;
+      setTimer(120);
+      localStorage.setItem("otpEndTime", newEndTime.toString());
+    } catch (error) {
+      toast.error("Failed to resend OTP. Please try again.");
     }
-  }, [timer]);
-
-  const startTimer = () => {
-    const endTime = Date.now() + 60000;
-    localStorage.setItem("otpTimerEndTime", endTime.toString());
-    setTimer(60);
-    setIsResendDisabled(true);
   };
 
   const handleChange = (index: number, value: string) => {
@@ -85,15 +84,15 @@ const Otp = () => {
     }
   };
 
+  // In your Otp component
   const handleVerify = async () => {
     const otpString = otpValues.join("");
     if (otpString.length !== 6) {
-      setError("Please enter a 6-digit valid OTP");
+      toast.error("Please enter a 6-digit valid OTP");
       return;
     }
     const otpNumber = parseInt(otpString, 10);
     setIsVerifying(true);
-    setError("");
     try {
       await verifyOtp(userInfo.email, otpNumber);
       toast.success("OTP verified successfully");
@@ -101,35 +100,14 @@ const Otp = () => {
       navigate("/");
     } catch (error) {
       if (error instanceof Error) {
-        setError(error.message || "Invalid OTP. Please try again.");
+        console.log(error.message);
+
+        toast.error(error.message);
       } else {
-        setError("An unexpected error occurred. Please try again.");
+        toast.error("An unexpected error occurred. Please try again.");
       }
     } finally {
       setIsVerifying(false);
-    }
-  };
-
-  const handleResend = async () => {
-    console.log("email", userInfo.email);
-    if (!userInfo.email) {
-      setError("User email not found. Please try registering again.");
-      return;
-    }
-    setIsResending(true);
-    setError("");
-    try {
-      await resendOtp(userInfo.email);
-      startTimer();
-      toast.success("New OTP sent successfully");
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message || "Failed to resend OTP. Please try again.");
-      } else {
-        setError("An unexpected error occurred. Please try again.");
-      }
-    } finally {
-      setIsResending(false);
     }
   };
 
@@ -156,7 +134,6 @@ const Otp = () => {
             />
           ))}
         </div>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <button
           onClick={handleVerify}
           disabled={isVerifying}
@@ -164,24 +141,22 @@ const Otp = () => {
         >
           {isVerifying ? "Verifying..." : "Verify"}
         </button>
-        <p className="text-center mt-6 text-gray-600">
-          Didn't receive the code?{" "}
+        <div className="flex justify-between items-center">
           <button
             onClick={handleResend}
-            disabled={isResendDisabled || isResending}
-            className={`font-semibold ${
-              isResendDisabled || isResending
-                ? "text-gray-400"
-                : "text-blue-600 hover:text-blue-700"
+            disabled={timer > 0}
+            className={`text-blue-600 font-medium ${
+              timer > 0
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:text-blue-800"
             }`}
           >
-            {isResendDisabled
-              ? `Resend in ${timer}s`
-              : isResending
-              ? "Resending..."
-              : "Resend"}
+            Resend Otp
           </button>
-        </p>
+          <span className="text-gray-500">
+            {timer > 0 ? `Resend in ${timer}s` : ""}
+          </span>
+        </div>
       </div>
     </div>
   );

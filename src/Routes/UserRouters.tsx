@@ -1,3 +1,4 @@
+import HomePage from "@/pages/users/HomeScreen/HomePage";
 import LandingPage from "@/pages/users/HomeScreen/LandingPage";
 import Otp from "@/pages/users/Registration/Otp";
 import Register from "@/pages/users/Registration/Register";
@@ -11,6 +12,7 @@ export const UserRouters = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/otp" element={<Otp />} />
+      <Route path="/home" element={<HomePage />} />
     </Routes>
   );
 };
