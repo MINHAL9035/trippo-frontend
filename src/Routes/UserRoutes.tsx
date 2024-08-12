@@ -1,11 +1,11 @@
-import HomePage from "@/pages/users/HomeScreen/HomePage";
-import LandingPage from "@/pages/users/HomeScreen/LandingPage";
-import Otp from "@/pages/users/Registration/Otp";
-import Register from "@/pages/users/Registration/Register";
 import Login from "@/pages/users/auth/Login";
-
+import HomePage from "@/pages/users/homeScreen/HomePage";
+import LandingPage from "@/pages/users/homeScreen/LandingPage";
+import Otp from "@/pages/users/registration/Otp";
+import Register from "@/pages/users/registration/Register";
 import { Route, Routes } from "react-router-dom";
-export const UserRouters = () => {
+
+const UserRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
@@ -17,4 +17,4 @@ export const UserRouters = () => {
   );
 };
 
-export default UserRouters;
+export default UserRoutes;

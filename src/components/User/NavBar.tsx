@@ -1,20 +1,27 @@
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { BsMoonStarsFill } from "react-icons/bs";
-import { IoSunnyOutline } from "react-icons/io5";
 import { FiMenu, FiX } from "react-icons/fi";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useTheme } from "../theme-provider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
+import { Button } from "../ui/button";
+import { loggingOut } from "@/redux/slices/userSlice";
+import { toast } from "sonner";
+import ToggleTheme from "./ToggleTheme";
+import { logout } from "@/service/api/user";
 
 const NavBar = () => {
-  const { setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
+  const userInfo = useSelector((state: RootState) => state.auth.userInfo);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const logoutResponse = await logout();
+    console.log("logoutResponse", logoutResponse);
+    dispatch(loggingOut());
+    navigate("/login");
+    toast.success("Logout Successfull!");
+  };
 
   return (
     <nav className="shadow-md bg-card text-card-foreground">
@@ -40,29 +47,23 @@ const NavBar = () => {
             </div>
           </div>
           <div className="hidden md:flex items-center space-x-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <IoSunnyOutline className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                  <BsMoonStarsFill className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                  <span className="sr-only">Toggle theme</span>
+            <ToggleTheme />
+            {userInfo ? (
+              <Link to="/logout">
+                <Button
+                  onClick={handleLogout}
+                  className="ml-4 px-4 py-2 text-sm font-medium"
+                >
+                  Logout
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setTheme("light")}>
-                  Light
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")}>
-                  Dark
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")}>
-                  System
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Link to="/login">
-              <Button className="px-4 py-2 text-sm font-medium">Sign In</Button>
-            </Link>
+              </Link>
+            ) : (
+              <Link to="/login">
+                <Button className="ml-4 px-4 py-2 text-sm font-medium">
+                  Sign In
+                </Button>
+              </Link>
+            )}
           </div>
           <div className="md:hidden flex items-center">
             <button
@@ -95,31 +96,23 @@ const NavBar = () => {
           </div>
           <div className="pt-4 pb-3 border-t border-card">
             <div className="flex items-center px-5">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <IoSunnyOutline className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <BsMoonStarsFill className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                    <span className="sr-only">Toggle theme</span>
+              <ToggleTheme />
+              {userInfo ? (
+                <Link to="/logout">
+                  <Button
+                    onClick={handleLogout}
+                    className="ml-4 px-4 py-2 text-sm font-medium"
+                  >
+                    Logout
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Link to="/login">
-                <Button className="ml-4 px-4 py-2 text-sm font-medium">
-                  Sign In
-                </Button>
-              </Link>
+                </Link>
+              ) : (
+                <Link to="/login">
+                  <Button className="ml-4 px-4 py-2 text-sm font-medium">
+                    Sign In
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>

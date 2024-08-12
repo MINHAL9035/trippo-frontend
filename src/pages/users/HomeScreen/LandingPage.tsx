@@ -1,5 +1,5 @@
-import NavBar from "@/components/User/NavBar";
-import HomeParallax from "@/components/User/HomeParallax";
+import NavBar from "@/components/user/NavBar";
+import HomeParallax from "@/components/user/HomeParallax";
 
 const LandingPage = () => {
   return (

@@ -13,8 +13,10 @@ const words = [
   },
 
   {
-    text: " traveler",
-    className: "text-blue-500 dark:text-blue-500",
+    text: " traveller",
+    className: "text-yellow-400 dark:text-yellow-400",
+
+
   },
 ];
 
@@ -28,7 +30,7 @@ const Login = () => {
     <div className="hidden sm:flex flex-col items-center justify-center p-4 sm:p-8 w-full sm:w-1/2">
       <TypewriterEffectSmooth className="ml-16" words={words} />
       <p className="text-sm sm:text-base text-center -mt-4">
-        <span className="text-blue-500">Log in </span> to access your travel
+        <span className="text-yellow-500">Log in </span> to access your travel
         plans and more
       </p>
       <Lottie

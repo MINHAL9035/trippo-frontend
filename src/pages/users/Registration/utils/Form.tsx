@@ -4,18 +4,18 @@ import { Label } from "@/components/ui/label";
 import Lottie from "lottie-react";
 import google from "@/assets/animations/google.json";
 import clsx from "clsx";
-import PasswordStrengthIndicator from "@/components/User/PasswordStrengthIndicator";
+import PasswordStrengthIndicator from "@/components/user/PasswordStrengthIndicator";
 import { FaEye, FaRegEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { signupInterface } from "@/interface/registerInterface";
 import { registrationSchema } from "@/validation/formValidation";
-import { signUp } from "@/api/user";
 import { useFormik } from "formik";
 import { setUserInfo } from "@/redux/slices/userSlice";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import axios from "axios";
+import { signupInterface } from "@/interface/user/registerInterface";
+import { signUp } from "@/service/api/user";
 
 const Form = () => {
   const navigate = useNavigate();
@@ -93,7 +93,7 @@ const Form = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
+        <div className="space-y-1">
           <Label
             htmlFor="firstName"
             className={clsx({
@@ -102,24 +102,28 @@ const Form = () => {
           >
             First Name
           </Label>
-          <Input
-            id="firstName"
-            name="firstName"
-            placeholder="First Name"
-            value={values.firstName}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
-            className={clsx({
-              "border-red-500": errors.firstName && touched.firstName,
-            })}
-          />
-          {errors.firstName && touched.firstName && (
-            <p className="text-xs text-red-500">{errors.firstName}</p>
-          )}
+          <div className="relative">
+            <Input
+              id="firstName"
+              name="firstName"
+              placeholder="First Name"
+              value={values.firstName}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+              className={clsx({
+                "border-red-500": errors.firstName && touched.firstName,
+              })}
+            />
+            {errors.firstName && touched.firstName && (
+              <p className="text-xs text-red-500 absolute">
+                {errors.firstName}
+              </p>
+            )}
+          </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1 ">
           <Label
             htmlFor="lastName"
             className={clsx({
@@ -128,48 +132,54 @@ const Form = () => {
           >
             Last Name
           </Label>
-          <Input
-            id="lastName"
-            name="lastName"
-            placeholder="Last Name"
-            value={values.lastName}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
-            className={clsx({
-              "border-red-500": errors.lastName && touched.lastName,
-            })}
-          />
-          {errors.lastName && touched.lastName && (
-            <p className="text-xs text-red-500">{errors.lastName}</p>
-          )}
+          <div className="relative">
+            <Input
+              id="lastName"
+              name="lastName"
+              placeholder="Last Name"
+              value={values.lastName}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+              className={clsx({
+                "border-red-500": errors.lastName && touched.lastName,
+              })}
+            />
+            {errors.lastName && touched.lastName && (
+              <p className="text-xs text-red-500 absolute">{errors.lastName}</p>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1 ">
         <Label
           htmlFor="email"
           className={clsx({ "text-red-500": errors.email && touched.email })}
         >
           Email
         </Label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="Enter your Email"
-          value={values.email}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          className={clsx({ "border-red-500": errors.email && touched.email })}
-        />
-        {errors.email && touched.email && (
-          <p className="text-xs text-red-500">{errors.email}</p>
-        )}
+        <div className="relative">
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Enter your Email"
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+            className={clsx({
+              "border-red-500": errors.email && touched.email,
+            })}
+          />
+          {errors.email && touched.email && (
+            <p className="text-xs text-red-500 absolute">{errors.email}</p>
+          )}
+        </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1">
         <Label
           htmlFor="password"
           className={clsx({
@@ -204,11 +214,11 @@ const Form = () => {
         </div>
         <PasswordStrengthIndicator password={values.password} />
         {errors.password && touched.password && (
-          <p className="text-xs text-red-500">{errors.password}</p>
+          <p className="text-xs text-red-500 absolute">{errors.password}</p>
         )}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1 min-h-[80px]">
         <Label
           htmlFor="confirmPassword"
           className={clsx({
@@ -247,7 +257,9 @@ const Form = () => {
           </Button>
         </div>
         {errors.confirmPassword && touched.confirmPassword && (
-          <p className="text-xs text-red-500">{errors.confirmPassword}</p>
+          <p className="text-xs text-red-500 absolute">
+            {errors.confirmPassword}
+          </p>
         )}
       </div>
 

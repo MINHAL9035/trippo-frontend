@@ -1,12 +1,12 @@
 import Lottie from "lottie-react";
 import otp from "@/assets/animations/otp.json";
 import React, { useEffect, useRef, useState } from "react";
-import { resendOtp, verifyOtp } from "@/api/user";
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { setUserInfo } from "@/redux/slices/userSlice";
 import { RootState } from "@/redux/store/store";
+import { resendOtp, verifyOtp } from "@/service/api/user";
 
 const Otp = () => {
   const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""]);
@@ -97,7 +97,7 @@ const Otp = () => {
       await verifyOtp(userInfo.email, otpNumber);
       toast.success("OTP verified successfully");
       dispatch(setUserInfo({ ...userInfo, verified: true }));
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
