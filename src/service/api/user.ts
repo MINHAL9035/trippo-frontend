@@ -29,7 +29,8 @@ export const signUp = async (
     return Promise.reject();
   }
 };
-
+ 
+ 
 /**
  * Sends OTP verification data to the server.
  *
