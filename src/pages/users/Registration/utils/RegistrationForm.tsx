@@ -12,7 +12,7 @@ const RegistrationForm = () => {
       <CardHeader className="text-center">
         <CardTitle className="text-xl font-bold">Sign Up</CardTitle>
         <CardDescription>
-          Get started with <span className="text-blue-500">Trippo!</span>
+          Get started with <span className="text-yellow-500">Trippo!</span>
         </CardDescription>
       </CardHeader>
       <CardContent>

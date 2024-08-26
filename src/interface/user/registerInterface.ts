@@ -6,6 +6,6 @@ export interface signupInterface {
   password: string;
   confirmPassword: string;
   verified?: boolean;
-  isAdmin?: boolean;
   createdAt?: string;
+  role: "user" | "admin";
 }

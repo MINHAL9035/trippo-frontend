@@ -1,6 +1,5 @@
 import React from "react";
 import GradualSpacing from "../magicui/gradual-spacing";
-import { IoIosArrowRoundForward } from "react-icons/io";
 import {
   motion,
   useScroll,
@@ -8,9 +7,6 @@ import {
   useSpring,
   MotionValue,
 } from "framer-motion";
-import { Button } from "./button";
-import { Link } from "react-router-dom";
-
 export const HeroParallax = ({
   products,
 }: {
@@ -58,7 +54,7 @@ export const HeroParallax = ({
   return (
     <div
       ref={ref}
-      className="h-[360vh] py-40 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+      className="h-[330vh] py-40 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
     >
       <Header />
       <motion.div
@@ -103,7 +99,7 @@ export const HeroParallax = ({
 
 export const Header = () => {
   return (
-    <div className="h-auto flex  justify-center">
+    <div className="h-fit flex  justify-center">
       <div>
         <GradualSpacing
           className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold tracking-[-0.1em] sm:leading-[3rem] md:leading-[4rem] lg:leading-[4.5rem] xl:leading-[5rem]"
@@ -117,11 +113,6 @@ export const Header = () => {
           className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-bold tracking-[-0.1em] sm:leading-[3rem] md:leading-[4rem] lg:leading-[4.5rem] xl:leading-[5rem]"
           text="Plan effortlessly!"
         />
-        <Link to="/login">
-          <Button className="ml-[45%] mt-6">
-            Get Started &nbsp; <IoIosArrowRoundForward />
-          </Button>
-        </Link>
       </div>
     </div>
   );

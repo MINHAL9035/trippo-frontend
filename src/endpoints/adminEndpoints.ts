@@ -1,5 +1,7 @@
 const adminEndpoints = {
-  login: "/admin/login",
-  logout:"/admin/logout"
+  login: "/admin/adminLogin",
+  getUsers: "/admin/users",
+  logout: "/admin/logout",
+  changeStatus:"/admin/update-status"
 };
-export default adminEndpoints
+export default adminEndpoints;

@@ -1,19 +1,30 @@
-import Login from "@/pages/users/auth/Login";
-import HomePage from "@/pages/users/homeScreen/HomePage";
-import LandingPage from "@/pages/users/homeScreen/LandingPage";
-import Otp from "@/pages/users/registration/Otp";
-import Register from "@/pages/users/registration/Register";
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
+import WithAuth from "@/hocs/user/WithAuth";
+import WithoutAuth from "@/hocs/user/WithoutAuth";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import Register from "@/pages/users/registration/Register";
+import Login from "@/pages/users/auth/Login";
+import Otp from "@/pages/users/registration/Otp";
+import UserProfile from "@/pages/users/profile/UserProfile";
+import TripList from "@/pages/users/trip/TripList";
+const LandingPage = lazy(() => import("@/pages/users/homeScreen/LandingPage"));
 
 const UserRoutes = () => {
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/otp" element={<Otp />} />
-      <Route path="/home" element={<HomePage />} />
-    </Routes>
+    <Suspense fallback={<LoadingSpinner />}>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/register"
+          element={<WithoutAuth component={Register} />}
+        />
+        <Route path="/login" element={<WithoutAuth component={Login} />} />
+        <Route path="/otp" element={<WithoutAuth component={Otp} />} />
+        <Route path="/profile" element={<WithAuth component={UserProfile} />} />
+        <Route path="/trips" element={<WithAuth component={TripList} />} />
+      </Routes>
+    </Suspense>
   );
 };
 

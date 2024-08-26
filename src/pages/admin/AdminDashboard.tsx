@@ -1,111 +1,154 @@
+import Sidebar from "@/components/admin/Sidebar";
+import ToggleTheme from "@/components/user/ToggleTheme";
 import React from "react";
-import { HomeIcon, InboxIcon } from "@heroicons/react/24/outline";
-import { LuLogOut } from "react-icons/lu";
-import { useDispatch } from "react-redux";
-import { AdminLogout } from "@/redux/slices/adminSlice";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { adminLogout } from "@/service/api/admin";
+import {
+  IoPersonOutline,
+  IoCartOutline,
+  IoBarChartOutline,
+  IoTrendingUpOutline,
+} from "react-icons/io5";
+import { IconType } from "react-icons/lib";
+
+interface StatCardProps {
+  title: string;
+  value: string;
+  icon: IconType;
+  trend: number;
+}
+
+const StatCard: React.FC<StatCardProps> = ({
+  title,
+  value,
+  icon: Icon,
+  trend,
+}) => (
+  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+          {title}
+        </p>
+        <p className="text-2xl font-semibold text-gray-700 dark:text-gray-200">
+          {value}
+        </p>
+      </div>
+      <Icon className="w-12 h-12 text-yellow-500" />
+    </div>
+    <p
+      className={`mt-2 text-sm ${
+        trend > 0 ? "text-green-500" : "text-red-500"
+      }`}
+    >
+      {trend > 0 ? "↑" : "↓"} {Math.abs(trend)}% from last month
+    </p>
+  </div>
+);
 
 const Dashboard: React.FC = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const handleLogout = async () => {
-    const logoutResponse = await adminLogout();
-    console.log("logoutResponse", logoutResponse);
-    dispatch(AdminLogout());
-    navigate("/admin/");
-    toast.success("Logout Successfull!");
-  };
-  const navItems = [
-    { name: "Dashboard", icon: HomeIcon, current: true },
-    { name: "Users", icon: InboxIcon, current: false },
+  const stats = [
+    { title: "Total Users", value: "10,483", icon: IoPersonOutline, trend: 12 },
+    { title: "Total Revenue", value: "$45,231", icon: IoCartOutline, trend: 8 },
+    {
+      title: "Active Trips",
+      value: "1,324",
+      icon: IoBarChartOutline,
+      trend: -3,
+    },
+    {
+      title: "User Growth",
+      value: "+2.5%",
+      icon: IoTrendingUpOutline,
+      trend: 2.5,
+    },
   ];
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div className="hidden md:flex md:flex-shrink-0">
-        <div className="flex flex-col w-64">
-          <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
-            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-              <div className="flex items-center flex-shrink-0 px-4">
-                <span className="ml-2 text-xl font-semibold text-blue-600">
-                  TrippoAdmin
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+      <Sidebar />
+      <main className="flex-1 p-8 overflow-y-auto">
+        <div className="flex justify-between">
+          <div>
+            <h1 className="text-3xl font-semibold text-gray-800 dark:text-white mb-6">
+              Dashboard
+            </h1>
+          </div>
+          <div>
+            <ToggleTheme />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {stats.map((stat, index) => (
+            <StatCard key={index} {...stat} />
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+              Recent Bookings
+            </h2>
+            <table className="w-full">
+              <thead>
+                <tr className="text-left text-gray-500 dark:text-gray-400">
+                  <th className="pb-3">User</th>
+                  <th className="pb-3">Destination</th>
+                  <th className="pb-3">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-t border-gray-200 dark:border-gray-700">
+                  <td className="py-3">John Doe</td>
+                  <td className="py-3">Paris, France</td>
+                  <td className="py-3">Aug 15, 2024</td>
+                </tr>
+                <tr className="border-t border-gray-200 dark:border-gray-700">
+                  <td className="py-3">Jane Smith</td>
+                  <td className="py-3">Tokyo, Japan</td>
+                  <td className="py-3">Aug 18, 2024</td>
+                </tr>
+                <tr className="border-t border-gray-200 dark:border-gray-700">
+                  <td className="py-3">Bob Johnson</td>
+                  <td className="py-3">New York, USA</td>
+                  <td className="py-3">Aug 20, 2024</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
+            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+              Popular Destinations
+            </h2>
+            <ul className="space-y-4">
+              <li className="flex items-center">
+                <span className="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-white font-semibold mr-3">
+                  1
                 </span>
-              </div>
-              <nav className="mt-5 flex-1 px-2 bg-white space-y-1">
-                {navItems.map((item) => (
-                  <a
-                    key={item.name}
-                    href="#"
-                    className={`${
-                      item.current
-                        ? "bg-blue-100 text-blue-900"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    } group flex items-center px-2 py-2 text-sm font-medium rounded-md`}
-                  >
-                    <item.icon
-                      className="text-gray-400 group-hover:text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
-                      aria-hidden="true"
-                    />
-                    {item.name}
-                  </a>
-                ))}
-              </nav>
-            </div>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Bali, Indonesia
+                </span>
+              </li>
+              <li className="flex items-center">
+                <span className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-400 font-semibold mr-3">
+                  2
+                </span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Santorini, Greece
+                </span>
+              </li>
+              <li className="flex items-center">
+                <span className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-400 font-semibold mr-3">
+                  3
+                </span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Machu Picchu, Peru
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
-
-      {/* Main content */}
-      <div className="flex flex-col w-0 flex-1 overflow-hidden">
-        <div className="md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3">
-          <button className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-            <span className="sr-only">Open sidebar</span>
-            <svg
-              className="h-6 w-6"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-        </div>
-        <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none">
-          <div className="py-6">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-              <h1 className="text-2xl font-semibold text-gray-900">
-                Dashboard
-              </h1>
-            </div>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-              {/* Replace with your content */}
-              <div className="py-4">
-                <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" />
-              </div>
-              {/* /End replace */}
-            </div>
-          </div>
-        </main>
-      </div>
-
-      {/* Logout button */}
-      <button
-        onClick={handleLogout}
-        className="absolute bottom-4 right-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-      >
-        <LuLogOut className="h-5 w-5 mr-2" />
-        Logout
-      </button>
+      </main>
     </div>
   );
 };

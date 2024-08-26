@@ -1,13 +1,18 @@
+import LoadingSpinner from '@/components/LoadingSpinner';
+import  { lazy, Suspense } from 'react';
 import { Route, Routes } from "react-router-dom";
-import UserRoutes from "./UserRoutes";
-import AdminRoutes from "./AdminRoutes";
+
+const UserRoutes = lazy(() => import("./UserRoutes"));
+const AdminRoutes = lazy(() => import("./AdminRoutes"));
 
 const AppRoutes = () => {
   return (
-    <Routes>
-      <Route path="/*" element={<UserRoutes />} />
-      <Route path="/admin/*" element={<AdminRoutes />} />
-    </Routes>
+    <Suspense fallback={<LoadingSpinner />}>
+      <Routes>
+        <Route path="/*" element={<UserRoutes />} />
+        <Route path="/admin/*" element={<AdminRoutes />} />
+      </Routes>
+    </Suspense>
   );
 };
 
