@@ -35,6 +35,7 @@ const Login = () => {
   }, []);
 
   return (
+    <>
     <div className="w-full h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-7xl flex flex-col sm:flex-row justify-evenly rounded-lg overflow-hidden">
         <div ref={animationRef} className="hidden sm:flex flex-col items-center justify-center p-4 sm:p-8 w-full sm:w-1/2">
@@ -54,6 +55,8 @@ const Login = () => {
         </div>
       </div>
     </div>
+    </>
+  
   );
 };
 

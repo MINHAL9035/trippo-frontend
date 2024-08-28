@@ -102,11 +102,6 @@ const Otp = () => {
     setIsVerifying(true);
     try {
       const response = await verifyOtp(email, otpNumber);
-      const user = {
-        firstName: response?.data.user.firstName,
-        lastName: response?.data.user.lastName,
-        email: response?.data.user.email,
-      };
       if (response?.status === 201) {
         toast.success("OTP verified successfully");
         // dispatch(setUserInfo(user));

@@ -39,7 +39,7 @@ const UserProfile = () => {
             <div className="relative">
               <img
                 src={userProfile?.image}
-                alt="Muhammed Minhal"
+                alt="No image"
                 className="w-32 h-32 rounded-full"
               />
               <div className="absolute bottom-0 right-0 bg-yellow-500 rounded-full p-1">

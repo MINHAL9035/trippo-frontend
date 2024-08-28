@@ -85,10 +85,14 @@ export const logout = async (): Promise<AxiosResponse<unknown> | undefined> => {
   }
 };
 
-export const googleLogin = async (data: TokenResponse) => {
+export const googleLogin = async (token: TokenResponse) => {
+  console.log("my token", token);
+
   try {
-    const response = await Api.post(userEndpoints.googleLogin, data);
-    return response.data;
+    const response = await Api.post(userEndpoints.googleLogin, token);
+    console.log("i am from frontend", response);
+
+    return response;
   } catch (error) {
     apiHandler(error);
     return Promise.reject();

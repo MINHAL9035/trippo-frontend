@@ -2,34 +2,41 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { registrationSchema } from "@/validation/formValidation";
 import { signupInterface } from "@/interface/user/registerInterface";
-import { signUp } from "@/service/api/user";
-// import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
+import { googleLogin, signUp } from "@/service/api/user";
+import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
 import handleError from "@/utils/errorHandler";
 import CommonForm from "../../../../components/form/Form";
 import { toast } from "sonner";
-// import Lottie from "lottie-react";
-// import { Button } from "@/components/ui/button";
-// import google from "../../../../assets/animations/google.json";
+import Lottie from "lottie-react";
+import { Button } from "@/components/ui/button";
+import google from "../../../../assets/animations/google.json";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "@/redux/slices/userSlice";
 
 const Form = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // const handleGoogleSignup = useGoogleLogin({
-  //   onSuccess: async (response: TokenResponse) => {
-  //     try {
-  //       const responseData = await googleLogin(response);
-  //       if (responseData.status === 201) {
-  //         navigate("/");
-  //       }
-  //     } catch (error) {
-  //       handleError(error);
-  //     }
-  //   },
-  //   onError: (error) => {
-  //     handleError(error);
-  //   },
-  // });
+  const handleGoogleSignup = useGoogleLogin({
+    onSuccess: async (response: TokenResponse) => {
+      console.log("GOOGLERESPONSE", response);
+
+      try {
+        const responseData = await googleLogin(response);
+        console.log("my google backend resposne", responseData);
+        if (responseData?.status === 201) {
+          dispatch(setUserInfo(responseData.data.email));
+          navigate("/");
+        }
+      } catch (error) {
+        handleError(error);
+      }
+    },
+    onError: (error) => {
+      handleError(error);
+    },
+  });
 
   return (
     <CommonForm<signupInterface>
@@ -78,17 +85,17 @@ const Form = () => {
         },
       ]}
       submitButtonText={isSubmitting ? "Signing Up..." : "Sign Up"}
-      // extraButtons={
-      //   <Button
-      //     onClick={() => handleGoogleSignup()}
-      //     className="w-full"
-      //     variant="outline"
-      //     type="button"
-      //   >
-      //     Sign Up with{" "}
-      //     <Lottie className="w-16 ml-2" animationData={google} loop={true} />
-      //   </Button>
-      // }
+      extraButtons={
+        <Button
+          onClick={() => handleGoogleSignup()}
+          className="w-full"
+          variant="outline"
+          type="button"
+        >
+          Sign Up with{" "}
+          <Lottie className="w-16 ml-2" animationData={google} loop={true} />
+        </Button>
+      }
       bottomText={
         <p className="text-center">
           Already a member?{" "}

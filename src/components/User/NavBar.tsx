@@ -35,8 +35,8 @@ const NavBar = () => {
               </Link>
              
             </div>
-            <div className="hidden  md:block ml-96">
-              <div className="flex items-baseline space-x-10">
+            <div className="hidden  md:block ml-[70%]">
+              <div className="flex items-baseline space-x-14">
                 {[
                   { name: "Home", path: "/" },
                   { name: "Explore", path: "/explore" },
