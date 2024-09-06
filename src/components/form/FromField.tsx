@@ -1,21 +1,12 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 import clsx from "clsx";
 import { FaEye, FaRegEyeSlash } from "react-icons/fa";
+import { FormFieldProps } from "../interface/formFeild";
 
-interface FormFieldProps {
-  id: string;
-  label: string;
-  type?: string;
-  placeholder: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  error?: string;
-  touched?: boolean;
-}
+
 
 const FormField: React.FC<FormFieldProps> = ({
   id,
@@ -28,9 +19,9 @@ const FormField: React.FC<FormFieldProps> = ({
   onKeyDown,
   error,
   touched,
+  rows = 3,
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
   const handleToggleVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
@@ -44,17 +35,31 @@ const FormField: React.FC<FormFieldProps> = ({
         {label}
       </Label>
       <div className="relative">
-        <Input
-          id={id}
-          name={id}
-          type={type === "password" && isPasswordVisible ? "text" : type}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          onKeyDown={onKeyDown}
-          error={!!(error && touched)}
-        />
+        {type === "textarea" ? (
+          <Textarea
+            id={id}
+            name={id}
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
+            onKeyDown={onKeyDown}
+            rows={rows}
+            className={clsx({ "border-red-500": error && touched })}
+          />
+        ) : (
+          <Input
+            id={id}
+            name={id}
+            type={type === "password" && isPasswordVisible ? "text" : type}
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
+            onKeyDown={onKeyDown}
+            className={clsx({ "border-red-500": error && touched })}
+          />
+        )}
         {type === "password" && (
           <button
             type="button"

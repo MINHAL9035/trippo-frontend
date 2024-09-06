@@ -68,3 +68,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+
+.custom-modal .ant-modal-body {
+  max-height: 60vh; /* Adjust this height as needed */
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.custom-modal .ant-modal-body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+.modal-content {
+  padding: 0 24px; /* Add padding if necessary */
+}

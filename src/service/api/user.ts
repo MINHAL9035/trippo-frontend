@@ -8,7 +8,7 @@ import { TokenResponse } from "@react-oauth/google";
 import { AxiosResponse } from "axios";
 interface loginResponse {
   email: string;
-  image: string;
+  userId: string;
 }
 
 /**
@@ -69,6 +69,7 @@ export const login = async (
 ): Promise<AxiosResponse<loginResponse> | undefined> => {
   try {
     const response = await Api.post(userEndpoints.login, userCredentials);
+    console.log(response.data);
     return response;
   } catch (error) {
     apiHandler(error);
@@ -86,23 +87,45 @@ export const logout = async (): Promise<AxiosResponse<unknown> | undefined> => {
   }
 };
 
-export const googleLogin = async (data: TokenResponse) => {
+export const googleLogin = async (token: TokenResponse) => {
   try {
-    const response = await Api.post(userEndpoints.googleLogin, data);
-    return response.data;
+    const response = await Api.post(userEndpoints.googleLogin, token);
+    return response;
   } catch (error) {
     apiHandler(error);
     return Promise.reject();
   }
 };
 
-export const userDetails = async (email: string) => {
+export const forgotOtp = async (email: string) => {
   try {
-    const response = await Api.get(userEndpoints.getUserDetails, {
-      params: { email },
-    });
-    console.log("dagfda", response);
+    const response = await Api.post(userEndpoints.ForgetPassWordOtp, { email });
+    return response;
+  } catch (error) {
+    apiHandler(error);
+    return Promise.reject();
+  }
+};
 
+export const verifyForgotOtp = async (otp: number, email: string) => {
+  try {
+    const response = await Api.post(userEndpoints.verifyForgotOtp, {
+      otp,
+      email,
+    });
+    return response;
+  } catch (error) {
+    apiHandler(error);
+    return Promise.reject();
+  }
+};
+
+export const changePassword = async (password: string, email: string) => {
+  try {
+    const response = await Api.patch(userEndpoints.changePassword, {
+      password,
+      email,
+    });
     return response;
   } catch (error) {
     apiHandler(error);
