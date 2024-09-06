@@ -18,13 +18,11 @@ export const adminLogin = async (
     }
   }
 };
-export const getUsers = async (
-  page: number
-): Promise<AxiosResponse<{ users: IUser[]; totalPages: number }>> => {
+export const getUsers = async (): Promise<
+  AxiosResponse<{ users: IUser[] }>
+> => {
   try {
-    const response = await Api.get(adminEndpoints.getUsers, {
-      params: { page: page },
-    });
+    const response = await Api.get(adminEndpoints.getUsers);
     return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {

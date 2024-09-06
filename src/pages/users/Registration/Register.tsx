@@ -1,11 +1,11 @@
 import Lottie from "lottie-react";
 import registerLight from "@/assets/animations/registerLight.json";
 import registerDark from "@/assets/animations/registerDark.json";
-import { useTheme } from "@/components/theme-provider";
 import RegistrationForm from "./utils/RegistrationForm";
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
 import { gsap } from "gsap";
 import { useEffect, useRef } from "react";
+import { useTheme } from "@/context/theme-provider";
 const words = [
   {
     text: "Welcome",

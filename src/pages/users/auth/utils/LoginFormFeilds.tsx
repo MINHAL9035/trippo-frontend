@@ -9,11 +9,11 @@ import { toast } from "sonner";
 import { loginInterface } from "@/interface/user/login";
 import { googleLogin, login } from "@/service/api/user";
 import handleError from "@/utils/errorHandler";
-import CommonForm from "@/components/form/Form";
 import { useState } from "react";
 import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
-
-const Form = () => {
+import CommonForm from "@/components/form/CommonForm";
+import { message } from "antd";
+const LoginFormFeilds = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,7 +23,13 @@ const Form = () => {
       try {
         const responseData = await googleLogin(response);
         if (responseData.status === 201) {
-          dispatch(setUserInfo(responseData.data.email));
+          message.success("Logged In Successfully");
+          dispatch(
+            setUserInfo({
+              email: responseData.data.email,
+              userId: responseData.data.userId,
+            })
+          );
           navigate("/");
         }
       } catch (error) {
@@ -46,11 +52,15 @@ const Form = () => {
         onSubmit={async (values: loginInterface) => {
           setIsSubmitting(true);
           try {
-            console.log("my frontend ", values);
             const response = await login(values);
             if (response?.status == 201) {
               toast.success("logged in successfully");
-              dispatch(setUserInfo(response?.data.email));
+              dispatch(
+                setUserInfo({
+                  email: response?.data.email,
+                  userId: response.data.userId,
+                })
+              );
               navigate("/");
             }
           } catch (error) {
@@ -62,16 +72,26 @@ const Form = () => {
           {
             id: "email",
             label: "Email",
-            type: "email",
+            type: "text",
             placeholder: "Enter your Email",
+            required: true,
           },
           {
             id: "password",
             label: "Password",
             type: "password",
             placeholder: "Enter the password",
+            required: true,
           },
         ]}
+        forgotPasswordText={
+          <Link
+            to="/forgotPassword"
+            className="text-blue-500   hover:underline"
+          >
+            Forgot Password?
+          </Link>
+        }
         submitButtonText={isSubmitting ? "Logging in..... " : "login"}
         extraButtons={
           <Button
@@ -97,4 +117,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default LoginFormFeilds;

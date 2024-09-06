@@ -8,6 +8,7 @@ import Login from "@/pages/users/auth/Login";
 import Otp from "@/pages/users/registration/Otp";
 import UserProfile from "@/pages/users/profile/UserProfile";
 import TripList from "@/pages/users/trip/TripList";
+import ForgotPassword from "@/pages/users/auth/forgot_Password/ForgotPassword";
 const LandingPage = lazy(() => import("@/pages/users/homeScreen/LandingPage"));
 
 const UserRoutes = () => {
@@ -21,6 +22,10 @@ const UserRoutes = () => {
         />
         <Route path="/login" element={<WithoutAuth component={Login} />} />
         <Route path="/otp" element={<WithoutAuth component={Otp} />} />
+        <Route
+          path="/forgotPassword"
+          element={<WithoutAuth component={ForgotPassword} />}
+        />
         <Route path="/profile" element={<WithAuth component={UserProfile} />} />
         <Route path="/trips" element={<WithAuth component={TripList} />} />
       </Routes>

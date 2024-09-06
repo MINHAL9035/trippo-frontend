@@ -41,31 +41,39 @@ export const refreshTokenAxiosIntercepter = (Api: AxiosInstance) => {
       const errorData = error.response?.data as ErrorResponse;
       const errorMessage = errorData?.message;
 
-      if (errorMessage?.message === "User Token Not Found") {
-        localStorage.removeItem("userInfo");
-        window.location.href = "/";
+      // Handle specific token not found cases
+      if (
+        errorMessage?.message === "User Token Not Found" ||
+        errorMessage?.message === "Admin Token Not Found"
+      ) {
+        // Clear local storage and redirect to login
+        if (errorMessage?.message === "User Token Not Found") {
+          localStorage.removeItem("userInfo");
+          window.location.href = "/login";
+        } else if (errorMessage?.message === "Admin Token Not Found") {
+          localStorage.removeItem("adminInfo");
+          window.location.href = "/admin/";
+        }
         return Promise.reject(error);
       }
 
+      // Handle token expired cases
       if (error.response?.status === 401 && !originalRequest._retry) {
-        console.log("sfs", errorMessage);
+        console.log("Interceptor triggered for 401 - token expired");
 
         let refreshPath: string | undefined;
         let userInfoKey: string | undefined;
-        console.log("welocme");
 
         if (errorMessage?.message === "User Token expired") {
-          console.log("hi");
-
           refreshPath = "/auth/refresh";
           userInfoKey = "userInfo";
-        } else if (errorMessage?.message === "Refresh Token is Invalid!") {
-          localStorage.removeItem("userInfo");
-          window.location.href = "/";
-        } else {
-          console.log("returnered");
+        } else if (errorMessage?.message === "Admin Token expired") {
+          refreshPath = "/admin/refresh";
+          userInfoKey = "adminInfo";
+        }
 
-          return Promise.reject(error);
+        if (refreshPath === undefined) {
+          return Promise.reject(new Error("Refresh path is undefined"));
         }
 
         if (isRefreshing) {
@@ -80,22 +88,15 @@ export const refreshTokenAxiosIntercepter = (Api: AxiosInstance) => {
 
         originalRequest._retry = true;
         isRefreshing = true;
+
         try {
-          if (refreshPath) {
-            const refreshResponse = await Api.post(refreshPath);
-            console.log("refreshResponse", refreshResponse);
+          const refreshResponse = await Api.post(refreshPath);
+          console.log("Refresh response:", refreshResponse);
 
-            processQueue(null);
-
-            return Api(originalRequest);
-          } else {
-            throw new Error("Refresh path is undefined");
-          }
+          processQueue(null, refreshResponse.data.token);
+          return Api(originalRequest);
         } catch (refreshError) {
-          console.log("hello");
-
           processQueue(refreshError, null);
-          // Clear user info
           if (userInfoKey) {
             localStorage.removeItem(userInfoKey);
           }

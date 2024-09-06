@@ -5,29 +5,28 @@ import { signupInterface } from "@/interface/user/registerInterface";
 import { googleLogin, signUp } from "@/service/api/user";
 import { TokenResponse, useGoogleLogin } from "@react-oauth/google";
 import handleError from "@/utils/errorHandler";
-import CommonForm from "../../../../components/form/Form";
+import CommonForm from "../../../../components/form/CommonForm";
 import { toast } from "sonner";
 import Lottie from "lottie-react";
 import { Button } from "@/components/ui/button";
 import google from "../../../../assets/animations/google.json";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "@/redux/slices/userSlice";
+import { message } from "antd";
 
-const Form = () => {
+const SignupFormFeilds = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleGoogleSignup = useGoogleLogin({
     onSuccess: async (response: TokenResponse) => {
-      console.log("GOOGLERESPONSE", response);
-
       try {
         const responseData = await googleLogin(response);
-        console.log("my google backend resposne", responseData);
         if (responseData?.status === 201) {
           dispatch(setUserInfo(responseData.data.email));
           navigate("/");
+          message.success("Logged In Successfully")
         }
       } catch (error) {
         handleError(error);
@@ -63,27 +62,41 @@ const Form = () => {
         }
       }}
       fields={[
-        { id: "firstName", label: "First Name", placeholder: "First Name" },
-        { id: "lastName", label: "Last Name", placeholder: "Last Name" },
+        {
+          id: "firstName",
+          label: "First Name",
+          placeholder: "First Name",
+          required: true,
+        },
+        {
+          id: "lastName",
+          label: "Last Name",
+          placeholder: "Last Name",
+          required: true,
+        },
         {
           id: "email",
           label: "Email",
-          type: "email",
+          type: "text",
           placeholder: "Enter your Email",
+          required: true,
         },
         {
           id: "password",
           label: "Password",
           type: "password",
           placeholder: "Enter the password",
+          required: true,
         },
         {
           id: "confirmPassword",
           label: "Confirm Password",
           type: "password",
           placeholder: "Confirm the password",
+          required: true,
         },
       ]}
+     
       submitButtonText={isSubmitting ? "Signing Up..." : "Sign Up"}
       extraButtons={
         <Button
@@ -108,4 +121,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default SignupFormFeilds;

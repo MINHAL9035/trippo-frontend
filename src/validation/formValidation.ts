@@ -42,7 +42,6 @@ export const registrationSchema = yup.object().shape({
   role: yup.string().oneOf(["user", "admin"]).required(),
 });
 
-
 export const loginSchema = yup.object().shape({
   email: yup
     .string()
@@ -59,4 +58,34 @@ export const loginSchema = yup.object().shape({
       "Password must contain at least one special character"
     )
     .required("Password is required"),
+});
+
+export const forgotPasswordSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+});
+export const forgotOtpSchema = yup.object().shape({
+  otp: yup
+    .string()
+    .matches(/^\d{6}$/, "OTP must be exactly 6 digits")
+    .required("OTP is required"),
+});
+export const ChangePasswordSchema = yup.object().shape({
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .matches(/\d/, "Password must contain at least one number")
+    .matches(
+      /[!@#$%^&*(),.?":{}|<>]/,
+      "Password must contain at least one special character"
+    )
+    .required("Password is required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Passwords must match")
+    .required("Confirm Password is required"),
 });

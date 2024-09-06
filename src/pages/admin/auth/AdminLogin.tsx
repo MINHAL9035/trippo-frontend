@@ -1,5 +1,4 @@
-import Lottie from "lottie-react";
-import adminAnimation from "@/assets/animations/adminAnimation.json";
+import adminImage from "../../../assets/images/admin/adminLogin.png";
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
 import AdminLoginForm from "./utils/AdminLoginForm";
 
@@ -28,11 +27,12 @@ const AdminLogin = () => {
             <span className="text-yellow-500">Access the dashboard </span> to
             manage users, content, and settings.
           </p>
-          <Lottie
+          {/* <Lottie
             className="w-full max-w-sm"
             animationData={adminAnimation}
             loop={true}
-          />
+          /> */}
+          <img className="w-80 m-8" src={adminImage} alt="adminImage" />
         </div>
         <div className="flex items-center justify-center p-4 sm:p-8 w-full sm:w-1/2">
           <AdminLoginForm />

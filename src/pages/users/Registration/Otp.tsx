@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-// import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
-// import { setUserInfo } from "@/redux/slices/userSlice";
 import { resendOtp, verifyOtp } from "@/service/api/user";
 import otpImage from "../../../assets/images/otpImage.png";
-import { AxiosError } from "axios";
+import handleError from "@/utils/errorHandler";
 
 const Otp = () => {
   const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""]);
@@ -14,7 +12,6 @@ const Otp = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [otpEndTime, setOtpEndTime] = useState<number | null>(null);
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
   const location = useLocation();
 
   useEffect(() => {
@@ -57,18 +54,7 @@ const Otp = () => {
         toast.error("Invalid.Please try again");
       }
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response) {
-          const errorMessage = error.response.data.message;
-          toast.error(`${errorMessage.message}`);
-        } else if (error.request) {
-          toast.error("No response from server. Please try again later.");
-        } else {
-          toast.error("An unexpected error occurred. Please try again.");
-        }
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
+      handleError(error);
     }
   };
 
@@ -104,24 +90,12 @@ const Otp = () => {
       const response = await verifyOtp(email, otpNumber);
       if (response?.status === 201) {
         toast.success("OTP verified successfully");
-        // dispatch(setUserInfo(user));
         navigate("/login");
       } else {
         toast.error("Invalid something went wrong");
       }
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response) {
-          const errorMessage = error.response.data.message;
-          toast.error(`${errorMessage.message}`);
-        } else if (error.request) {
-          toast.error("No response from server. Please try again later.");
-        } else {
-          toast.error("An unexpected error occurred. Please try again.");
-        }
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
+      handleError(error);
     } finally {
       setIsVerifying(false);
     }

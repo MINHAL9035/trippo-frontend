@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Form from "./Form";
+import SignupFormFeilds from "./SignupFormFeilds";
 const RegistrationForm = () => {
   return (
     <Card className="w-full max-w-md mx-auto shadow-none border-none">
@@ -16,7 +16,7 @@ const RegistrationForm = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Form />
+        <SignupFormFeilds />
       </CardContent>
     </Card>
   );

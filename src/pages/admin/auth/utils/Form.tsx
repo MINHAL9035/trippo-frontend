@@ -6,8 +6,8 @@ import { loginInterface } from "@/interface/user/login";
 import { setAdminInfo } from "@/redux/slices/adminSlice";
 import { adminLogin } from "@/service/api/admin";
 import { useState } from "react";
-import CommonForm from "@/components/form/Form";
 import handleError from "@/utils/errorHandler";
+import CommonForm from "@/components/form/CommonForm";
 
 const Form = () => {
   const navigate = useNavigate();
@@ -39,14 +39,16 @@ const Form = () => {
           {
             id: "email",
             label: "Email",
-            type: "email",
+            type: "text",
             placeholder: "Enter your Email",
+            required: true,
           },
           {
             id: "password",
             label: "Password",
             type: "password",
             placeholder: "Enter the password",
+            required: true,
           },
         ]}
         submitButtonText={isSubmitting ? "Logging in..... " : "login"}
