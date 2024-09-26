@@ -2,7 +2,6 @@ import { IUser } from "@/interface/user/IUser.interface";
 import React from "react";
 import { MdEditNote } from "react-icons/md";
 import EditModal from "./EditModal";
-
 interface ProfileRightProps {
   userProfile: IUser | null;
 }
@@ -10,12 +9,16 @@ interface ProfileRightProps {
 const ProfileRight = ({ userProfile }: ProfileRightProps) => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(true);
+
   const showLoading = () => {
     setOpen(true);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
     }, 2000);
+  };
+  const handleClose = () => {
+    setOpen(false);
   };
   return (
     <>
@@ -99,7 +102,7 @@ const ProfileRight = ({ userProfile }: ProfileRightProps) => {
       <EditModal
         open={open}
         loading={loading}
-        onClose={() => setOpen(false)}
+        onClose={handleClose}
         UserProfile={userProfile}
       />
     </>

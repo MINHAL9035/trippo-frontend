@@ -15,15 +15,18 @@ export const userDetails = async (email: string) => {
   }
 };
 
-export const editUser = async (formData: FormData) => {
+export const editProfile = async (formData: FormData) => {
   try {
-    const response = await Api.post(userEndpoints.editProfile, formData, {
+    const response = await Api.put(userEndpoints.editProfile, formData, {
       headers: {
-        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
       },
     });
-    return response;
+    console.log("my es",response.data);
+    
+    return response.data;
   } catch (error) {
     apiHandler(error);
+    return Promise.reject();
   }
 };

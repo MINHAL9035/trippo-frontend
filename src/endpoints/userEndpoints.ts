@@ -10,6 +10,10 @@ const userEndpoints = {
   ForgetPassWordOtp: "/auth/forgotOtp",
   verifyForgotOtp: "/auth/verifyForgotOtp",
   changePassword: "/auth/changePassword",
+  searchResults: "/users/searchResults",
+  getSingleHotelDetails: "/users/getHotelDetails",
+  pendingBookings: "/users/pendingBookings",
+  getBookingDetails: "/users/getBookingDetails",
 };
 
 export default userEndpoints;

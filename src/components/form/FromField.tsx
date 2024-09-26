@@ -5,8 +5,10 @@ import { Textarea } from "../ui/textarea";
 import clsx from "clsx";
 import { FaEye, FaRegEyeSlash } from "react-icons/fa";
 import { FormFieldProps } from "../interface/formFeild";
-
-
+import { DatePicker as AntDatePicker, Space } from "antd";
+const { RangePicker } = AntDatePicker;
+import dayjs from "dayjs";
+import type { Dayjs } from "dayjs";
 
 const FormField: React.FC<FormFieldProps> = ({
   id,
@@ -25,7 +27,19 @@ const FormField: React.FC<FormFieldProps> = ({
   const handleToggleVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
-
+  const handleDateRangeChange = (
+    dates: [Dayjs | null, Dayjs | null] | null,
+    dateStrings: [string, string]
+  ) => {
+    if (onChange) {
+      onChange({
+        target: {
+          name: id,
+          value: dates ? dateStrings : null,
+        },
+      } as unknown as React.ChangeEvent<HTMLInputElement>);
+    }
+  };
   return (
     <div className="space-y-1">
       <Label
@@ -47,6 +61,16 @@ const FormField: React.FC<FormFieldProps> = ({
             rows={rows}
             className={clsx({ "border-red-500": error && touched })}
           />
+        ) : type === "date" ? (
+          <Space direction="vertical" size={12}>
+            <RangePicker
+              onChange={handleDateRangeChange}
+              disabledDate={(current) => {
+                return current && current < dayjs().startOf("day");
+              }}
+              format="DD-MM-YYYY"
+            />
+          </Space>
         ) : (
           <Input
             id={id}

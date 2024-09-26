@@ -3,6 +3,7 @@ import userEndpoints from "@/endpoints/userEndpoints";
 import { loginInterface } from "@/interface/user/login";
 import { signupInterface } from "@/interface/user/registerInterface";
 import { SignUpResponse } from "@/interface/user/registerResponseInterface";
+import { SearchState } from "@/redux/slices/searchSlice";
 import apiHandler from "@/utils/apiHandler";
 import { TokenResponse } from "@react-oauth/google";
 import { AxiosResponse } from "axios";
@@ -29,8 +30,7 @@ export const signUp = async (
     return Promise.reject();
   }
 };
- 
- 
+
 /**
  * Sends OTP verification data to the server.
  *
@@ -69,7 +69,6 @@ export const login = async (
 ): Promise<AxiosResponse<loginResponse> | undefined> => {
   try {
     const response = await Api.post(userEndpoints.login, userCredentials);
-    console.log(response.data);
     return response;
   } catch (error) {
     apiHandler(error);
@@ -125,6 +124,54 @@ export const changePassword = async (password: string, email: string) => {
     const response = await Api.patch(userEndpoints.changePassword, {
       password,
       email,
+    });
+    return response;
+  } catch (error) {
+    apiHandler(error);
+    return Promise.reject();
+  }
+};
+
+export const searchHotels = async (searchData: SearchState) => {
+  console.log("my sending things", searchData);
+
+  try {
+    const response = await Api.post(userEndpoints.searchResults, searchData);
+    return response;
+  } catch (error) {
+    apiHandler(error);
+    return Promise.reject();
+  }
+};
+
+export const getSingleHotelDetails = async (id: string) => {
+  try {
+    const response = await Api.get(
+      `${userEndpoints.getSingleHotelDetails}/${id}`
+    );
+    return response;
+  } catch (error) {
+    apiHandler(error);
+    return Promise.reject();
+  }
+};
+
+export const pendingBookings = async (bookingData: unknown) => {
+  try {
+    const response = await Api.post(userEndpoints.pendingBookings, bookingData);
+    console.log("my pending", response);
+
+    return response;
+  } catch (error) {
+    apiHandler(error);
+    return Promise.reject();
+  }
+};
+
+export const getBookingDetails = async (bookingId: string) => {
+  try {
+    const response = await Api.get(userEndpoints.getBookingDetails, {
+      params: { bookingId },
     });
     return response;
   } catch (error) {

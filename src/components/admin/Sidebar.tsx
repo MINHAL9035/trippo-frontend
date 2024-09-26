@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoLogOut, IoHomeOutline, IoPersonOutline } from "react-icons/io5";
+import { FaHotel } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { adminLogout } from "@/service/api/admin";
 import { AdminLogout } from "@/redux/slices/adminSlice";
@@ -21,6 +22,7 @@ const Sidebar = () => {
   const navItems = [
     { name: "Dashboard", icon: IoHomeOutline, path: "/admin/dashboard" },
     { name: "Users", icon: IoPersonOutline, path: "/admin/users" },
+    { name: "HotelOwners", icon: FaHotel, path: "/admin/hotelOwners" },
   ];
 
   return (

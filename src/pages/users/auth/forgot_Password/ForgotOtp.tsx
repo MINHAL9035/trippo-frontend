@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CommonForm from "@/components/form/CommonForm";
 import { useFormContext } from "@/context/utils/useFormContext";
 import handleError from "@/utils/errorHandler";
-import { forgotOtpSchema } from "@/validation/formValidation";
+import { OtpSchema } from "@/validation/formValidation";
 import {
   Card,
   CardContent,
@@ -70,7 +70,7 @@ const ForgotOtp = () => {
             initialValues={{
               otp: "",
             }}
-            validationSchema={forgotOtpSchema}
+            validationSchema={OtpSchema}
             onSubmit={handleSubmit}
             fields={[
               {

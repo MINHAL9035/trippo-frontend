@@ -1,9 +1,10 @@
 import AdminLogin from "@/pages/admin/auth/AdminLogin";
 import { Route, Routes } from "react-router-dom";
-import AdminDashboard from "@/pages/admin/AdminDashboard";
+import AdminDashboard from "@/pages/admin/adminDashboard/AdminDashboard";
 import ProtectedAdmin from "@/hocs/admin/ProtectedAdmin";
 import PublicAdmin from "@/hocs/admin/PublicAdmin";
-import AdminUsers from "@/pages/admin/AdminUsers";
+import AdminUsers from "@/pages/admin/adminUsers/AdminUsers";
+import AdminHotelOwners from "@/pages/admin/adminHotelOwner/AdminHotelOwners";
 
 const AdminRoutes = () => {
   return (
@@ -16,6 +17,10 @@ const AdminRoutes = () => {
       <Route
         path="/users"
         element={<ProtectedAdmin component={AdminUsers} />}
+      />
+      <Route
+        path="/hotelOwners"
+        element={<ProtectedAdmin component={AdminHotelOwners} />}
       />
     </Routes>
   );

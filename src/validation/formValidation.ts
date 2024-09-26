@@ -59,6 +59,12 @@ export const loginSchema = yup.object().shape({
     )
     .required("Password is required"),
 });
+export const hotelOwnerEmailSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+});
 
 export const forgotPasswordSchema = yup.object().shape({
   email: yup
@@ -66,7 +72,7 @@ export const forgotPasswordSchema = yup.object().shape({
     .email("Invalid email address")
     .required("Email is required"),
 });
-export const forgotOtpSchema = yup.object().shape({
+export const OtpSchema = yup.object().shape({
   otp: yup
     .string()
     .matches(/^\d{6}$/, "OTP must be exactly 6 digits")
@@ -88,4 +94,19 @@ export const ChangePasswordSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password")], "Passwords must match")
     .required("Confirm Password is required"),
+});
+export const OwnerLoginSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .matches(/\d/, "Password must contain at least one number")
+    .matches(
+      /[!@#$%^&*(),.?":{}|<>]/,
+      "Password must contain at least one special character"
+    )
+    .required("Password is required"),
 });

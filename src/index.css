@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -71,19 +73,21 @@
 
 
 
-.custom-modal .ant-modal-body {
-  max-height: 60vh; /* Adjust this height as needed */
-  overflow-y: auto;
+/* Hide scrollbar utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
-.custom-modal .ant-modal-body::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none; /* Chrome, Safari, and Opera */
-}
-
-.modal-content {
-  padding: 0 24px; /* Add padding if necessary */
+.loading {
+  width: 50px;
+  height: 50px;
+  border: 10px solid grey;
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
 }

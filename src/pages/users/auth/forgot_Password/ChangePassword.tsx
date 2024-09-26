@@ -7,12 +7,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useFormContext } from "@/context/utils/useFormContext";
+import { clearEmail } from "@/redux/slices/forgotPasswordSlice";
 import { RootState } from "@/redux/store/store";
 import { changePassword } from "@/service/api/user";
 import handleError from "@/utils/errorHandler";
 import { ChangePasswordSchema } from "@/validation/formValidation";
 import { message } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 interface changePasswordInterface {
@@ -24,13 +25,15 @@ const ChangePassword = () => {
   const email = useSelector((state: RootState) => state.forgotPassword.email);
   const { setFormState } = useFormContext();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleSubmit = async (values: changePasswordInterface) => {
     try {
       const response = await changePassword(values.password, email);
       if (response.status === 200) {
         message.success("password changed successfully");
         navigate("/login");
-        setFormState("forgotPassword");      
+        dispatch(clearEmail());
+        setFormState("forgotPassword");
       }
     } catch (error) {
       handleError(error);

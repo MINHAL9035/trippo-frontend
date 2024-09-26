@@ -2,7 +2,8 @@ import Api from "@/config/axiosConfig";
 import adminEndpoints from "@/endpoints/adminEndpoints";
 import { IUser } from "@/interface/user/IUser.interface";
 import { loginInterface } from "@/interface/user/login";
-import axios, { AxiosResponse } from "axios";
+import apiHandler from "@/utils/apiHandler";
+import { AxiosResponse } from "axios";
 
 export const adminLogin = async (
   adminCredentials: loginInterface
@@ -11,11 +12,8 @@ export const adminLogin = async (
     const response = await Api.post(adminEndpoints.login, adminCredentials);
     return response;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    } else {
-      throw new Error("An unexpected error occurred during sign up");
-    }
+    apiHandler(error);
+    return Promise.reject();
   }
 };
 export const getUsers = async (): Promise<
@@ -25,11 +23,17 @@ export const getUsers = async (): Promise<
     const response = await Api.get(adminEndpoints.getUsers);
     return response;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error;
-    } else {
-      throw new Error("An unexpected error occurred while fetching users");
-    }
+    apiHandler(error);
+    return Promise.reject();
+  }
+};
+export const getRequest = async () => {
+  try {
+    const response = await Api.get(adminEndpoints.getRequests);
+    return response;
+  } catch (error) {
+    apiHandler(error);
+    return Promise.reject();
   }
 };
 
@@ -51,11 +55,22 @@ export const adminLogout = async (): Promise<
     const response = await Api.post(adminEndpoints.logout);
     return response;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      return error.response;
-    } else {
-      console.error("Unexpected error:", error);
-      throw error;
-    }
+    apiHandler(error);
+    return Promise.reject();
+  }
+};
+
+export const updateOwnerStatus = async (
+  ownerId: string,
+  action: "accepted" | "rejected"
+) => {
+  try {
+    const response = await Api.patch(
+      `${adminEndpoints.updateOwnerStatus}?ownerId=${ownerId}&action=${action}`
+    );
+    return response;
+  } catch (error) {
+    apiHandler(error);
+    return Promise.reject();
   }
 };
