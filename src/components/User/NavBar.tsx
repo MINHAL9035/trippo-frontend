@@ -17,9 +17,11 @@ const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userProfile, setUserProfile] = useState<IUser | null>(null);
+  const [isSticky, setIsSticky] = useState(false);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const navRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = async () => {
     await logout();
@@ -44,9 +46,28 @@ const NavBar = () => {
     }
   }, [userInfo?.email]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (navRef.current) {
+        setIsSticky(window.scrollY > navRef.current.offsetTop);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <>
-      <nav className="bg-card text-card-foreground">
+      <nav 
+        ref={navRef}
+        className={`bg-card text-card-foreground transition-all duration-300 ${
+          isSticky ? 'fixed top-0 left-0 right-0 shadow-md z-50' : ''
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo and Name */}
@@ -60,7 +81,7 @@ const NavBar = () => {
               <div className="hidden md:block ml-[30%] lg:ml-[50%] xl:ml-[40%]">
                 <div className="flex items-baseline space-x-14">
                   <Link
-                    to="/"
+                    to="/home"
                     className="px-3 py-2 rounded-md text-sm font-medium text-card-foreground hover:text-yellow-400 relative group"
                   >
                     Home
@@ -149,7 +170,6 @@ const NavBar = () => {
                 className="inline-flex items-center justify-center p-2 rounded-md text-card-foreground hover:text-primary hover:bg-background focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
               >
                 <span className="sr-only">Open main menu</span>
-
                 <FiMenu className="block h-6 w-6" />
               </button>
             </div>
@@ -159,6 +179,7 @@ const NavBar = () => {
         {/* Mobile Drawer */}
         <MobileNavbar isOpen={isOpen} setIsOpen={setIsOpen} />
       </nav>
+      {isSticky && <div style={{ height: '64px' }} />} {/* Placeholder to prevent content jump */}
     </>
   );
 };

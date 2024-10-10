@@ -10,8 +10,6 @@ import {
   UserIcon,
   MinusIcon,
   PlusIcon,
-  Wifi,
-  ParkingCircle,
 } from "lucide-react";
 import { DatePicker, Input } from "antd";
 import {
@@ -28,7 +26,6 @@ import { setSearchData } from "@/redux/slices/searchSlice";
 import { searchHotels } from "@/service/api/user";
 import { HotelInterface } from "@/interface/owner/IHotel.Interface";
 import dayjs from "dayjs";
-import { MdPool } from "react-icons/md";
 
 const { RangePicker } = DatePicker;
 
@@ -75,6 +72,7 @@ const SearchResults: React.FC = () => {
         children: children.map((child) => child.age),
       };
       const response = await searchHotels(searchData);
+      console.log("response", response.data);
 
       if (response.status === 201) {
         dispatch(setSearchData(searchData));
@@ -84,14 +82,6 @@ const SearchResults: React.FC = () => {
     } catch (error) {
       handleError(error);
     }
-  };
-
-  const handleClick = () => {
-    searchResults.map((hotel) => {
-      return hotel._id;
-    });
-    const hotelId = searchResults[0]?._id;
-    navigate("/hotelDetails", { state: { hotelId: hotelId } });
   };
 
   const handleRoomChange = (value: number) => setRooms(Math.max(1, value));
@@ -241,7 +231,7 @@ const SearchResults: React.FC = () => {
 
           {searchResults.length > 0 ? (
             <div className="space-y-6">
-              {searchResults.map((hotel, index) => (
+              {searchResults.map((hotel: HotelInterface, index) => (
                 <Card
                   key={index}
                   className="overflow-hidden hover:shadow-xl transition-shadow duration-300"
@@ -249,9 +239,13 @@ const SearchResults: React.FC = () => {
                   <div className="flex flex-col md:flex-row">
                     <div className="md:w-1/3">
                       <img
-                        src="/src/assets/images/hotelimage.jpeg"
+                        src={hotel.images?.[0]}
                         alt={hotel.hotelName}
-                        className="w-full h-full object-cover"
+                        className="w-full h-[300px] object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "/src/assets/images/hotelimage.jpeg";
+                        }}
                       />
                     </div>
                     <div className="md:w-2/3 p-6">
@@ -260,64 +254,37 @@ const SearchResults: React.FC = () => {
                           <h3 className="font-bold text-2xl text-gray-800 mb-2">
                             {hotel.hotelName}
                           </h3>
-                          {/* <div className="flex items-center mb-2">
-                            <Rate
-                              disabled
-                              defaultValue={4}
-                              className="text-yellow-400"
-                            />
-                            <span className="ml-2 text-sm text-gray-600">
-                              4.0 (250 reviews)
-                            </span>
-                          </div> */}
                           <p className="text-sm text-gray-600 flex items-center mb-2">
-                            <MapPin className="w-4 h-4 mr-2 text-gray-400" />{" "}
+                            <MapPin className="w-4 h-4 mr-2 text-gray-400" />
                             {hotel.place}
                           </p>
                         </div>
-                        <div className="text-right">
-                          <p className="text-sm text-gray-600 mb-1">
-                            Price per night
-                          </p>
-                          <p className="font-bold text-3xl text-gray-800 mb-2">
-                            ₹{hotel.price}
-                          </p>
-                          {/* <Button className="bg-green-500 hover:bg-green-600 text-white font-semibold">
-                            View deal
-                          </Button> */}
-                        </div>
                       </div>
                       <div className="flex flex-wrap gap-4 mb-4">
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Coffee className="w-4 h-4 mr-2 text-gray-400" />{" "}
-                          Breakfast included
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Wifi className="w-4 h-4 mr-2 text-gray-400" /> Free
-                          WiFi
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <ParkingCircle className="w-4 h-4 mr-2 text-gray-400" />{" "}
-                          Free parking
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <MdPool className="w-4 h-4 mr-2 text-gray-400" />{" "}
-                          Swimming pool
-                        </div>
+                        {hotel.amenities?.map((amenity, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center text-sm text-gray-600"
+                          >
+                            <Coffee className="w-4 h-4 mr-2 text-gray-400" />
+                            {amenity}
+                          </div>
+                        ))}
                       </div>
                       <p className="text-sm text-gray-700 mb-4">
-                        Experience luxury and comfort at {hotel.hotelName}. Our
-                        spacious rooms, excellent amenities, and prime location
-                        make us the perfect choice for your stay in{" "}
-                        {hotel.place}.
+                        {hotel.description}
                       </p>
                       <div className="flex justify-between items-center">
                         <p className="text-sm text-gray-600">
-                          Only 3 rooms left at this price
+                          Starting from ₹{hotel.rooms?.[0]?.rate || "N/A"} per
+                          night
                         </p>
-
                         <Button
-                          onClick={handleClick}
+                          onClick={() =>
+                            navigate("/hotelDetails", {
+                              state: { hotelId: hotel._id },
+                            })
+                          }
                           variant="outline"
                           className="text-blue-600 hover:bg-blue-50"
                         >
@@ -332,7 +299,7 @@ const SearchResults: React.FC = () => {
           ) : (
             <div className="text-center py-12">
               <h3 className="text-2xl font-semibold text-gray-700 mb-4">
-                No hotels found for this destination
+                No hotels found for this destination and dates
               </h3>
               <p className="text-gray-600 mb-6">
                 Try adjusting your search criteria or exploring a different

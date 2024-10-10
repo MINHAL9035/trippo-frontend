@@ -58,6 +58,8 @@ export const getFullDetails = async (
     const response = await Api.get(hotelEndpoints.getFullDetails, {
       params: { hotelId },
     });
+    console.log("my details response", response.data);
+
     return response;
   } catch (error) {
     apiHandler(error);
@@ -68,6 +70,72 @@ export const getFullDetails = async (
 export const submitDetails = async (details: submitDetailsInterface) => {
   try {
     const response = await Api.post(hotelEndpoints.submitDetails, details);
+    return response;
+  } catch (error) {
+    apiHandler(Error);
+    return Promise.reject();
+  }
+};
+
+export const fetchHotelDetails = async (hotelId: string) => {
+  try {
+    const response = await Api.get(hotelEndpoints.hotelDetails, {
+      params: { hotelId },
+    });
+
+    return response;
+  } catch (error) {
+    apiHandler(Error);
+    return Promise.reject();
+  }
+};
+
+export const editHotel = async (
+  hotelDetails: HotelInterface,
+  hotelId: string
+) => {
+  try {
+    const response = await Api.patch(
+      `${hotelEndpoints.editHotel}?hotelId=${hotelId}`,
+      hotelDetails
+    );
+    return response;
+  } catch (error) {
+    apiHandler(Error);
+    return Promise.reject();
+  }
+};
+
+export const editHotelInformation = async (
+  formData: FormData,
+  hotelId: string
+) => {
+  formData.forEach((values) => {
+    console.log("sdvgs", values);
+  });
+
+  try {
+    const response = await Api.patch(
+      `${hotelEndpoints.editHotelInformation}?hotelId=${hotelId}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    apiHandler(Error);
+    return Promise.reject();
+  }
+};
+
+export const getFullHotelDetails = async (hotelId: string) => {
+  try {
+    const response = await Api.get(hotelEndpoints.getFullHotelDetails, {
+      params: { hotelId },
+    });
     return response;
   } catch (error) {
     apiHandler(Error);

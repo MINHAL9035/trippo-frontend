@@ -25,7 +25,6 @@ export interface HotelAndOwnerInterface {
   place?: string;
   state?: string;
   country?: string;
-  postalCode?: string;
   _id?: string | undefined;
 }
 

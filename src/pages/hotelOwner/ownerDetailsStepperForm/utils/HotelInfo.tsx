@@ -24,13 +24,10 @@ const HotelInfo: React.FC<HotelInfoProps> = ({
   const hotelId = useSelector((state: RootState) => state.hotel.hotelId);
   const initialValues = {
     hotelName: hotelDetails?.hotelName || "",
-    roomType: hotelDetails?.roomType || "",
-    numberOfRooms: hotelDetails?.numberOfRooms || "",
     streetAddress: hotelDetails?.streetAddress || "",
     place: hotelDetails?.place || "",
     state: hotelDetails?.state || "",
     country: hotelDetails?.country || "",
-    price: hotelDetails?.price || "",
   };
 
   const handleSubmit = async (values: HotelInterface) => {
@@ -92,58 +89,6 @@ const HotelInfo: React.FC<HotelInfoProps> = ({
               />
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label
-                htmlFor="roomType"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Room Type
-              </label>
-              <Field
-                type="text"
-                id="roomType"
-                name="roomType"
-                className={`w-full px-3 py-2 border ${
-                  errors.roomType && touched.roomType
-                    ? "border-red-500"
-                    : "border-gray-300"
-                }  rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500`}
-              />
-              <div className="min-h-[20px] mt-1">
-                <ErrorMessage
-                  name="roomType"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
-            </div>
-            <div>
-              <label
-                htmlFor="numberOfRooms"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Number of Rooms
-              </label>
-              <Field
-                type="text"
-                id="numberOfRooms"
-                name="numberOfRooms"
-                className={`w-full px-3 py-2 border ${
-                  errors.numberOfRooms && touched.numberOfRooms
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500`}
-              />
-              <div className="min-h-[20px] mt-1">
-                <ErrorMessage
-                  name="numberOfRooms"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
-            </div>
-          </div>
           <div>
             <label
               htmlFor="streetAddress"
@@ -170,31 +115,6 @@ const HotelInfo: React.FC<HotelInfoProps> = ({
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-              <label
-                htmlFor="price"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-              Price 
-              </label>
-              <Field
-                type="text"
-                id="price"
-                name="price"
-                className={`w-full px-3 py-2 border ${
-                  errors.price && touched.price
-                    ? "border-red-500"
-                    : "border-gray-300"
-                } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500`}
-              />
-              <div className="min-h-[20px] mt-1">
-                <ErrorMessage
-                  name="price"
-                  component="div"
-                  className="text-red-500 text-sm"
-                />
-              </div>
-            </div>
             <AutocompleteField
               id="place"
               label="Place"
@@ -207,10 +127,9 @@ const HotelInfo: React.FC<HotelInfoProps> = ({
               error={errors.place}
               touched={touched.place}
             />
-            
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
+            <div>
               <label
                 htmlFor="state"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -260,7 +179,6 @@ const HotelInfo: React.FC<HotelInfoProps> = ({
                 />
               </div>
             </div>
-            
           </div>
 
           <div className="flex justify-between mt-6">

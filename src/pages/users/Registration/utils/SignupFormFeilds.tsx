@@ -25,8 +25,8 @@ const SignupFormFeilds = () => {
         const responseData = await googleLogin(response);
         if (responseData?.status === 201) {
           dispatch(setUserInfo(responseData.data.email));
-          navigate("/");
-          message.success("Logged In Successfully")
+          navigate("/home");
+          message.success("Logged In Successfully");
         }
       } catch (error) {
         handleError(error);
@@ -40,8 +40,8 @@ const SignupFormFeilds = () => {
   return (
     <CommonForm<signupInterface>
       initialValues={{
-        firstName: "",
-        lastName: "",
+        fullName: "",
+        userName: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -63,15 +63,15 @@ const SignupFormFeilds = () => {
       }}
       fields={[
         {
-          id: "firstName",
-          label: "First Name",
-          placeholder: "First Name",
+          id: "fullName",
+          label: "FullName",
+          placeholder: "fullName",
           required: true,
         },
         {
-          id: "lastName",
-          label: "Last Name",
-          placeholder: "Last Name",
+          id: "userName",
+          label: "UserName",
+          placeholder: "userName",
           required: true,
         },
         {
@@ -96,7 +96,6 @@ const SignupFormFeilds = () => {
           required: true,
         },
       ]}
-     
       submitButtonText={isSubmitting ? "Signing Up..." : "Sign Up"}
       extraButtons={
         <Button

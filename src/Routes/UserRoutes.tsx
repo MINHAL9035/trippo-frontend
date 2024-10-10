@@ -14,6 +14,11 @@ import Hotel from "@/pages/users/hotels/Hotel";
 import SearchResults from "@/pages/users/hotels/SearchResults";
 import HotelDetails from "@/pages/users/hotels/HotelDetails";
 import BookingDetails from "@/pages/users/hotels/BookingDetails";
+import Explore from "@/pages/users/explore/Explore";
+import Home from "@/pages/users/home/Home";
+import Community from "@/pages/users/community/Community";
+import SingleUserProfile from "@/pages/users/community/utils/SingleUserProfile";
+import BookingSuccessPage from "@/pages/users/hotels/BookingSuccessPage";
 const LandingPage = lazy(() => import("@/pages/users/homeScreen/LandingPage"));
 
 const UserRoutes = () => {
@@ -31,7 +36,9 @@ const UserRoutes = () => {
           path="/forgotPassword"
           element={<WithoutAuth component={ForgotPassword} />}
         />
+        <Route path="/home" element={<WithAuth component={Home} />} />
         <Route path="/profile" element={<WithAuth component={UserProfile} />} />
+        <Route path="/profile/viewBookingDetails" element={<WithAuth component={UserProfile} />} />
         <Route path="/trips" element={<WithAuth component={TripList} />} />
         <Route
           path="/trips/:id"
@@ -43,7 +50,14 @@ const UserRoutes = () => {
           element={<WithAuth component={SearchResults} />}
         />
         <Route path="/hotelDetails" element={<HotelDetails />} />
-        <Route path="/bookingDetails" element={<BookingDetails />} />
+        <Route path="/bookingDetails/:bookingId" element={<BookingDetails />} />
+        <Route path="/bookingSuccess" element={<BookingSuccessPage />} />
+        <Route path="/explore" element={<WithAuth component={Explore} />} />
+        <Route path="/community" element={<WithAuth component={Community} />} />
+        <Route
+          path="/:userName"
+          element={<WithAuth component={SingleUserProfile} />}
+        />
       </Routes>
     </Suspense>
   );

@@ -1,23 +1,38 @@
-export interface Hotel {
+interface Room {
+  type: string;
+  rate: number;
+  capacity: number;
+  available: number;
+  amenities: string[];
+  availableDates: string[];
+  _id: string;
+  roomId: string;
+}
+
+interface Hotel {
   _id: string;
   ownerId: string;
   hotelName: string;
-  roomType: string;
-  numberOfRooms: string;
   streetAddress: string;
   place: string;
   state: string;
   country: string;
-  price: string;
+  isVerified: boolean;
+  images: string[];
+  amenities: string[];
+  rooms: Room[];
+  description: string;
+  hotelType: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface User {
+interface User {
   _id: string;
-  firstName: string;
-  lastName: string;
+  fullName: string;
+  userName: string;
   email: string;
+  password: string;
   image: string;
   verified: boolean;
   is_blocked: boolean;
@@ -27,18 +42,15 @@ export interface User {
   updatedAt: string;
 }
 
-export interface BookingDetails {
+export interface IBookingDetails {
   _id: string;
-  destination: string;
+  userId: User;
+  hotelId: Hotel;
   checkIn: string;
   checkOut: string;
-  rooms: number;
-  adults: number;
-  children: number[];
-  hotelId: Hotel;
-  userId: User;
-  status: string;
+  roomId: string;
+  status: "pending" | "confirmed" | "cancelled";
+  bookingId: string;
   createdAt: string;
   updatedAt: string;
-  bookingId: string;
 }

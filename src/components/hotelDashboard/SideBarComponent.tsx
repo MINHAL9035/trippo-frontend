@@ -5,20 +5,24 @@ import { ownerLogout } from "@/redux/slices/hotelOwnerSlice";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { ownerLoggedOut } from "@/service/api/hotelOwner";
+
 interface SideBarProps {
   collapsed: boolean;
 }
+
 const SideBarComponent: React.FC<SideBarProps> = ({ collapsed }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleLogout = async () => {
     const response = await ownerLoggedOut();
     if (response?.status === 201) {
       dispatch(ownerLogout());
       navigate("/hotelOwner/");
-      toast.success("Logout Successfull!");
+      toast.success("Logout Successful!");
     }
   };
+
   return (
     <>
       <Sidebar
@@ -31,20 +35,25 @@ const SideBarComponent: React.FC<SideBarProps> = ({ collapsed }) => {
               collapsed ? "hidden" : ""
             }`}
           >
-            TrippoHotels
+            <span className="text-black">Trippo</span>Hotels
           </h2>
         </div>
         <Menu>
-          <Link to="/hotelOwner/ownerDashboard">
-            <MenuItem icon={<LayoutDashboard size={20} />} className="mb-2">
-              Dashboard
-            </MenuItem>
-          </Link>
-          <Link to="/hotelOwner/ownerHotels">
-            <MenuItem icon={<Hotel size={20} />} className="mb-2">
-              Hotels
-            </MenuItem>
-          </Link>
+          {/* Use the as prop to avoid nesting Link inside an anchor */}
+          <MenuItem
+            icon={<LayoutDashboard size={20} />}
+            className="mb-2"
+            component={<Link to="/hotelOwner/ownerDashboard" />}
+          >
+            Dashboard
+          </MenuItem>
+          <MenuItem
+            icon={<Hotel size={20} />}
+            className="mb-2"
+            component={<Link to="/hotelOwner/ownerHotels" />}
+          >
+            Hotels
+          </MenuItem>
           <MenuItem icon={<Settings size={20} />} className="mb-2">
             Settings
           </MenuItem>

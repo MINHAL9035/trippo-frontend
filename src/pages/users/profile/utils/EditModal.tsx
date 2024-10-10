@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { message } from "antd";
 import CommonForm from "@/components/form/CommonForm";
 import CommonModal from "@/components/modal/CommonModal";
 import { ProfileFormValues } from "@/interface/user/IProfileFormValues";
@@ -16,27 +17,36 @@ interface EditModalProps {
 
 const EditModal: React.FC<EditModalProps> = ({
   open,
-  loading,
+  loading: parentLoading,
   onClose,
   UserProfile,
 }) => {
-  const handleSubmit = async (values: ProfileFormValues) => {
-    console.log("sdf", values);
+  const [submitting, setSubmitting] = useState(false);
 
+  const handleSubmit = async (values: ProfileFormValues) => {
     try {
+      setSubmitting(true);
       const formData = new FormData();
-      formData.append("firstName", values.firstName);
-      formData.append("lastName", values.lastName);
+      formData.append("fullName", values.fullName);
       formData.append("currentCity", values.currentCity || "");
       formData.append("website", values.website || "");
       formData.append("aboutYou", values.aboutYou || "");
       if (values.profilePicture) {
         formData.append("profilePicture", values.profilePicture);
       }
+
       const response = await editProfile(formData);
-      return response;
+
+      if (response.status === 200) {
+        message.success("Profile updated successfully!");
+        onClose();
+        // Refresh the page
+        window.location.reload();
+      }
     } catch (error) {
       handleError(error);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -44,13 +54,12 @@ const EditModal: React.FC<EditModalProps> = ({
     <CommonModal
       title="Edit Profile"
       open={open}
-      loading={loading}
+      loading={parentLoading || submitting}
       onClose={onClose}
     >
       <CommonForm<ProfileFormValues>
         initialValues={{
-          firstName: UserProfile?.firstName || "",
-          lastName: UserProfile?.lastName || "",
+          fullName: UserProfile?.fullName || "",
           currentCity: UserProfile?.currentCity || "",
           website: UserProfile?.website || "",
           aboutYou: UserProfile?.aboutYou || "",
@@ -68,15 +77,9 @@ const EditModal: React.FC<EditModalProps> = ({
             listType: "picture-card",
           },
           {
-            id: "firstName",
-            label: "First Name",
-            placeholder: "First Name",
-            required: true,
-          },
-          {
-            id: "lastName",
-            label: "Last Name",
-            placeholder: "Last Name",
+            id: "fullName",
+            label: "fullName",
+            placeholder: "fullName",
             required: true,
           },
           {
@@ -99,7 +102,7 @@ const EditModal: React.FC<EditModalProps> = ({
             required: false,
           },
         ]}
-        submitButtonText="Save Changes"
+        submitButtonText={submitting ? "Saving..." : "Save Changes"}
       />
     </CommonModal>
   );

@@ -18,7 +18,7 @@ const LoginFormFeilds = () => {
   const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleGoogleSignup = useGoogleLogin({
+  const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (response: TokenResponse) => {
       try {
         const responseData = await googleLogin(response);
@@ -28,9 +28,10 @@ const LoginFormFeilds = () => {
             setUserInfo({
               email: responseData.data.email,
               userId: responseData.data.userId,
+              userName: responseData.data.userName,
             })
           );
-          navigate("/");
+          navigate("/home");
         }
       } catch (error) {
         handleError(error);
@@ -59,9 +60,10 @@ const LoginFormFeilds = () => {
                 setUserInfo({
                   email: response?.data.email,
                   userId: response.data.userId,
+                  userName: response.data.userName,
                 })
               );
-              navigate("/");
+              navigate("/home");
             }
           } catch (error) {
             setIsSubmitting(false);
@@ -95,7 +97,7 @@ const LoginFormFeilds = () => {
         submitButtonText={isSubmitting ? "Logging in..... " : "login"}
         extraButtons={
           <Button
-            onClick={() => handleGoogleSignup()}
+            onClick={() => handleGoogleLogin()}
             className="w-full"
             variant="outline"
             type="button"

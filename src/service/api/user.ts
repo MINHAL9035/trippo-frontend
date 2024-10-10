@@ -8,6 +8,7 @@ import apiHandler from "@/utils/apiHandler";
 import { TokenResponse } from "@react-oauth/google";
 import { AxiosResponse } from "axios";
 interface loginResponse {
+  userName: string;
   email: string;
   userId: string;
 }
@@ -89,6 +90,7 @@ export const logout = async (): Promise<AxiosResponse<unknown> | undefined> => {
 export const googleLogin = async (token: TokenResponse) => {
   try {
     const response = await Api.post(userEndpoints.googleLogin, token);
+    console.log("my response", response);
     return response;
   } catch (error) {
     apiHandler(error);
@@ -171,6 +173,18 @@ export const pendingBookings = async (bookingData: unknown) => {
 export const getBookingDetails = async (bookingId: string) => {
   try {
     const response = await Api.get(userEndpoints.getBookingDetails, {
+      params: { bookingId },
+    });
+    return response;
+  } catch (error) {
+    apiHandler(error);
+    return Promise.reject();
+  }
+};
+
+export const getcompletedBookings = async (bookingId: string | null) => {
+  try {
+    const response = await Api.get(userEndpoints.getCompletedBookings, {
       params: { bookingId },
     });
     return response;

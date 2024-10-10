@@ -5,6 +5,8 @@ import { Route, Routes } from "react-router-dom";
 import DetailsStepperForm from "@/pages/hotelOwner/ownerDetailsStepperForm/DetailsStepperForm";
 import OwnerDashboard from "@/pages/hotelOwner/ownerDashboard/OwnerDashboard";
 import OwnerHotels from "@/pages/hotelOwner/ownerDashboard/OwnerHotels";
+import EditHotel from "@/pages/hotelOwner/ownerDashboard/utils/EditHotel";
+import ViewDetails from "@/pages/hotelOwner/ownerDashboard/utils/ViewDetails";
 
 const HotelOwnerRoutes = () => {
   return (
@@ -22,6 +24,8 @@ const HotelOwnerRoutes = () => {
         />
         <Route path="/ownerDashboard" element={<OwnerDashboard />} />
         <Route path="/ownerHotels" element={<OwnerHotels />} />
+        <Route path="/editHotel" element={<EditHotel />} />
+        <Route path="/viewDetails" element={<ViewDetails />} />
       </Routes>
     </>
   );

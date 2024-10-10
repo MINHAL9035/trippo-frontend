@@ -50,7 +50,6 @@ const CustomDetailsModal: React.FC<CustomDetailsModalProps> = ({
               />
             </div>
           </div>
-
           <div className="bg-white shadow-md rounded-lg overflow-hidden">
             <div className="bg-green-600 px-4 py-3 flex items-center">
               <Hotel className="text-white mr-2" size={24} />
@@ -100,7 +99,7 @@ const CustomDetailsModal: React.FC<CustomDetailsModalProps> = ({
                 <DetailItem
                   icon={MapPin}
                   label="Postal Code"
-                  value={request?.hotelId.postalCode}
+                  value={request?.hotelId.price}
                 />
               </div>
             </div>

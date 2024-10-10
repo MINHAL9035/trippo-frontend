@@ -63,7 +63,7 @@ const HotelOwnerTable = () => {
         <div className="py-8">
           <div className="mb-4">
             <h2 className="text-2xl font-semibold text-gray-800">
-              Hotel Owner Requests
+              Hotel Owner Requestskk
             </h2>
           </div>
           <div className="shadow overflow-hidden rounded-lg">
@@ -95,17 +95,17 @@ const HotelOwnerTable = () => {
                   <tr key={request._id} className="bg-white hover:bg-gray-50">
                     <td className="px-5 py-5 border-b border-gray-200 text-sm">
                       <p className="text-gray-900 whitespace-no-wrap">
-                        {request.ownerId.firstName} {request.ownerId.lastName}
+                        {request.ownerId?.firstName} {request.ownerId?.lastName}
                       </p>
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 text-sm">
                       <p className="text-gray-900 whitespace-no-wrap">
-                        {request.ownerId.email}
+                        {request.ownerId?.email}
                       </p>
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 text-sm">
                       <p className="text-gray-900 whitespace-no-wrap">
-                        {request.hotelId.hotelName}
+                        {request.hotelId?.hotelName}
                       </p>
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 text-sm">

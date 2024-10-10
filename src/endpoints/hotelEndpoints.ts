@@ -8,9 +8,14 @@ const hotelEndpoints = {
   updateHotel: "/hotelOwner/updateHotel",
   getFullDetails: "/hotelOwner/fullDetails",
   submitDetails: "/hotelOwner/submitDetails",
-  loginOwner:"/hotelOwner/loginOwner",
-  ownerLogout:"/hotelOwner/logoutOwner",
-  getOwnerHotels:"/hotelOwner/getOwnerHotels"
+  loginOwner: "/hotelOwner/loginOwner",
+  ownerLogout: "/hotelOwner/logoutOwner",
+  getOwnerHotels: "/hotelOwner/getOwnerHotels",
+  hotelDetails: "/hotelOwner/hotelDetails",
+  editHotel: "/hotelOwner/editHotel",
+  editHotelInformation:"/hotelOwner/editHotelInfo",
+  getFullHotelDetails:"/hotelOwner/hotelDetails",
+  getOwnerDashboard:"/hotelOwner/ownerDashboard"
 };
 
 export default hotelEndpoints;

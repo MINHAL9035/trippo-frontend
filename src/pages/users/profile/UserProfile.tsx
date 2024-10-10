@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import ProfileRight from "./utils/ProfileRight";
 import ProfileBottom from "./utils/ProfileBottom";
-import ProfileTop from "./utils/ProfileTop";
 import Footer from "@/components/user/Footer";
 import { userDetails } from "@/service/api/userProfileApi";
 
@@ -34,11 +33,8 @@ const UserProfile = () => {
     <>
       <NavBar />
       <div className="flex flex-col md:flex-row gap-6 p-6 ">
-        {/* Left column - User info */}
         <ProfileRight userProfile={userProfile} />
-        {/* Right column - Achievements and Activity */}
-        <div className="w-full md:w-2/3">
-          <ProfileTop />
+        <div className="w-full h-screen ">
           <ProfileBottom />
         </div>
       </div>

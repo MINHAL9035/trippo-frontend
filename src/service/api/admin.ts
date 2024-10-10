@@ -74,3 +74,13 @@ export const updateOwnerStatus = async (
     return Promise.reject();
   }
 };
+
+export const getOwners = async () => {
+  try {
+    const response = await Api.get(adminEndpoints.getOwners);
+    return response;
+  } catch (error) {
+    apiHandler(error);
+    return Promise.reject();
+  }
+};

@@ -1,24 +1,26 @@
 import * as yup from "yup";
 
 export const registrationSchema = yup.object().shape({
-  firstName: yup
+  fullName: yup
     .string()
     .matches(
-      /^[a-zA-Z0-9]+$/,
-      "firstName can only contain letters, numbers, and underscores"
+      /^[a-zA-Z]+( [a-zA-Z]+)?$/,
+      "Full name must only contain letters and can have only one space between the first and last name"
     )
-    .min(2, "firstName must be more than 2 letters")
-    .max(50, "Name is too long")
-    .required("firstName is required"),
-  lastName: yup
+    .min(4, "Full name must be at least 4 characters long")
+    .max(50, "Full name is too long")
+    .required("Full name is required"),
+
+  userName: yup
     .string()
     .matches(
-      /^[a-zA-Z0-9]+$/,
-      "lastName can only contain letters, numbers, and underscores"
+      /^[a-zA-Z0-9_]+$/,
+      "Username can only contain letters, numbers, and underscores"
     )
-    .min(1, "lastName is required")
-    .max(50, "lastName is too long")
-    .required("lastName is required"),
+    .min(3, "Username is required")
+    .max(50, "Username is too long")
+    .required("Username is required"),
+
   email: yup
     .string()
     .email("Invalid email format")

@@ -5,5 +5,6 @@ const adminEndpoints = {
   changeStatus: "/admin/update-status",
   getRequests: "/admin/getRequests",
   updateOwnerStatus: "/admin/updateStatus",
+  getOwners:"/admin/owners"
 };
 export default adminEndpoints;

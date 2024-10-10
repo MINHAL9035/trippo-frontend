@@ -77,6 +77,7 @@ const FormField: React.FC<FormFieldProps> = ({
             name={id}
             type={type === "password" && isPasswordVisible ? "text" : type}
             placeholder={placeholder}
+            autoComplete="current-password"
             value={value}
             onChange={onChange}
             onBlur={onBlur}

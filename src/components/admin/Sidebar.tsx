@@ -22,7 +22,8 @@ const Sidebar = () => {
   const navItems = [
     { name: "Dashboard", icon: IoHomeOutline, path: "/admin/dashboard" },
     { name: "Users", icon: IoPersonOutline, path: "/admin/users" },
-    { name: "HotelOwners", icon: FaHotel, path: "/admin/hotelOwners" },
+    { name: "HotelOwners", icon: FaHotel, path: "/admin/owners" },
+    { name: "HotelOwners Request", icon: FaHotel, path: "/admin/hotelOwners" },
   ];
 
   return (

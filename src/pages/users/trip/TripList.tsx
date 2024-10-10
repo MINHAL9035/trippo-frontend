@@ -60,7 +60,7 @@ const TripList = () => {
       <NavBar />
       <div className="max-w-4xl mx-auto p-4">
         {/* Navigation Links */}
-        <nav className=" space-x-11 mb-4 md:block hidden">
+        <nav className="sticky top-16 z-50 space-x-11 mb-4 md:block hidden">
           <Link to="/hotels" className="hover:text-yellow-500 hover:underline">
             Hotels
           </Link>
@@ -72,7 +72,7 @@ const TripList = () => {
           </Link>
         </nav>
         {/* Adding the hr line below the nav */}
-        <hr className="border-t border-gray-300 mb-4 hidden md:block" />
+        <hr className="sticky top-24 border-t border-gray-300 mb-4 hidden md:block" />
 
         <h1 className="text-3xl font-bold mb-4">My Trips</h1>
         <div className="grid grid-cols-2 gap-4 mb-4">

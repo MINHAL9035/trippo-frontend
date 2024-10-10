@@ -81,10 +81,7 @@ const UsersTable: React.FC = () => {
                 Image
               </th>
               <th scope="col" className="px-6 py-3">
-                First Name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Last Name
+                Full Name
               </th>
               <th scope="col" className="px-6 py-3">
                 Email
@@ -114,12 +111,11 @@ const UsersTable: React.FC = () => {
                 <td className="px-6 py-4">
                   <img
                     src={user.image}
-                    alt={user.firstName}
+                    alt={user.fullName}
                     className="w-10 h-10 rounded-full"
                   />
                 </td>
-                <td className="px-6 py-4 font-medium">{user.firstName}</td>
-                <td className="px-6 py-4">{user.lastName}</td>
+                <td className="px-6 py-4 font-medium">{user.fullName}</td>
                 <td className="px-6 py-4">{user.email}</td>
                 <td className="px-6 py-4">
                   {user.is_blocked ? (

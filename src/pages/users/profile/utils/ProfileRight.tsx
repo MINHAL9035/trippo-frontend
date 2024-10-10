@@ -35,7 +35,7 @@ const ProfileRight = ({ userProfile }: ProfileRightProps) => {
             </div>
           </div>
           <h2 className="mt-4 text-xl font-semibold">
-            {userProfile?.firstName} {userProfile?.lastName}
+            {userProfile?.fullName}
           </h2>
           <p className="text-gray-500 text-sm">{userProfile?.email}</p>
           <div className="flex justify-between w-full mt-4">

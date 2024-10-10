@@ -210,34 +210,6 @@ const Hotel: React.FC = () => {
           </CardContent>
         </Card>
 
-        <section className="mb-12">
-          <h3 className="text-2xl font-semibold mb-6 text-gray-800">
-            Popular Destinations
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(4)].map((_, i) => (
-              <Card
-                key={i}
-                className="overflow-hidden hover:shadow-lg transition-shadow duration-300"
-              >
-                <img
-                  src="/src/assets/images/hotelimage.jpeg"
-                  alt={`Destination ${i + 1}`}
-                  className="w-full h-48 object-cover"
-                />
-                <CardContent className="p-4">
-                  <h4 className="font-semibold text-lg mb-2">
-                    Destination {i + 1}
-                  </h4>
-                  <p className="text-sm text-gray-600">
-                    Discover the beauty and charm of this amazing location.
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-
         <section>
           <h3 className="text-2xl font-semibold mb-6 text-gray-800">
             Top Rated Hotels

@@ -5,6 +5,7 @@ import ProtectedAdmin from "@/hocs/admin/ProtectedAdmin";
 import PublicAdmin from "@/hocs/admin/PublicAdmin";
 import AdminUsers from "@/pages/admin/adminUsers/AdminUsers";
 import AdminHotelOwners from "@/pages/admin/adminHotelOwner/AdminHotelOwners";
+import AdminVerifiedOwners from "@/pages/admin/adminHotelOwner/AdminVerifiedOwners";
 
 const AdminRoutes = () => {
   return (
@@ -21,6 +22,10 @@ const AdminRoutes = () => {
       <Route
         path="/hotelOwners"
         element={<ProtectedAdmin component={AdminHotelOwners} />}
+      />
+      <Route
+        path="/owners"
+        element={<ProtectedAdmin component={AdminVerifiedOwners} />}
       />
     </Routes>
   );

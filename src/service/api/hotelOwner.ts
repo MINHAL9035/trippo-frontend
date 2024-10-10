@@ -86,3 +86,14 @@ export const getOwnerHotels = async (
     return Promise.reject();
   }
 };
+
+export const getDashboardDetails = async (ownerId: string) => {
+  try {
+    const response = await Api.get(hotelEndpoints.getOwnerDashboard, {
+      params: { ownerId },
+    });
+    return response;
+  } catch (error) {
+    apiHandler(error);
+  }
+};
