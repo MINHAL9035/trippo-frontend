@@ -45,8 +45,11 @@ interface User {
 }
 
 export interface BookingDetails {
+  totalPrice: number;
+  rooms: number;
   _id: string;
   bookingId: string;
+  nights: number;
   checkIn: string;
   checkOut: string;
   hotelId: Hotel;

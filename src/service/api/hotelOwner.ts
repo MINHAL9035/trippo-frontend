@@ -97,3 +97,23 @@ export const getDashboardDetails = async (ownerId: string) => {
     apiHandler(error);
   }
 };
+
+export const getBookings = async () => {
+  try {
+    const response = await Api.get(hotelEndpoints.getBookings);
+    return response;
+  } catch (error) {
+    apiHandler(error);
+  }
+};
+
+export const getOwnerBookings = async (bookingId: string) => {
+  try {
+    const response = await Api.get(hotelEndpoints.getBookingDetailsOwner, {
+      params: { bookingId },
+    });
+    return response;
+  } catch (error) {
+    apiHandler(error);
+  }
+};

@@ -39,7 +39,6 @@ const SideBarComponent: React.FC<SideBarProps> = ({ collapsed }) => {
           </h2>
         </div>
         <Menu>
-          {/* Use the as prop to avoid nesting Link inside an anchor */}
           <MenuItem
             icon={<LayoutDashboard size={20} />}
             className="mb-2"
@@ -53,6 +52,13 @@ const SideBarComponent: React.FC<SideBarProps> = ({ collapsed }) => {
             component={<Link to="/hotelOwner/ownerHotels" />}
           >
             Hotels
+          </MenuItem>
+          <MenuItem
+            icon={<Hotel size={20} />}
+            className="mb-2"
+            component={<Link to="/hotelOwner/bookings" />}
+          >
+            Bookings
           </MenuItem>
           <MenuItem icon={<Settings size={20} />} className="mb-2">
             Settings

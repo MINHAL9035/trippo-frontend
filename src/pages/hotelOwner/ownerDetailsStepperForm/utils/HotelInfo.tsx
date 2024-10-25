@@ -119,7 +119,7 @@ const HotelInfo: React.FC<HotelInfoProps> = ({
               id="place"
               label="Place"
               placeholder="Search for a place"
-              value={values.place || ""}
+              value={values.place || ""}  
               onChange={(selectedPlace) =>
                 setFieldValue("place", selectedPlace)
               }

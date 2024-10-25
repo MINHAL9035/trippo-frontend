@@ -34,7 +34,36 @@ export const editProfile = async (formData: FormData) => {
 export const getUserBookings = async () => {
   try {
     const response = await Api.get(userEndpoints.userBookings);
-    console.log("res", response);
+    return response;
+  } catch (error) {
+    apiHandler(error);
+    return Promise.reject();
+  }
+};
+export const getUserCancelledBookings = async () => {
+  try {
+    const response = await Api.get(userEndpoints.cancelledBookings);
+    return response;
+  } catch (error) {
+    apiHandler(error);
+    return Promise.reject();
+  }
+};
+
+export const cancelBooking = async (bookingId: string) => {
+  try {
+    const response = await Api.post(userEndpoints.cancelBooking, { bookingId });
+    return response;
+  } catch (error) {
+    apiHandler(error);
+  }
+};
+
+export const getUserWallet = async (userId: string) => {
+  try {
+    const response = await Api.get(userEndpoints.userWallet, {
+      params: { userId },
+    });
     return response;
   } catch (error) {
     apiHandler(error);

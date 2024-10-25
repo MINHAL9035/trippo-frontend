@@ -98,7 +98,7 @@ const TripList = () => {
               />
             ))
           ) : (
-            <p>No trips available</p>
+            <p>No trips created</p>
           )}
         </div>
         <div ref={ref} className="loading" />

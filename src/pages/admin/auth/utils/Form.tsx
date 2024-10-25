@@ -26,8 +26,14 @@ const Form = () => {
           try {
             const response = await adminLogin(values);
             if (response?.status == 201) {
+              console.log(response.data);
               toast.success("logged in successfully");
-              dispatch(setAdminInfo(response?.data.email));
+              dispatch(
+                setAdminInfo({
+                  email: response?.data.email,
+                  adminId: response?.data.userId,
+                })
+              );
               navigate("/admin/dashboard");
             }
           } catch (error) {

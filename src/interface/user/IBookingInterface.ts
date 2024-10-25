@@ -43,14 +43,25 @@ interface User {
 }
 
 export interface IBookingDetails {
+  nights: number;
   _id: string;
   userId: User;
   hotelId: Hotel;
   checkIn: string;
   checkOut: string;
   roomId: string;
-  status: "pending" | "confirmed" | "cancelled";
+  status: string;
   bookingId: string;
   createdAt: string;
   updatedAt: string;
+  roomRate: number;
+  rooms: number;
+  totalPrice: number;
+}
+
+export interface BookingsState {
+  all: IBookingDetails[];
+  completed: IBookingDetails[];
+  cancelled: IBookingDetails[];
+  [key: string]: IBookingDetails[];
 }

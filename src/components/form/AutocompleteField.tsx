@@ -5,7 +5,7 @@ import { Place } from "@/service/interface/ITripApi";
 
 interface AutocompleteFieldProps {
   id: string;
-  label: React.ReactNode;
+  label?: React.ReactNode;
   placeholder: string;
   value: string | null;
   onChange: (selectedPlace: string | null) => void;
@@ -16,7 +16,7 @@ interface AutocompleteFieldProps {
 
 interface OptionType {
   value: string | null;
-  label: string;
+  label?: string;
   place: Place;
 }
 

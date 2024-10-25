@@ -139,6 +139,8 @@ export const searchHotels = async (searchData: SearchState) => {
 
   try {
     const response = await Api.post(userEndpoints.searchResults, searchData);
+    console.log("my searchResult", response.data);
+
     return response;
   } catch (error) {
     apiHandler(error);
@@ -161,8 +163,6 @@ export const getSingleHotelDetails = async (id: string) => {
 export const pendingBookings = async (bookingData: unknown) => {
   try {
     const response = await Api.post(userEndpoints.pendingBookings, bookingData);
-    console.log("my pending", response);
-
     return response;
   } catch (error) {
     apiHandler(error);
@@ -183,6 +183,8 @@ export const getBookingDetails = async (bookingId: string) => {
 };
 
 export const getcompletedBookings = async (bookingId: string | null) => {
+  console.log("coming from proile", bookingId);
+
   try {
     const response = await Api.get(userEndpoints.getCompletedBookings, {
       params: { bookingId },

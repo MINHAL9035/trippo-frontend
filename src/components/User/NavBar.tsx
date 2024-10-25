@@ -179,7 +179,7 @@ const NavBar = () => {
         {/* Mobile Drawer */}
         <MobileNavbar isOpen={isOpen} setIsOpen={setIsOpen} />
       </nav>
-      {isSticky && <div style={{ height: '64px' }} />} {/* Placeholder to prevent content jump */}
+      {isSticky && <div style={{ height: '64px' }} />}
     </>
   );
 };

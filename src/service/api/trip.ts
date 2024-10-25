@@ -53,3 +53,26 @@ export const getTripDetails = async (
     apiHandler(error);
   }
 };
+
+export const createAiTrip = async (tripData: unknown) => {
+  console.log("my api tripData", tripData);
+  try {
+    const response = await Api.post(tripEndpoints.createAiTrip, tripData);
+    return response;
+  } catch (error) {
+    apiHandler(error);
+  }
+};
+
+export const getAiCreatedTrip = async (tripId: string | undefined) => {
+  console.log("tripId", tripId);
+
+  try {
+    const response = await Api.get(tripEndpoints.getAitrip, {
+      params: { tripId },
+    });
+    return response;
+  } catch (error) {
+    apiHandler(error);
+  }
+};

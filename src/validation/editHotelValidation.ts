@@ -15,32 +15,58 @@ export const HotelBasicInformationSchema = Yup.object().shape({
     .required("Description is required"),
 });
 
+// export const HotelInformationSchema = Yup.object().shape({
+//   images: Yup.array().min(1, "At least one image is required"),
+//   hotelType: Yup.string().required("Hotel type is required"),
+//   amenities: Yup.array()
+//     .of(Yup.string())
+//     .min(1, "At least one amenity is required"),
+//   rooms: Yup.array()
+//     .of(
+//       Yup.object().shape({
+//         type: Yup.string().required("Room type is required"),
+//         rate: Yup.number()
+//           .positive("Rate must be positive")
+//           .required("Rate is required"),
+//         capacity: Yup.number()
+//           .positive("Capacity must be positive")
+//           .required("Capacity is required"),
+//         available: Yup.number()
+//           .min(0, "Available rooms must be non-negative")
+//           .required("Available rooms is required"),
+//         amenities: Yup.array()
+//           .of(Yup.string())
+//           .min(1, "At least one room amenity is required"),
+//         availableDates: Yup.array()
+//           .of(Yup.date().nullable())
+//           .length(2)
+//           .required("Available dates are required"),
+//       })
+//     )
+//     .min(1, "At least one room is required"),
+// });
+
 export const HotelInformationSchema = Yup.object().shape({
-  images: Yup.array().min(1, "At least one image is required"),
   hotelType: Yup.string().required("Hotel type is required"),
   amenities: Yup.array()
-    .of(Yup.string())
+    .of(Yup.string().required("Amenity cannot be empty"))
     .min(1, "At least one amenity is required"),
   rooms: Yup.array()
     .of(
       Yup.object().shape({
         type: Yup.string().required("Room type is required"),
         rate: Yup.number()
-          .positive("Rate must be positive")
-          .required("Rate is required"),
+          .required("Rate is required")
+          .min(0, "Rate must be positive"),
         capacity: Yup.number()
-          .positive("Capacity must be positive")
-          .required("Capacity is required"),
+          .required("Capacity is required")
+          .min(1, "Capacity must be at least 1"),
         available: Yup.number()
-          .min(0, "Available rooms must be non-negative")
-          .required("Available rooms is required"),
+          .required("Available rooms is required")
+          .min(0, "Available rooms must be non-negative"),
         amenities: Yup.array()
-          .of(Yup.string())
+          .of(Yup.string().required("Room amenity cannot be empty"))
           .min(1, "At least one room amenity is required"),
-        availableDates: Yup.array()
-          .of(Yup.date().nullable())
-          .length(2)
-          .required("Available dates are required"),
       })
     )
     .min(1, "At least one room is required"),

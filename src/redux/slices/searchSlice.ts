@@ -1,12 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface SearchState {
-  destination: string;
-  checkIn: string | null;
-  checkOut: string | null;
-  rooms: number;
-  adults: number;
-  children: number[];
+  selectedPlace?: string | null;
+  checkInDate?: string | null;
+  checkOutDate?: string | null;
+  guests?: {
+    adults: number;
+    children: number;
+    childrenAges: number[];
+    rooms: number;
+  };
 }
 
 const loadInitialState = (): SearchState => {
@@ -15,12 +18,15 @@ const loadInitialState = (): SearchState => {
     return JSON.parse(savedState);
   }
   return {
-    destination: "",
-    checkIn: null,
-    checkOut: null,
-    rooms: 1,
-    adults: 2,
-    children: [],
+    selectedPlace: "",
+    checkInDate: null,
+    checkOutDate: null,
+    guests: {
+      adults: 2,
+      children: 0,
+      childrenAges: [],
+      rooms: 1,
+    },
   };
 };
 

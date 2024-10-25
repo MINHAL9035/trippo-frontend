@@ -5,6 +5,7 @@ const communityEndpoints = {
   getUserPost: "/community/getUserPost",
   searchUsers: "/community/searchUsers",
   searchUserDetails: "/community/searchUserDetails",
+  getMessages:"/socket"
 };
 
 export default communityEndpoints;

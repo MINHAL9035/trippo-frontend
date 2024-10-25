@@ -7,6 +7,8 @@ import OwnerDashboard from "@/pages/hotelOwner/ownerDashboard/OwnerDashboard";
 import OwnerHotels from "@/pages/hotelOwner/ownerDashboard/OwnerHotels";
 import EditHotel from "@/pages/hotelOwner/ownerDashboard/utils/EditHotel";
 import ViewDetails from "@/pages/hotelOwner/ownerDashboard/utils/ViewDetails";
+import OwnerBookings from "@/pages/hotelOwner/ownerDashboard/OwnerBookings";
+import BookingViewDetails from "@/pages/hotelOwner/ownerDashboard/utils/BookingViewDetails";
 
 const HotelOwnerRoutes = () => {
   return (
@@ -26,6 +28,8 @@ const HotelOwnerRoutes = () => {
         <Route path="/ownerHotels" element={<OwnerHotels />} />
         <Route path="/editHotel" element={<EditHotel />} />
         <Route path="/viewDetails" element={<ViewDetails />} />
+        <Route path="/bookings" element={<OwnerBookings />} />
+        <Route path="/details/:bookingId" element={<BookingViewDetails />} />
       </Routes>
     </>
   );

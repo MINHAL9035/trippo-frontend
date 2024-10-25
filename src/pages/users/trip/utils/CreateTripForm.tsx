@@ -12,10 +12,7 @@ interface DrawerProps {
   onClose: () => void;
 }
 
-const CreateTripForm: React.FC<DrawerProps> = ({
-  open,
-  onClose,
-}) => {
+const CreateTripForm: React.FC<DrawerProps> = ({ open, onClose }) => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (values: CreateTrip) => {

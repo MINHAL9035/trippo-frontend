@@ -7,6 +7,7 @@ import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
 import { gsap } from "gsap";
 
 import { useTheme } from "@/context/theme-provider";
+import NavBar from "@/components/user/NavBar";
 
 const words = [
   { text: "Welcome" },
@@ -36,6 +37,7 @@ const Login = () => {
 
   return (
     <>
+      <NavBar />
       <div className="w-full h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-7xl flex flex-col sm:flex-row justify-evenly rounded-lg overflow-hidden">
           <div

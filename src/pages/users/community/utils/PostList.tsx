@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   MoreVertical,
   Heart,
@@ -14,6 +14,10 @@ import {
 import { IPostInterface } from "@/interface/user/IPost.interface";
 import { getPosts } from "@/service/api/community";
 import handleError from "@/utils/errorHandler";
+import { useNavigate } from "react-router-dom";
+import { socketService } from "@/service/socket.service";
+import { RootState } from "@/redux/store/store";
+import { useSelector } from "react-redux";
 
 interface ImageCarouselProps {
   images: string[];
@@ -97,17 +101,66 @@ interface PostCardProps {
   post: IPostInterface;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  const [isLiked, setIsLiked] = useState(false);
+const PostCard: React.FC<PostCardProps> = ({ post: initialPost }) => {
+  const [post, setPost] = useState<IPostInterface>(initialPost);
   const [isSaved, setIsSaved] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
+  const userInfo = useSelector((state: RootState) => state.auth.userInfo);
+
+  const navigate = useNavigate();
+
+  const handleUserClick = (userName: string) => {
+    navigate(`/${userName}`);
+  };
+
+  useEffect(() => {
+    socketService.connect();
+    socketService.register(userInfo.userId);
+
+    const initialIsLiked = initialPost.likes.includes(userInfo.userId);
+    setIsLiked(initialIsLiked);
+    setLikeCount(initialPost.likes.length);
+
+    return () => {
+      socketService.disconnect();
+    };
+  }, [initialPost.likes, userInfo.userId]);
+
+  useEffect(() => {
+    const handlePostLiked = (data: { postId: string; likes: string[] }) => {
+      if (data.postId === post._id) {
+        const newIsLiked = data.likes.includes(userInfo.userId);
+        setIsLiked(newIsLiked);
+        setLikeCount(data.likes.length);
+        setPost((prev) => ({ ...prev, likes: data.likes }));
+      }
+    };
+
+    socketService.onPostLiked(handlePostLiked);
+
+    return () => {
+      // Clean up socket listener
+      if (socketService["socket"]) {
+        socketService["socket"].off("post_liked", handlePostLiked);
+      }
+    };
+  }, [post._id, userInfo.userId]);
+
+  const handleLikeClick = useCallback(() => {
+    socketService.likePost(post._id, userInfo.userId);
+  }, [post._id, userInfo.userId]);
 
   return (
     <div className="rounded-md mb-6">
       <div className="p-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex flex-col">
-            <div className="flex items-center">
+            <div
+              className="flex items-center hover:cursor-pointer"
+              onClick={() => handleUserClick(post.userId.userName)}
+            >
               <div className="h-10 w-10 rounded-full mr-3 overflow-hidden">
                 <img
                   src={post.userId.image}
@@ -152,21 +205,27 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <ImageCarousel images={post.imageUrl} />
         )}
         <p className="text-gray-800 mb-2">{post.description}</p>
-        <p className="text-sm text-gray-500 mb-4">
-          {formatDate(post.createdAt)}
-        </p>
+
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1">
             <button
-              onClick={() => setIsLiked(!isLiked)}
-              className={`flex items-center px-2 py-1 rounded-md ${
-                isLiked ? "text-red-500" : "text-gray-500"
-              } hover:bg-gray-100`}
+              onClick={handleLikeClick}
+              className="flex items-center space-x-2 group"
             >
-              <Heart className="mr-2 h-5 w-5" />
+              <Heart
+                className={`h-6 w-6 transition-colors duration-200 
+                ${
+                  isLiked
+                    ? "text-red-500 fill-current"
+                    : "text-gray-500 group-hover:text-red-500"
+                }`}
+              />
+              <span className="text-sm text-gray-600">{likeCount}</span>
             </button>
-            <button className="flex items-center px-2 py-1 rounded-md text-gray-500 hover:bg-gray-100">
-              <MessageCircle className="mr-2 h-5 w-5" />
+
+            <button className="flex items-center space-x-2 text-gray-500">
+              <MessageCircle className="h-6 w-6" />
+              <span className="text-sm">{post.comments?.length || 0}</span>
             </button>
           </div>
           <button
@@ -178,6 +237,9 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             <Bookmark className="h-5 w-5" />
           </button>
         </div>
+        <p className="text-sm text-gray-500 mb-4">
+          {formatDate(post.createdAt)}
+        </p>
       </div>
     </div>
   );

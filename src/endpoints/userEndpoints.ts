@@ -14,8 +14,11 @@ const userEndpoints = {
   getSingleHotelDetails: "/users/getHotelDetails",
   pendingBookings: "/users/pendingBookings",
   getBookingDetails: "/users/getBookingDetails",
-  getCompletedBookings:"/users/completedBookings",
-  userBookings:"/users/bookings"
+  getCompletedBookings: "/users/completedBookings",
+  userBookings: "/users/bookings",
+  cancelledBookings:"/users/cancelled",
+  cancelBooking: "/users/cancelBooking",
+  userWallet: "/users/wallet",
 };
 
 export default userEndpoints;

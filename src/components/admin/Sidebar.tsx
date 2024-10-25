@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { adminLogout } from "@/service/api/admin";
 import { AdminLogout } from "@/redux/slices/adminSlice";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -96,14 +97,13 @@ const Sidebar = () => {
       </nav>
 
       <div className="absolute bottom-0 w-full p-4  border-gray-200 dark:border-gray-700">
-        <Link
-          to="/logout"
+        <Button
           onClick={handleLogout}
-          className="flex items-center text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-yellow-500 dark:hover:text-yellow-500 transition-colors duration-200"
+          className="flex items-center text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800  transition-colors duration-200"
         >
           <IoLogOut className="w-5 h-5 mr-3" />
           {isExpanded && <span>Log out</span>}
-        </Link>
+        </Button>
       </div>
     </div>
   );

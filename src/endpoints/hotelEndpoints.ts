@@ -15,7 +15,9 @@ const hotelEndpoints = {
   editHotel: "/hotelOwner/editHotel",
   editHotelInformation:"/hotelOwner/editHotelInfo",
   getFullHotelDetails:"/hotelOwner/hotelDetails",
-  getOwnerDashboard:"/hotelOwner/ownerDashboard"
+  getOwnerDashboard:"/hotelOwner/ownerDashboard",
+  getBookings:"/hotelOwner/bookings",
+  getBookingDetailsOwner:"/hotelOwner/bookingDetails-owner"
 };
 
 export default hotelEndpoints;

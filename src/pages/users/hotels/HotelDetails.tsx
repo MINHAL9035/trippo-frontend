@@ -1,33 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import dayjs from "dayjs";
 import { MapPin, Users, Coffee } from "lucide-react";
 import { RootState } from "@/redux/store/store";
 import { getSingleHotelDetails, pendingBookings } from "@/service/api/user";
 import NavBar from "@/components/user/NavBar";
 import Footer from "@/components/user/Footer";
-
-interface Room {
-  roomId: string;
-  type: string;
-  rate: number;
-  capacity: number;
-  available: number;
-  amenities: string[];
-  availableDates: string[];
-  _id: string;
-}
-
-interface HotelInterface {
-  _id: string;
-  hotelName: string;
-  place: string;
-  description: string;
-  amenities: string[];
-  images: string[];
-  rooms: Room[];
-}
+import { HotelInterface } from "@/interface/owner/IHotel.Interface";
+import handleError from "@/utils/errorHandler";
 
 const HotelDetails: React.FC = () => {
   const navigate = useNavigate();
@@ -35,6 +15,7 @@ const HotelDetails: React.FC = () => {
   const [hotelDetails, setHotelDetails] = useState<HotelInterface | null>(null);
   const [loading, setLoading] = useState(true);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
+  const lastSearch = useSelector((state: RootState) => state.search);
 
   useEffect(() => {
     const fetchHotelDetails = async () => {
@@ -43,7 +24,7 @@ const HotelDetails: React.FC = () => {
         const response = await getSingleHotelDetails(location.state?.hotelId);
         setHotelDetails(response.data);
       } catch (error) {
-        console.error(error);
+        handleError(error);
       } finally {
         setLoading(false);
       }
@@ -70,17 +51,20 @@ const HotelDetails: React.FC = () => {
     );
   }
 
-  const handleBooking = async (roomId: string) => {
+  const handleBooking = async (roomId: string, roomRate: number) => {
     try {
       const bookingData = {
         hotelId: hotelDetails._id,
         roomId: roomId,
         userId: userInfo.userId,
-        checkIn: dayjs().add(1, "day").toISOString(),
-        checkOut: dayjs().add(2, "day").toISOString(),
+        checkIn: lastSearch.checkInDate,
+        checkOut: lastSearch.checkOutDate,
+        roomRate: roomRate,
+        rooms: lastSearch.guests?.rooms,
       };
 
       const response = await pendingBookings(bookingData);
+      console.log("my response of pedningBookings",response.data);
       if (response.status === 201) {
         navigate(`/bookingDetails/${response?.data.bookingId}`);
       }
@@ -96,7 +80,9 @@ const HotelDetails: React.FC = () => {
         {/* Hero Section with Main Image */}
         <div className="relative h-[60vh] w-full">
           <img
-            src={hotelDetails.images[0] || "/src/assets/images/hotelimage.jpeg"}
+            src={
+              hotelDetails.images?.[0] || "/src/assets/images/hotelimage.jpeg"
+            }
             alt={hotelDetails.hotelName}
             className="w-full h-full object-cover"
           />
@@ -118,7 +104,7 @@ const HotelDetails: React.FC = () => {
         {/* Image Gallery */}
         <div className="container mx-auto px-4 -mt-16 mb-12">
           <div className="grid grid-cols-4 gap-4">
-            {hotelDetails.images.slice(1).map((image, index) => (
+            {hotelDetails.images?.slice(1).map((image, index) => (
               <div
                 key={index}
                 className="aspect-w-4 aspect-h-3 rounded-lg overflow-hidden shadow-lg"
@@ -152,7 +138,7 @@ const HotelDetails: React.FC = () => {
               <div className="bg-white rounded-xl p-6 shadow-sm">
                 <h2 className="text-2xl font-semibold mb-6">Amenities</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                  {hotelDetails.amenities.map((amenity, index) => (
+                  {hotelDetails.amenities?.map((amenity, index) => (
                     <div key={index} className="flex items-center space-x-3">
                       <div className="p-2 bg-blue-50 rounded-lg">
                         <Coffee className="w-5 h-5 text-blue-600" />
@@ -167,7 +153,7 @@ const HotelDetails: React.FC = () => {
               <div className="bg-white rounded-xl p-6 shadow-sm">
                 <h2 className="text-2xl font-semibold mb-6">Available Rooms</h2>
                 <div className="space-y-4">
-                  {hotelDetails.rooms.map((room) => (
+                  {hotelDetails.rooms?.map((room) => (
                     <div
                       key={room._id}
                       className="border rounded-lg p-4 hover:border-blue-500 transition-colors duration-200"
@@ -206,7 +192,9 @@ const HotelDetails: React.FC = () => {
                             per night
                           </p>
                           <button
-                            onClick={() => handleBooking(room.roomId)}
+                            onClick={() =>
+                              handleBooking(room.roomId, room.rate)
+                            }
                             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
                           >
                             Book Now
@@ -218,54 +206,6 @@ const HotelDetails: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            {/* Right Column - Booking Summary */}
-            {/* <div className="lg:col-span-1">
-              <div className="bg-white rounded-xl p-6 shadow-sm sticky top-4">
-                <h2 className="text-xl font-semibold mb-6">Quick Booking</h2>
-                <div className="space-y-4">
-                  <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-                    <Calendar className="w-5 h-5 text-gray-500 mr-3" />
-                    <div>
-                      <p className="text-sm text-gray-500">Check-in</p>
-                      <p className="font-medium">
-                        {dayjs().add(1, "day").format("MMM D, YYYY")}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-                    <Calendar className="w-5 h-5 text-gray-500 mr-3" />
-                    <div>
-                      <p className="text-sm text-gray-500">Check-out</p>
-                      <p className="font-medium">
-                        {dayjs().add(2, "day").format("MMM D, YYYY")}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-                    <Users className="w-5 h-5 text-gray-500 mr-3" />
-                    <div>
-                      <p className="text-sm text-gray-500">Guests</p>
-                      <p className="font-medium">2 Adults</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-                    <Bed className="w-5 h-5 text-gray-500 mr-3" />
-                    <div>
-                      <p className="text-sm text-gray-500">Room Type</p>
-                      <p className="font-medium">Select from available rooms</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => selectedRoom && handleBooking(selectedRoom)}
-                    className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:bg-gray-300"
-                    disabled={!selectedRoom}
-                  >
-                    Proceed to Book
-                  </button>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>

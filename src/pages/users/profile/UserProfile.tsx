@@ -12,7 +12,7 @@ import { userDetails } from "@/service/api/userProfileApi";
 
 const UserProfile = () => {
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
-  const [userProfile, setUserProfile] = useState<IUser | null>(null);
+    const [userProfile, setUserProfile] = useState<IUser | null>(null);
 
   const hasFetchedUserProfile = useRef(false);
 

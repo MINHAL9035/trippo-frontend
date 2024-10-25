@@ -1,19 +1,47 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { Home, MessageCircle, PlusCircle, User, Search, X } from "lucide-react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import {
+  Home,
+  MessageCircle,
+  PlusCircle,
+  User,
+  Search,
+  X,
+  Bell,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 import { useSelector } from "react-redux";
 import PostList from "./utils/PostList";
-import CreatePostModal from "./utils/CreatePostModal";
+import CreatePostModal from "../../community/utils/CreatePostModal";
 import UsersList from "./utils/UsersList";
 import CommunityProfile from "./utils/CommunityProfile";
-import { getUserPost, searchUsers } from "@/service/api/community";
+import {
+  getNotifications,
+  getUserPost,
+  searchUsers,
+} from "@/service/api/community";
 import handleError from "@/utils/errorHandler";
 import { RootState } from "@/redux/store/store";
 import { IUser } from "@/interface/user/IUser.interface";
-import NavBar from "@/components/user/NavBar";
-import SingleUserProfile from "./utils/SingleUserProfile";
-import CommunityMessage from "./utils/CommunityMessage";
+import SingleUserProfile from "../../community/utils/SingleUserProfile";
+import { userDetails } from "@/service/api/userProfileApi";
+import { socketService } from "@/service/socket.service";
+import { format } from "date-fns";
+
+interface INotification {
+  _id: string;
+  triggeredBy: {
+    fullName: string;
+    userName: string;
+    image: string;
+  };
+  postId: {
+    imageUrl: string[];
+  };
+  type: string;
+  createdAt: string;
+  isRead: boolean;
+}
 
 const Community = () => {
   const [activeItem, setActiveItem] = useState("Home");
@@ -27,8 +55,10 @@ const Community = () => {
   const [searchResults, setSearchResults] = useState<IUser[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
+  const [userProfile, setUserProfile] = useState<IUser | null>(null);
   const navigate = useNavigate();
   const [refreshPosts, setRefreshPosts] = useState(0);
+  const [notifications, setNotifications] = useState<INotification[]>([]);
 
   // ============ OPENING AND CLOSING OF NAVITEMS ===================
   const sidebarItems = [
@@ -36,30 +66,52 @@ const Community = () => {
     { name: "Search", icon: Search },
     { name: "Messages", icon: MessageCircle },
     { name: "Create", icon: PlusCircle },
+    { name: "Notifications", icon: Bell },
     { name: "Profile", icon: User },
   ];
-
-  const handleItemClick = useCallback((itemName: string) => {
-    if (itemName === "Create") {
-      setIsModalOpen(true);
-      return;
+  const hasFetchedUserProfile = useRef(false);
+  useEffect(() => {
+    if (userInfo.email && !hasFetchedUserProfile.current) {
+      hasFetchedUserProfile.current = true;
+      (async (email: string) => {
+        try {
+          const response = await userDetails(email);
+          setUserProfile(response.data);
+        } catch (error) {
+          handleError(error);
+        }
+      })(userInfo.email);
     }
+  }, [userInfo.email]);
 
-    if (["Search", "Messages", "Notifications"].includes(itemName)) {
-      setDrawerType(itemName.toLowerCase());
-      setShowDrawer(true);
-      setIsCompact(true);
-      if (itemName !== "Search") {
-        setActiveItem(itemName);
+  const handleItemClick = useCallback(
+    (itemName: string) => {
+      if (itemName === "Create") {
+        setIsModalOpen(true);
+        return;
       }
-      return;
-    }
 
-    setActiveItem(itemName);
-    setDrawerType(null);
-    setIsCompact(false);
-    setShowDrawer(false);
-  }, []);
+      if (itemName === "Messages") {
+        navigate("/message");
+        setActiveItem(itemName);
+        return;
+      }
+
+      if (["Search", "Notifications"].includes(itemName)) {
+        setDrawerType(itemName.toLowerCase());
+        setShowDrawer(true);
+        setIsCompact(true);
+        setActiveItem(itemName);
+        return;
+      }
+
+      setActiveItem(itemName);
+      setDrawerType(null);
+      setIsCompact(false);
+      setShowDrawer(false);
+    },
+    [navigate]
+  );
 
   const handleCloseDrawer = useCallback(() => {
     setShowDrawer(false);
@@ -74,36 +126,59 @@ const Community = () => {
   }, []);
   // =======================================
 
+  // =======================nofication socket====================
+
+  useEffect(() => {
+    socketService.onNewNotification((notification) => {
+      setNotifications((prev) => [notification, ...prev]);
+    });
+
+    const fetchNotifications = async () => {
+      try {
+        const response = await getNotifications(userInfo.userId);
+        if (response?.status === 200) {
+          setNotifications(response.data);
+        }
+      } catch (error) {
+        handleError(error);
+      }
+    };
+
+    fetchNotifications();
+  }, [userInfo.userId]);
+  // =============================================================
+
   // handleSingleUserProfile
   const handleUserClick = (userName: string) => {
-    console.log("fdkfj", userName);
-
     navigate(`/${userName}`);
     setShowDrawer(false);
     setIsCompact(false);
   };
 
   //=================  HANDLING SEARCH =====================
-  const search = useCallback((query: string) => {
-    const performSearch = async () => {
-      try {
-        setIsSearching(true);
-        const response = await searchUsers(query);
-        if (response.status === 200) {
-          setSearchResults(response.data);
+  const search = useCallback(
+    (query: string) => {
+      const performSearch = async () => {
+        try {
+          setIsSearching(true);
+          if (query !== userProfile?.userName && userProfile?.fullName) {
+            const response = await searchUsers(query);
+            if (response.status === 200) {
+              setSearchResults(response.data);
+            }
+          }
+        } catch (error) {
+          handleError(error);
+          setSearchResults([]);
+        } finally {
+          setIsSearching(false);
         }
-      } catch (error) {
-        handleError(error);
-        setSearchResults([]);
-      } finally {
-        setIsSearching(false);
-      }
-    };
+      };
 
-    performSearch();
-  }, []);
-
-  console.log("sjd", searchResults);
+      performSearch();
+    },
+    [userProfile?.fullName, userProfile?.userName]
+  );
 
   const debouncedSearch = useMemo(() => debounce(search, 500), [search]);
   useEffect(() => {
@@ -209,10 +284,49 @@ const Community = () => {
             </div>
           </div>
         );
-      case "messages":
-        return <div className="p-4">Messages Contxcsent</div>;
       case "notifications":
-        return <div className="p-4">Notifications Content</div>;
+        return (
+          <div className="p-4">
+            <h3 className="font-semibold mb-4">Notifications</h3>
+            {notifications.map((notification) => (
+              <div
+                key={notification._id}
+                className={`p-4 ${
+                  notification.isRead ? "bg-white" : "bg-blue-50"
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <img
+                    src={notification.triggeredBy.image}
+                    alt=""
+                    className="w-10 h-10 rounded-full"
+                  />
+                  <div className="flex-1">
+                    <p className="text-sm">
+                      <span className="font-medium">
+                        {notification.triggeredBy.fullName}
+                      </span>{" "}
+                      liked your post
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {format(
+                        new Date(notification.createdAt),
+                        "MMM d, yyyy h:mm a"
+                      )}
+                    </p>
+                  </div>
+                  {notification.postId.imageUrl && (
+                    <img
+                      src={notification.postId.imageUrl[0]}
+                      alt=""
+                      className="w-12 h-12 object-cover rounded"
+                    />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        );
       default:
         return null;
     }
@@ -239,8 +353,6 @@ const Community = () => {
         );
       case "Profile":
         return <CommunityProfile />;
-      case "Messages":
-        return <CommunityMessage />;
       case "searchresult":
         return <SingleUserProfile />;
       default:
@@ -251,11 +363,10 @@ const Community = () => {
   // ================ MAIN COMPONENT RETURN =====================
   return (
     <>
-      <NavBar />
       <div className="flex flex-col min-h-screen bg-gray-100">
         <div className="flex flex-1">
           <div
-            className={`bg-white border-r border-gray-200 shadow-sm transition-all duration-300 ${
+            className={`bg-white  border-r border-gray-200 shadow-sm transition-all duration-300 ${
               isCompact ? "w-20" : "w-72"
             }`}
           >
@@ -292,8 +403,8 @@ const Community = () => {
 
           {showDrawer && (
             <div className="w-96 bg-white border-r border-gray-200 shadow-lg">
-              <div className="flex justify-between items-center p-4 border-b border-gray-200">
-                <h2 className="font-semibold capitalize">{drawerType}</h2>
+              <div className="flex justify-between items-center p-2 border-b border-gray-200">
+                <h2 className="font-semibold capitalize"></h2>
                 <button
                   onClick={handleCloseDrawer}
                   className="hover:bg-gray-100 p-1 rounded-full"

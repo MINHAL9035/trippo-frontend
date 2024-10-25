@@ -84,3 +84,12 @@ export const getOwners = async () => {
     return Promise.reject();
   }
 };
+
+export const getAdminDashboard = async () => {
+  try {
+    const response = await Api.get(adminEndpoints.getAdminDash);
+    return response;
+  } catch (error) {
+    apiHandler(error);
+  }
+};

@@ -1,31 +1,42 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; // Import useNavigate
-import Footer from "@/components/user/Footer";
-import NavBar from "@/components/user/NavBar";
-import { getcompletedBookings } from "@/service/api/user";
-import handleError from "@/utils/errorHandler";
-import { format } from "date-fns";
+import { ElementType, ReactNode, useEffect, useState } from "react";
 import {
   CheckCircle,
   Calendar,
   MapPin,
-  Users,
-  Wifi,
-  Tv,
-  Snowflake,
-  CreditCard,
-  User,
+  Home,
+  Clock,
+  DollarSign,
+  Download,
+  ArrowLeft,
 } from "lucide-react";
+import { format } from "date-fns";
+import { useLocation } from "react-router-dom";
+import { getcompletedBookings } from "@/service/api/user";
+import handleError from "@/utils/errorHandler";
 import { BookingDetails } from "@/interface/user/ICompletedBooking";
+import NavBar from "@/components/user/NavBar";
+import Footer from "@/components/user/Footer";
 
-const BookingSuccessPage: React.FC = () => {
+interface DetailRowProps {
+  icon: ElementType;
+  label: string;
+  value: string | number;
+}
+
+interface InfoCardProps {
+  title: string;
+  icon?: ElementType;
+  children: ReactNode;
+  className?: string;
+}
+
+const BookingSuccessPage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const bookingId = queryParams.get("bookingId");
   const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(
     null
   );
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCompletedBookings = async () => {
@@ -43,172 +54,177 @@ const BookingSuccessPage: React.FC = () => {
     }
   }, [bookingId]);
 
+  console.log("my completed bookings", bookingDetails);
+
   if (!bookingDetails) return null;
 
-  const { checkIn, checkOut, hotelId, roomId, userId } = bookingDetails;
-  const {
-    hotelName,
-    streetAddress,
-    place,
-    state,
-    country,
-    images,
-    description,
-    hotelType,
-  } = hotelId;
-  const room = hotelId.rooms.find((room) => room.roomId === roomId);
+  const room = bookingDetails.hotelId.rooms.find(
+    (r) => r.roomId === bookingDetails.roomId
+  );
 
-  const handleGoHome = () => {
-    navigate("/home");
-  };
+  const InfoCard = ({
+    title,
+    icon: Icon,
+    children,
+    className = "",
+  }: InfoCardProps) => (
+    <div
+      className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden ${className}`}
+    >
+      <div className="border-b border-gray-100 px-6 py-4 flex items-center gap-3">
+        {Icon && <Icon className="h-5 w-5 text-blue-600" />}
+        <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+      </div>
+      <div className="p-6">{children}</div>
+    </div>
+  );
+
+  const DetailRow = ({ icon: Icon, label, value }: DetailRowProps) => (
+    <div className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+      <Icon className="h-5 w-5 text-gray-500" />
+      <div>
+        <p className="text-sm text-gray-500">{label}</p>
+        <p className="font-medium text-gray-900">{value}</p>
+      </div>
+    </div>
+  );
 
   return (
     <>
       <NavBar />
-      <div className="min-h-screen  py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
-          <div className="bg-gradient-to-r from-green-500 to-green-400 px-6 py-4">
-            <div className="flex items-center">
-              <CheckCircle className="text-white mr-2" size={32} />
-              <h1 className="text-3xl font-bold text-white">
-                Booking Confirmed!
-              </h1>
+      <div className="min-h-screen bg-gray-50">
+        {/* Success Banner */}
+        <div className="bg-gradient-to-r from-green-600 to-green-700">
+          <div className="max-w-5xl mx-auto py-12 px-4">
+            <div className="flex flex-col items-center text-white">
+              <div className="rounded-full bg-white/20 backdrop-blur-sm p-4 mb-6">
+                <CheckCircle className="h-10 w-10 text-white" />
+              </div>
+              <h1 className="text-3xl font-bold mb-3">Booking Confirmed!</h1>
+              <p className="text-blue-100">
+                Booking ID:{" "}
+                <span className="font-medium text-white">
+                  {bookingDetails.bookingId}
+                </span>
+              </p>
+              {/* <div className="mt-4 text-sm text-blue-100 bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm">
+              Confirmation sent to {bookingDetails.userId.email}
+            </div> */}
             </div>
-            <p className="text-blue-100 mt-1 text-lg">
-              Your stay at {hotelName} is all set.
-            </p>
           </div>
+        </div>
 
-          <div className="p-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                  Booking Details
-                </h2>
-                <div className="space-y-3">
-                  <p className="text-gray-600">
-                    <strong>Booking ID:</strong> {bookingDetails.bookingId}
+        {/* Main Content */}
+        <div className="max-w-5xl mx-auto -mt-8 px-4 pb-12">
+          <div className="grid gap-6">
+            {/* Property Card */}
+            <InfoCard title="Property Details" icon={Home}>
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="md:w-1/3">
+                  <div className="relative rounded-lg overflow-hidden">
+                    <img
+                      src={bookingDetails.hotelId.images[0]}
+                      alt={bookingDetails.hotelId.hotelName}
+                      className="w-full h-48 object-cover transition-transform hover:scale-105 duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  </div>
+                </div>
+                <div className="md:w-2/3">
+                  <h3 className="text-2xl font-semibold text-gray-800 mb-2">
+                    {bookingDetails.hotelId.hotelName}
+                  </h3>
+                  <p className="inline-block px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm mb-4">
+                    {bookingDetails.hotelId.hotelType}
                   </p>
-                  <div className="flex items-center">
-                    <Calendar className="text-blue-500 mr-2" size={20} />
-                    <p className="text-gray-600">
-                      <strong>Check-in:</strong>{" "}
-                      {format(new Date(checkIn), "PPP")}
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <Calendar className="text-purple-500 mr-2" size={20} />
-                    <p className="text-gray-600">
-                      <strong>Check-out:</strong>{" "}
-                      {format(new Date(checkOut), "PPP")}
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <User className="text-green-500 mr-2" size={20} />
-                    <p className="text-gray-600">
-                      <strong>Guest:</strong> {userId.fullName}
+                  <div className="flex items-start gap-2 text-gray-600">
+                    <MapPin className="w-5 h-5 mt-1 flex-shrink-0 text-gray-400" />
+                    <p className="text-gray-600 leading-relaxed">
+                      {bookingDetails.hotelId.streetAddress},{" "}
+                      {bookingDetails.hotelId.place},{" "}
+                      {bookingDetails.hotelId.state},{" "}
+                      {bookingDetails.hotelId.country}
                     </p>
                   </div>
                 </div>
               </div>
+            </InfoCard>
 
-              <div>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                  Hotel Information
-                </h2>
-                <h3 className="text-xl font-medium text-gray-700">
-                  {hotelName}
-                </h3>
-                <p className="text-sm text-gray-500 mb-2">{hotelType}</p>
-                <div className="flex items-start mt-2">
-                  <MapPin className="text-red-400 mr-2 mt-1" size={20} />
-                  <p className="text-gray-600">
-                    {streetAddress}, {place}, {state}, {country}
-                  </p>
+            {/* Stay Details Grid */}
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Booking Summary */}
+              <InfoCard title="Booking Summary" icon={Calendar}>
+                <div className="space-y-2">
+                  <DetailRow
+                    icon={Calendar}
+                    label="Check-in"
+                    value={format(
+                      new Date(bookingDetails.checkIn),
+                      "EEEE, MMM d, yyyy"
+                    )}
+                  />
+                  <DetailRow
+                    icon={Calendar}
+                    label="Check-out"
+                    value={format(
+                      new Date(bookingDetails.checkOut),
+                      "EEEE, MMM d, yyyy"
+                    )}
+                  />
+                  <DetailRow
+                    icon={Clock}
+                    label="Duration"
+                    value={`${bookingDetails.nights} night${
+                      bookingDetails.nights > 1 ? "s" : ""
+                    }`}
+                  />
                 </div>
-                <p className="text-gray-600 mt-2">{description}</p>
-              </div>
-            </div>
+              </InfoCard>
 
-            <div className="mt-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Room Details
-              </h2>
-              {room && (
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-lg font-medium text-gray-700">
-                    Type: {room.type}
-                  </p>
-                  <div className="flex items-center mt-2">
-                    <CreditCard className="text-green-500 mr-2" size={20} />
-                    <p className="text-gray-600">
-                      Rate: ${room.rate} per night
-                    </p>
+              {/* Price Details */}
+              <InfoCard title="Price Details" icon={DollarSign}>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-gray-600 py-2">
+                      <span>Room Rate (per night)</span>
+                      <span>₹{room?.rate.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-600 py-2">
+                      <span>Number of Nights</span>
+                      <span>{bookingDetails.nights}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-600 py-2">
+                      <span>Number of Rooms</span>
+                      <span>{bookingDetails.rooms}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center mt-2">
-                    <Users className="text-blue-500 mr-2" size={20} />
-                    <p className="text-gray-600">
-                      Capacity: {room.capacity} persons
-                    </p>
-                  </div>
-                  <div className="mt-3">
-                    <p className="text-gray-700 font-medium mb-2">
-                      Room Amenities:
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {room.amenities.map((amenity, index) => (
-                        <span
-                          key={index}
-                          className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full"
-                        >
-                          {amenity === "wifi" && (
-                            <Wifi className="inline mr-1" size={12} />
-                          )}
-                          {amenity === "tv" && (
-                            <Tv className="inline mr-1" size={12} />
-                          )}
-                          {amenity === "ac" && (
-                            <Snowflake className="inline mr-1" size={12} />
-                          )}
-                          {amenity.charAt(0).toUpperCase() + amenity.slice(1)}
-                        </span>
-                      ))}
+                  <div className="border-t border-dashed pt-4">
+                    <div className="flex justify-between text-lg font-semibold">
+                      <span>Total Amount</span>
+                      <span className="text-green-600">
+                        ₹{bookingDetails.totalPrice.toLocaleString()}
+                      </span>
                     </div>
                   </div>
                 </div>
-              )}
+              </InfoCard>
             </div>
 
-            <div className="mt-8">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Hotel Images
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {images.map((image, index) => (
-                  <img
-                    key={index}
-                    src={image}
-                    alt={`Hotel Image ${index + 1}`}
-                    className="w-full h-32 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-8 border-t pt-6">
-              <p className="text-gray-600 text-center">
-                Thank you for choosing {hotelName}. We hope you have a wonderful
-                stay!
-              </p>
-            </div>
-
-            {/* Button to go home */}
-            <div className="mt-8 text-center">
+            {/* Action Buttons */}
+            <div className="flex gap-96">
               <button
-                onClick={handleGoHome}
-                className="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors duration-300"
+                onClick={() => (window.location.href = "/home")}
+                className="flex items-center justify-center gap-10 px-6 py-3 bg-white border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
               >
-                Go to Home
+                <ArrowLeft className="w-4 h-4" />
+                Return to Home
+              </button>
+              <button
+                onClick={() => window.print()}
+                className="flex-1 flex items-center justify-center gap-2 bg-yellow-400 text-white py-3 px-6 rounded-lg hover:bg-yellow-500 transition-colors duration-200"
+              >
+                <Download className="w-4 h-4" />
+                Download Booking Receipt
               </button>
             </div>
           </div>

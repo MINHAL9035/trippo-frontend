@@ -6,6 +6,7 @@ import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
 import { gsap } from "gsap";
 import { useEffect, useRef } from "react";
 import { useTheme } from "@/context/theme-provider";
+import NavBar from "@/components/user/NavBar";
 const words = [
   {
     text: "Welcome",
@@ -41,31 +42,34 @@ const Register = () => {
   }, []);
 
   return (
-    <div className="w-full h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 ">
-      <div className="w-full max-w-6xl flex flex-col sm:flex-row justify-evenly rounded-lg overflow-hidden">
-        <div
-          ref={formRef}
-          className="hidden sm:flex flex-col items-center justify-center p-4 sm:p-8 w-full sm:w-1/2 lg:w-1/2 xl:w-1/3 2xl:w-1/4"
-        >
-          <TypewriterEffectSmooth className="ml-14" words={words} />
-          <p className="text-sm sm:text-base text-center -mt-4">
-            <span className="text-yellow-500">Your ultimate</span> companion for
-            seamless trip planning
-          </p>
-          <Lottie
-            className="w-full max-w-sm"
-            animationData={animationData}
-            loop={true}
-          />
-        </div>
-        <div
-          ref={animationRef}
-          className="flex items-center justify-center p-4 sm:p-8 w-full sm:w-1/2"
-        >
-          <RegistrationForm />
+    <>
+      <NavBar />
+      <div className="w-full h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 ">
+        <div className="w-full max-w-6xl flex flex-col sm:flex-row justify-evenly rounded-lg overflow-hidden">
+          <div
+            ref={formRef}
+            className="hidden sm:flex flex-col items-center justify-center p-4 sm:p-8 w-full sm:w-1/2 lg:w-1/2 xl:w-1/3 2xl:w-1/4"
+          >
+            <TypewriterEffectSmooth className="ml-14" words={words} />
+            <p className="text-sm sm:text-base text-center -mt-4">
+              <span className="text-yellow-500">Your ultimate</span> companion
+              for seamless trip planning
+            </p>
+            <Lottie
+              className="w-full max-w-sm"
+              animationData={animationData}
+              loop={true}
+            />
+          </div>
+          <div
+            ref={animationRef}
+            className="flex items-center justify-center p-4 sm:p-8 w-full sm:w-1/2"
+          >
+            <RegistrationForm />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

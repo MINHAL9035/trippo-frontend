@@ -16,10 +16,18 @@ import HotelDetails from "@/pages/users/hotels/HotelDetails";
 import BookingDetails from "@/pages/users/hotels/BookingDetails";
 import Explore from "@/pages/users/explore/Explore";
 import Home from "@/pages/users/home/Home";
-import Community from "@/pages/users/community/Community";
-import SingleUserProfile from "@/pages/users/community/utils/SingleUserProfile";
+import SingleUserProfile from "@/pages/community/utils/SingleUserProfile";
 import BookingSuccessPage from "@/pages/users/hotels/BookingSuccessPage";
-const LandingPage = lazy(() => import("@/pages/users/homeScreen/LandingPage"));
+import TripsRoute from "@/hocs/user/TripsRoute";
+import UnauthTrip from "@/pages/users/trip/UnauthTrip";
+// import MessagePage from "@/pages/users/community/utils/MessagePage";
+import AiTripCreate from "@/pages/users/trip/AiTripCreate";
+import AiTripDetails from "@/pages/users/trip/utils/AiTripDetails";
+import Community from "@/pages/community/Community";
+import CommunityMessage from "@/pages/community/utils/CommunityMessage";
+import MessagePage from "@/pages/community/utils/MessagePage";
+
+const LandingPage = lazy(() => import("@/pages/users/home/LandingPage"));
 
 const UserRoutes = () => {
   return (
@@ -36,10 +44,19 @@ const UserRoutes = () => {
           path="/forgotPassword"
           element={<WithoutAuth component={ForgotPassword} />}
         />
-        <Route path="/home" element={<WithAuth component={Home} />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<WithAuth component={UserProfile} />} />
-        <Route path="/profile/viewBookingDetails" element={<WithAuth component={UserProfile} />} />
-        <Route path="/trips" element={<WithAuth component={TripList} />} />
+
+        <Route
+          path="/trips"
+          element={
+            <TripsRoute component={TripList} noAuthComponent={UnauthTrip} />
+          }
+        />
+        <Route
+          path="/ai-create-trip"
+          element={<WithAuth component={AiTripCreate} />}
+        />
         <Route
           path="/trips/:id"
           element={<WithAuth component={TripDetails} />}
@@ -52,12 +69,22 @@ const UserRoutes = () => {
         <Route path="/hotelDetails" element={<HotelDetails />} />
         <Route path="/bookingDetails/:bookingId" element={<BookingDetails />} />
         <Route path="/bookingSuccess" element={<BookingSuccessPage />} />
-        <Route path="/explore" element={<WithAuth component={Explore} />} />
+        <Route path="/explore" element={<Explore />} />
         <Route path="/community" element={<WithAuth component={Community} />} />
+        <Route
+          path="/message"
+          element={<WithAuth component={CommunityMessage} />}
+        />
         <Route
           path="/:userName"
           element={<WithAuth component={SingleUserProfile} />}
         />
+        <Route
+          path="/message/:userName"
+          element={<WithAuth component={MessagePage} />}
+        />
+        <Route path="/bookingDetails/:bookingId" element={<BookingDetails />} />
+        <Route path="/ai-trip-details/:tripId" element={<AiTripDetails />} />
       </Routes>
     </Suspense>
   );
