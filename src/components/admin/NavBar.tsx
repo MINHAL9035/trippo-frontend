@@ -1,4 +1,4 @@
-import ToggleTheme from "@/components/User/ToggleTheme";
+import ToggleTheme from "@/components/user/ToggleTheme";
 import { IoNotificationsOutline } from "react-icons/io5";
 const NavBar = () => {
   return (
