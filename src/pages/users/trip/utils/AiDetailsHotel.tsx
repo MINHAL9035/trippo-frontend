@@ -1,6 +1,27 @@
 import { Link } from "react-router-dom";
+interface HotelOption {
+  hotelName: string;
+  hotelAddress: string;
+  price: string;
+  rating: number;
+}
 
-const AiDetailsHotel = ({ trip }) => {
+interface UserInput {
+  place: string;
+  days: number;
+  budget: string;
+}
+
+interface TripData {
+  hotelOptions: HotelOption[];
+}
+
+export interface Trip {
+  tripData: TripData;
+  userInput: UserInput;
+}
+
+const AiDetailsHotel: React.FC<{ trip: Trip | null }> = ({ trip }) => {
   if (!trip) {
     return <div>Loading...</div>;
   }
@@ -32,7 +53,9 @@ const AiDetailsHotel = ({ trip }) => {
                 />
                 <div className="my-2 flex flex-col">
                   <h2 className="font-medium">{item.hotelName}</h2>
-                  <h2 className="text-xs text-gray-400">📌 {item.hotelAddress}</h2>
+                  <h2 className="text-xs text-gray-400">
+                    📌 {item.hotelAddress}
+                  </h2>
                   <h2 className="text-sm font-semibold">💵 {item.price}</h2>
                   <h2 className="text-sm">⭐ {item.rating} stars</h2>
                 </div>

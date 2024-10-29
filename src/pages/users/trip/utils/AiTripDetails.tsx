@@ -5,10 +5,10 @@ import handleError from "@/utils/errorHandler";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AiDetailsInfo from "./AiDetailsInfo";
-import AiDetailsHotel from "./AiDetailsHotel";
+import AiDetailsHotel, { Trip } from "./AiDetailsHotel";
 
 const AiTripDetails = () => {
-  const [aiTripDetails, setAiTripDetails] = useState();
+  const [aiTripDetails, setAiTripDetails] = useState<Trip | null>(null);
   const { tripId } = useParams();
 
   useEffect(() => {

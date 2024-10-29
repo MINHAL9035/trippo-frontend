@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 import { getUserMessageList } from "@/service/api/community";
 import handleError from "@/utils/errorHandler";
 import { format, isToday, isYesterday, differenceInDays } from "date-fns";
-import MessageDropdown from "./MessageDropdown";
 
 export interface IMessageList {
   _id: string;
@@ -106,7 +105,7 @@ const CommunityMessage = () => {
         <div className="p-4 h-full overflow-y-auto">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Messages</h2>
-            <MessageDropdown />
+            dalk
           </div>
 
           <div className="space-y-4">

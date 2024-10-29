@@ -1,20 +1,13 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { Send } from "lucide-react";
 import { IUser } from "@/interface/user/IUser.interface";
-import { RootState } from "@/redux/store/store";
-import { useSelector } from "react-redux";
 
 export interface ChatInterfaceProps {
   userData: IUser | null;
 }
 
-
-
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ userData }) => {
-  const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const [inputMessage, setInputMessage] = useState("");
-
-  const currentUserId = userInfo.userId;
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -57,7 +50,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ userData }) => {
             {inputMessage.trim() && (
               <button
                 type="button"
-                onClick={handleSendMessage}
                 className="text-blue-500 hover:text-blue-600 transition-colors"
               >
                 <Send className="w-6 h-6" />

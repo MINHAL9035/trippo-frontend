@@ -3,7 +3,7 @@ import { LucideIcon } from "lucide-react";
 interface DetailItemProps {
   icon: LucideIcon;
   label: string;
-  value: string | undefined;
+  value: string | number | undefined;
 }
 
 const DetailItem: React.FC<DetailItemProps> = ({

@@ -1,6 +1,6 @@
 import { Owner } from "./IOwner.interface";
 interface Room {
-  roomId:string
+  roomId: string;
   type: string;
   rate: number;
   capacity: number;
@@ -22,5 +22,8 @@ export class HotelInterface {
   images?: string[];
   rooms?: Room[];
   hotelType?: string;
-  availableRooms: Room[] | undefined;
+  availableRooms?: Room[] | undefined;
+  roomType?: string;
+  numberOfRooms?: string;
+  price?: number;
 }
