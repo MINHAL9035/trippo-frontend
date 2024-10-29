@@ -5,13 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
 import { loggingOut } from "@/redux/slices/userSlice";
 import { toast } from "sonner";
-import ToggleTheme from "./ToggleTheme";
+
 import { logout } from "@/service/api/user";
 import { PiCaretDoubleRightThin } from "react-icons/pi";
 import handleError from "@/utils/errorHandler";
 import { IUser } from "@/interface/user/IUser.interface";
 import { userDetails } from "@/service/api/userProfileApi";
+import ToggleTheme from "./ToggleTheme";
 import MobileNavbar from "./MobileNavbar";
+
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
