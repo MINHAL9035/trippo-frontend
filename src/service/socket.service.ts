@@ -1,8 +1,14 @@
+import { IGroupMessage } from "@/interface/user/group.interface";
 import { IMessage } from "@/pages/users/community/utils/MessagePage";
 import { io, Socket } from "socket.io-client";
+interface IGroupCreateResponse {
+  success: boolean;
+  group?: unknown;
+  error?: string;
+}
 
 class SocketService {
-  private socket: Socket | null = null;
+  public socket: Socket | null = null;
 
   connect() {
     this.socket = io("http://localhost:3000");
@@ -48,11 +54,11 @@ class SocketService {
     }
   }
 
-  onNewNotification(callback: (notification) => void) {
-    if (this.socket) {
-      this.socket.on("new_notification", callback);
-    }
-  }
+  // onNewNotification(callback: (notification) => void) {
+  //   if (this.socket) {
+  //     this.socket.on("new_notification", callback);
+  //   }
+  // }
 
   onPostLiked(
     callback: (data: {
@@ -63,6 +69,43 @@ class SocketService {
   ) {
     if (this.socket) {
       this.socket.on("post_liked", callback);
+    }
+  }
+
+  sendGroupMessage(groupId: string, senderId: string, content: string) {
+    if (this.socket) {
+      this.socket.emit("sendGroupMessage", { groupId, senderId, content });
+    }
+  }
+
+  onNewGroupMessage(callback: (message: IGroupMessage) => void) {
+    if (this.socket) {
+      this.socket.on("newGroupMessage", callback);
+    }
+  }
+
+  createGroup(groupData: {
+    groupName: string;
+    members: string[];
+    userId: string;
+  }) {
+    return new Promise<IGroupCreateResponse>((resolve) => {
+      if (this.socket) {
+        this.socket.emit(
+          "createGroup",
+          groupData,
+          (response: IGroupCreateResponse) => {
+            resolve(response);
+          }
+        );
+      } else {
+        resolve({ success: false, error: "Socket not connected" });
+      }
+    });
+  }
+  joinGroup(groupId: string) {
+    if (this.socket) {
+      this.socket.emit("joinGroup", groupId);
     }
   }
 }

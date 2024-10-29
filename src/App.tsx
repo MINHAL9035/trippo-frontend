@@ -7,18 +7,18 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          <FormProvider>
-            <AppRoutes />
-            <Toaster
-              position="top-right"
-              expand={false}
-              richColors
-              theme="light"
-              closeButton={true}
-            />
-          </FormProvider>
-        </ThemeProvider>
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            <FormProvider>
+              <AppRoutes />
+              <Toaster
+                position="top-right"
+                expand={false}
+                richColors
+                theme="light"
+                closeButton={true}
+              />
+            </FormProvider>
+          </ThemeProvider>
       </BrowserRouter>
     </>
   );

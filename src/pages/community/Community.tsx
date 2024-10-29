@@ -71,7 +71,7 @@ const Community = () => {
 
   return (
     <>
-      <div className="flex min-h-screen bg-white">
+      <div className="flex min-h-screen ">
         {/* Left Sidebar */}
         <div
           className={`fixed left-0 h-full border-r border-gray-200 p-4 transition-all duration-300 ${

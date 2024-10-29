@@ -7,7 +7,8 @@ import {
 import { BsMoonStarsFill } from "react-icons/bs";
 import { IoSunnyOutline } from "react-icons/io5";
 import { Button } from "../ui/button";
-import { useTheme } from "../../context/theme-provider";
+import { useTheme } from "@/context/utils/useThemeContext";
+
 
 const ToggleTheme = () => {
   const { setTheme } = useTheme();

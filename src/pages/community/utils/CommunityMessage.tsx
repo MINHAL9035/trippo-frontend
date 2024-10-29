@@ -82,9 +82,9 @@ const CommunityMessage = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex min-h-screen ">
       {/* Sidebar */}
-      <div className="fixed left-0 h-full border-r border-gray-200 p-4 transition-all duration-300 w-24 bg-white z-20">
+      <div className="fixed left-0 h-full border-r border-gray-200 p-4 transition-all duration-300 w-24  z-20">
         <Link to="/home">
           <div className="mb-8 font-bold text-center text-lg">T</div>
         </Link>
@@ -102,7 +102,7 @@ const CommunityMessage = () => {
       </div>
 
       {/* Drawer */}
-      <div className="fixed left-24 h-full border-r border-gray-200 bg-white transition-all duration-300 z-10 w-80">
+      <div className="fixed left-24 h-full border-r border-gray-200  transition-all duration-300 z-10 w-80">
         <div className="p-4 h-full overflow-y-auto">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Messages</h2>
@@ -110,31 +110,42 @@ const CommunityMessage = () => {
           </div>
 
           <div className="space-y-4">
-            {messageList.length > 0 ? (
-              messageList.map((message) => (
-                <div
-                  key={message._id}
-                  onClick={() => handleMessageListClick(message.name)}
-                  className="flex items-center p-4 hover:bg-gray-50 rounded-lg cursor-pointer"
-                >
-                  <div className="h-12 w-12 rounded-full mr-3 overflow-hidden">
-                    <img
-                      src={message.image}
-                      alt={message.name}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  <div>
-                    <div className="font-medium text-base">{message.name}</div>
-                    <div className="text-sm text-gray-500">
-                      Last message:{" "}
-                      {formatLastMessageDate(message.lastMessageDate)}
+            {messageList.length > 0 && (
+              <div>
+                <h3 className="text-sm font-semibold text-gray-500 mb-2">
+                  Direct Messages
+                </h3>
+                {messageList.map((message) => (
+                  <div
+                    key={message._id}
+                    onClick={() => handleMessageListClick(message.name)}
+                    className="flex items-center p-4 hover:bg-gray-50 rounded-lg cursor-pointer"
+                  >
+                    <div className="h-12 w-12 rounded-full mr-3 overflow-hidden">
+                      <img
+                        src={message.image}
+                        alt={message.name}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <div className="font-medium text-base">
+                        {message.name}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        Last message:{" "}
+                        {formatLastMessageDate(message.lastMessageDate)}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <div className="text-center text-gray-500 py-4">No messages</div>
+                ))}
+              </div>
+            )}
+
+            {messageList.length === 0 && (
+              <div className="text-center text-gray-500 py-4">
+                No messages or groups
+              </div>
             )}
           </div>
         </div>

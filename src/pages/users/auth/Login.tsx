@@ -5,9 +5,8 @@ import registerDark from "@/assets/animations/registerDark.json";
 import LoginForm from "./utils/LoginForm";
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
 import { gsap } from "gsap";
-
-import { useTheme } from "@/context/theme-provider";
 import NavBar from "@/components/user/NavBar";
+import { useTheme } from "@/context/utils/useThemeContext";
 
 const words = [
   { text: "Welcome" },

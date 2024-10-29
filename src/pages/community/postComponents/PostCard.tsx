@@ -22,7 +22,7 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return format(date, "MMMM dd, yyyy 'at' hh:mm a"); // e.g., "October 25, 2024 at 08:30 AM"
+    return format(date, "MMMM dd, yyyy 'at' hh:mm a");
   };
 
   const handlePrevImage = () => {
@@ -42,7 +42,7 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
   };
 
   return (
-    <div className="border border-gray-200 rounded-lg mb-6 bg-white">
+    <div className="border border-gray-200 rounded-lg mb-6 ">
       {/* Header */}
       <div className="flex items-center justify-between p-4">
         <div className="flex flex-col items-center cursor-pointer">

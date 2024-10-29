@@ -19,6 +19,7 @@ const userEndpoints = {
   cancelledBookings:"/users/cancelled",
   cancelBooking: "/users/cancelBooking",
   userWallet: "/users/wallet",
+  getGroups:"/users/getGroups"
 };
 
 export default userEndpoints;

@@ -4,10 +4,7 @@ import { useEffect, useState } from "react";
 import SearchDrawer from "./SearchDrawer";
 import { RootState } from "@/redux/store/store";
 import { useSelector } from "react-redux";
-import {
-  getSearchedUserDetail,
-  getUserMessageList,
-} from "@/service/api/community";
+import { getSearchedUserDetail } from "@/service/api/community";
 import handleError from "@/utils/errorHandler";
 import { format, isToday, isYesterday, differenceInDays } from "date-fns";
 import MessageDropdown from "./MessageDropdown";
@@ -25,7 +22,6 @@ export interface IMessageList {
 const MessagePage = () => {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [messageList, setMessageList] = useState<IMessageList[]>([]);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const { userName } = useParams<{ userName: string }>();
   const [userProfile, setUserProfile] = useState<IUser | null>(null);
@@ -67,20 +63,6 @@ const MessagePage = () => {
     setIsSearchOpen(false);
   };
 
-  useEffect(() => {
-    const UserMessageList = async () => {
-      try {
-        const response = await getUserMessageList(userInfo.userId);
-        if (response.status === 200) {
-          setMessageList(response.data);
-        }
-      } catch (error) {
-        handleError(error);
-      }
-    };
-    UserMessageList();
-  }, [userInfo.userId]);
-
   const handleMessageListClick = (userName: string) => {
     navigate(`/message/${userName}`);
   };
@@ -105,9 +87,9 @@ const MessagePage = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex min-h-screen ">
       {/* Sidebar */}
-      <div className="fixed left-0 h-full border-r border-gray-200 p-4 transition-all duration-300 w-24 bg-white z-20">
+      <div className="fixed left-0 h-full border-r border-gray-200 p-4 transition-all duration-300 w-24  z-20">
         <Link to="/home">
           <div className="mb-8 font-bold text-center text-lg">T</div>
         </Link>
@@ -125,7 +107,7 @@ const MessagePage = () => {
       </div>
 
       {/* Drawer */}
-      <div className="fixed left-24 h-full border-r border-gray-200 bg-white transition-all duration-300 z-10 w-80">
+      <div className="fixed left-24 h-full border-r border-gray-200  transition-all duration-300 z-10 w-80">
         <div className="p-4 h-full overflow-y-auto">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Messages</h2>

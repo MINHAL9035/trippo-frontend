@@ -5,8 +5,8 @@ import RegistrationForm from "./utils/RegistrationForm";
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
 import { gsap } from "gsap";
 import { useEffect, useRef } from "react";
-import { useTheme } from "@/context/theme-provider";
 import NavBar from "@/components/user/NavBar";
+import { useTheme } from "@/context/utils/useThemeContext";
 const words = [
   {
     text: "Welcome",
