@@ -1,6 +1,5 @@
 import { Drawer } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import ToggleTheme from "./ToggleTheme";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store/store";
 import { logout } from "@/service/api/user";
@@ -8,9 +7,9 @@ import { loggingOut } from "@/redux/slices/userSlice";
 import { toast } from "sonner";
 
 interface MobileNavbarProps {
-    isOpen: boolean;
-    setIsOpen: (isOpen: boolean) => void;
-  }
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}
 
 const MobileNavbar: React.FC<MobileNavbarProps> = ({ isOpen, setIsOpen }) => {
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
@@ -31,10 +30,11 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({ isOpen, setIsOpen }) => {
         onClose={() => setIsOpen(false)}
         open={isOpen}
         key="left"
+        className={`dark:bg-black`}
       >
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 dark:bg-black">
           <Link
-            to="/"
+            to="/home"
             className="block px-3 py-2 text-base font-medium text-card-foreground hover:text-primary"
             onClick={() => setIsOpen(false)}
           >
@@ -69,23 +69,22 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({ isOpen, setIsOpen }) => {
             Hotels
           </Link>
           <Link
-            to="/places"
+            to="/home"
             className="block px-3 py-2 text-base font-medium text-card-foreground hover:text-primary"
             onClick={() => setIsOpen(false)}
           >
             Things to Do
           </Link>
           <Link
-            to="/restuarants"
+            to="/home"
             className="block px-3 py-2 text-base font-medium text-card-foreground hover:text-primary"
             onClick={() => setIsOpen(false)}
           >
             Resturarnt
           </Link>
-          <div className="pt-4 border-t border-card">
-            <ToggleTheme />
+          <div className=" border-t border-card">
             {userInfo ? (
-              <div className="mt-4">
+              <div>
                 <Link
                   to="/profile"
                   className="block px-4 py-2 text-sm text-card-foreground hover:bg-background"

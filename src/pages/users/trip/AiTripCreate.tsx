@@ -2,11 +2,7 @@ import { Formik, Form, Field } from "formik";
 import AutocompleteField from "@/components/form/AutocompleteField";
 import Footer from "@/components/user/Footer";
 import NavBar from "@/components/user/NavBar";
-import {
-  AI_PROMPT,
-  SelectedBudgetOptions,
-  SelectTravelesList,
-} from "./utils/Options";
+
 import { createAiTripValidation } from "@/validation/createAiTrip.validation";
 import { message } from "antd";
 import { chatSession } from "@/service/AiModal";
@@ -14,8 +10,9 @@ import { createAiTrip } from "@/service/api/trip";
 import handleError from "@/utils/errorHandler";
 import JSON5 from "json5";
 import { useState } from "react";
-import AITripLoadingScreen from "./utils/AITripLoadingScreen ";
 import { useNavigate } from "react-router-dom";
+import { AI_PROMPT, SelectedBudgetOptions, SelectTravelesList } from "./utils_ai/Options";
+import AITripLoadingScreen from "./utils_ai/AITripLoadingScreen ";
 
 interface aiTrip {
   place: string;

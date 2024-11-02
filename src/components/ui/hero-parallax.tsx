@@ -139,7 +139,7 @@ export const ProductCard = ({
       whileHover={{
         y: -20,
       }}
-      className="group/product h-96 w-[30rem] relative flex-shrink-0"
+      className="group/product h-96 w-[35rem] relative flex-shrink-0"
     >
       <Link to={product.link} className="block group-hover/product:shadow-2xl ">
         <img

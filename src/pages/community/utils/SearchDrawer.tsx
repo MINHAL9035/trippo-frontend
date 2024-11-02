@@ -60,8 +60,8 @@ const SearchDrawer = ({ isSearchOpen, onClose }: SearchDrawerProps) => {
 
   return (
     <div
-      className={`fixed left-24 top-0 h-full bg-white shadow-md border-gray-200 transition-all duration-300 z-10 ${
-        isSearchOpen ? "w-80" : "w-0"
+      className={`fixed left-28 top-0 h-full  transition-all duration-300 z-10 ${
+        isSearchOpen ? "w-80 border-r " : "w-0"
       } overflow-hidden`}
     >
       <div className="p-4">
@@ -69,7 +69,7 @@ const SearchDrawer = ({ isSearchOpen, onClose }: SearchDrawerProps) => {
           <h2 className="text-xl font-semibold">Search</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full"
+            className="p-2 hover:text-yellow-400 rounded-full"
           >
             <X className="w-5 h-5" />
           </button>

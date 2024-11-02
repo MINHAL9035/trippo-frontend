@@ -22,12 +22,13 @@ import TripsRoute from "@/hocs/user/TripsRoute";
 import UnauthTrip from "@/pages/users/trip/UnauthTrip";
 // import MessagePage from "@/pages/users/community/utils/MessagePage";
 import AiTripCreate from "@/pages/users/trip/AiTripCreate";
-import AiTripDetails from "@/pages/users/trip/utils/AiTripDetails";
-import Community from "@/pages/community/Community";
+
 import CommunityMessage from "@/pages/community/utils/CommunityMessage";
 import MessagePage from "@/pages/community/utils/MessagePage";
+import AiTripDetails from "@/pages/users/trip/utils_ai/AiTripDetails";
 
 const LandingPage = lazy(() => import("@/pages/users/home/LandingPage"));
+const communityPage = lazy(() => import("@/pages/community/Community"));
 
 const UserRoutes = () => {
   return (
@@ -70,7 +71,10 @@ const UserRoutes = () => {
         <Route path="/bookingDetails/:bookingId" element={<BookingDetails />} />
         <Route path="/bookingSuccess" element={<BookingSuccessPage />} />
         <Route path="/explore" element={<Explore />} />
-        <Route path="/community" element={<WithAuth component={Community} />} />
+        <Route
+          path="/community"
+          element={<WithAuth component={communityPage} />}
+        />
         <Route
           path="/message"
           element={<WithAuth component={CommunityMessage} />}

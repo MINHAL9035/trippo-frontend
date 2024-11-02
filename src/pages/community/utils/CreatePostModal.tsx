@@ -160,6 +160,8 @@ const CreatePostModal: React.FC<CreateModalProps> = ({
       onCancel={handleClose}
       footer={null}
       width={800}
+      maskClosable={false}
+      className={`dark:bg-black`}
     >
       <Spin spinning={isLoading} tip="Creating post...">
         <Formik
@@ -197,7 +199,7 @@ const CreatePostModal: React.FC<CreateModalProps> = ({
                     fileList={fileList}
                     onChange={handleChange}
                     beforeUpload={() => false}
-                    className="h-80"
+                    className={`h-80 dark:bg-black`}
                   >
                     <p className="ant-upload-drag-icon">
                       <InboxOutlined />

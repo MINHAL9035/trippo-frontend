@@ -39,7 +39,7 @@ const Home = () => {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.6,
+        duration: 0.7,
         ease: "easeOut",
       },
     },
@@ -114,13 +114,13 @@ const Home = () => {
           >
             <div className="space-y-4">
               <motion.img
-                src="/src/assets/images/home1.jpg"
+                src="src/assets/images/home1.jpg"
                 alt="Coastal road with boat"
                 className="w-full h-40 md:h-64 object-cover rounded-md"
                 whileHover={{ scale: 1.05 }}
               />
               <motion.img
-                src="/src/assets/images/home2.jpg"
+                src="src/assets/images/home2.jpg"
                 alt="Japanese castle"
                 className="w-full h-40 md:h-64 object-cover rounded-md"
                 whileHover={{ scale: 1.05 }}
@@ -128,7 +128,7 @@ const Home = () => {
             </div>
             <motion.div className="flex items-center">
               <motion.img
-                src="/src/assets/images/home3.jpg"
+                src="src/assets/images/home3.jpg"
                 alt="Snowy landscape with person"
                 className="w-full h-full object-cover rounded-md"
                 whileHover={{ scale: 1.05 }}
@@ -150,7 +150,7 @@ const Home = () => {
             variants={itemVariants}
           >
             <img
-              src="/src/assets/images/home/homeAi.png"
+              src="src/assets/images/home/homeAi.png"
               alt="Plan your trip"
               className="w-full h-full object-cover"
             />
@@ -206,7 +206,6 @@ const Home = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleCommunityClick}
-
             >
               <span>Explore Community</span>
               <ArrowRight size={20} />
@@ -217,13 +216,13 @@ const Home = () => {
             variants={itemVariants}
           >
             <motion.img
-              src="/src/assets/images/home/homeC1.jpg"
+              src="src/assets/images/home/homeC1 (2).jpg"
               alt="Group hiking in desert"
               className="w-full h-48 md:h-72 object-cover rounded-md"
               whileHover={{ scale: 1.05 }}
             />
             <motion.img
-              src="/src/assets/images/home/homeC2.jpg"
+              src="src/assets/images/home/homeC2.jpg"
               alt="Friends enjoying view"
               className="w-full h-32 md:h-72 object-cover rounded-md mt-8 md:mt-16"
               whileHover={{ scale: 1.05 }}

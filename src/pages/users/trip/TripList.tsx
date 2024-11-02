@@ -1,9 +1,8 @@
 import Footer from "@/components/user/Footer";
 import NavBar from "@/components/user/NavBar";
 import { Plus } from "lucide-react";
-import TripCard from "./utils/TripCard";
+
 import { useEffect, useRef, useState } from "react";
-import CreateTripForm from "./utils/CreateTripForm";
 import { RootState } from "@/redux/store/store";
 import { useSelector } from "react-redux";
 import handleError from "@/utils/errorHandler";
@@ -12,6 +11,8 @@ import { getTripDetails } from "@/service/api/trip";
 import { useAsyncList } from "@react-stately/data";
 import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
+import TripCard from "./TripCard";
+import CreateTripForm from "./CreateTripForm";
 
 const TripList = () => {
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);

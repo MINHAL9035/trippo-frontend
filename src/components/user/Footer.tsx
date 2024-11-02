@@ -52,7 +52,7 @@ const Footer = () => {
   const linkVariants: Variants = {
     hover: {
       scale: 1.05,
-      color: "#10B981", // Tailwind emerald-500
+      color: "#10B981", 
       transition: {
         type: "spring",
         stiffness: 300,
@@ -203,3 +203,5 @@ const Footer = () => {
 };
 
 export default Footer;
+
+

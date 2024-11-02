@@ -8,9 +8,12 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IPostInterface } from "@/interface/user/IPost.interface";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import io, { Socket } from "socket.io-client";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store/store";
 
 interface PostProps {
   post: IPostInterface;
@@ -18,6 +21,10 @@ interface PostProps {
 
 const PostCard: React.FC<PostProps> = ({ post }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [likes, setLikes] = useState<string[]>(post.likes || []);
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const userInfo = useSelector((state: RootState) => state.auth.userInfo);
+  const currentUser = userInfo.userId;
   const navigate = useNavigate();
 
   const formatDate = (dateString: string) => {
@@ -40,6 +47,34 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
   const handleUserClick = (userName: string) => {
     navigate(`/${userName}`);
   };
+
+  // liking the post
+
+  useEffect(() => {
+    const newSocket = io("http://localhost:3000");
+    setSocket(newSocket);
+
+    newSocket.on("post_liked", (data) => {
+      if (data.postId === post._id) {
+        setLikes(data.likes);
+      }
+    });
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [post._id]);
+
+  const handleLike = () => {
+    if (socket) {
+      socket.emit("like_post", {
+        postId: post._id,
+        userId: currentUser,
+      });
+    }
+  };
+
+  const isLiked = likes.includes(currentUser);
 
   return (
     <div className="border border-gray-200 rounded-lg mb-6 ">
@@ -104,8 +139,11 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
       <div className="p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-4">
-            <button className="hover:text-gray-600">
-              <Heart className="w-6 h-6" />
+            <button
+              onClick={handleLike}
+              className={` ${isLiked ? "text-red-500" : ""}`}
+            >
+              <Heart className={`w-6 h-6 ${isLiked ? "fill-current" : ""}`} />
             </button>
             <button className="hover:text-gray-600">
               <MessageCircle className="w-6 h-6" />
@@ -120,7 +158,9 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
         </div>
 
         {/* Likes */}
-        <div className="font-semibold mb-2">10 likes</div>
+        <div className="font-semibold mb-2">
+          {likes.length} {likes.length === 1 ? "like" : "likes"}
+        </div>
 
         {/* Caption */}
         <div className="space-y-1">

@@ -14,7 +14,6 @@ import { userDetails } from "@/service/api/userProfileApi";
 import ToggleTheme from "./ToggleTheme";
 import MobileNavbar from "./MobileNavbar";
 
-
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -55,19 +54,19 @@ const NavBar = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   return (
     <>
-      <nav 
+      <nav
         ref={navRef}
         className={`bg-card text-card-foreground transition-all duration-300 ${
-          isSticky ? 'fixed top-0 left-0 right-0 shadow-md z-50' : ''
+          isSticky ? "fixed top-0 left-0 right-0 shadow-md z-50" : ""
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -167,11 +166,13 @@ const NavBar = () => {
 
             {/* Mobile Menu Button */}
             <div className="md:hidden flex items-center">
+              <ToggleTheme />
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="inline-flex items-center justify-center p-2 rounded-md text-card-foreground hover:text-primary hover:bg-background focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
               >
                 <span className="sr-only">Open main menu</span>
+
                 <FiMenu className="block h-6 w-6" />
               </button>
             </div>
@@ -181,7 +182,7 @@ const NavBar = () => {
         {/* Mobile Drawer */}
         <MobileNavbar isOpen={isOpen} setIsOpen={setIsOpen} />
       </nav>
-      {isSticky && <div style={{ height: '64px' }} />}
+      {isSticky && <div style={{ height: "64px" }} />}
     </>
   );
 };
