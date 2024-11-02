@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
 import { resendOtp, verifyOtp } from "@/service/api/user";
-import otpImage from "../../../assets/images/otpImage.png";
 import handleError from "@/utils/errorHandler";
 
 const Otp = () => {
@@ -105,7 +104,7 @@ const Otp = () => {
     <div className="min-h-screen bg-gradient-to-br flex items-center justify-center p-4">
       <div className="rounded-2xl p-8 w-full max-w-md">
         <div className="mb-8 flex justify-center">
-          <img src={otpImage} alt="" />
+          <img src='/public/images/otpImage.png' alt="" />
         </div>
         <p className="text-center text-white-600 mb-6">
           We've sent a code to your email

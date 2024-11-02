@@ -7,7 +7,6 @@ import Footer from "@/components/user/Footer";
 import { RootState } from "@/redux/store/store";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import homeImage1 from "../../../assets/images/home/homeAi.png";
 
 const Home = () => {
   const controls = useAnimation();
@@ -115,13 +114,13 @@ const Home = () => {
           >
             <div className="space-y-4">
               <motion.img
-                src="src/assets/images/home1.jpg"
+                src="/public/images/home1.jpg"
                 alt="Coastal road with boat"
                 className="w-full h-40 md:h-64 object-cover rounded-md"
                 whileHover={{ scale: 1.05 }}
               />
               <motion.img
-                src="src/assets/images/home2.jpg"
+                src="/public/images/home2.jpg"
                 alt="Japanese castle"
                 className="w-full h-40 md:h-64 object-cover rounded-md"
                 whileHover={{ scale: 1.05 }}
@@ -129,7 +128,7 @@ const Home = () => {
             </div>
             <motion.div className="flex items-center">
               <motion.img
-                src="src/assets/images/home3.jpg"
+                src="/public/images/home3.jpg"
                 alt="Snowy landscape with person"
                 className="w-full h-full object-cover rounded-md"
                 whileHover={{ scale: 1.05 }}
@@ -151,7 +150,7 @@ const Home = () => {
             variants={itemVariants}
           >
             <img
-              src={homeImage1}
+              src='images/home/homeAi.png'
               alt="Plan your trip"
               className="w-full h-full object-cover"
             />
@@ -217,13 +216,13 @@ const Home = () => {
             variants={itemVariants}
           >
             <motion.img
-              src="src/assets/images/home/homeC1 (2).jpg"
+              src="images/home/homeC1 (2).jpg"
               alt="Group hiking in desert"
               className="w-full h-48 md:h-72 object-cover rounded-md"
               whileHover={{ scale: 1.05 }}
             />
             <motion.img
-              src="src/assets/images/home/homeC2.jpg"
+              src="images/home/homeC2.jpg"
               alt="Friends enjoying view"
               className="w-full h-32 md:h-72 object-cover rounded-md mt-8 md:mt-16"
               whileHover={{ scale: 1.05 }}
