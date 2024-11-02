@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AiDetailsInfo from "./AiDetailsInfo";
 import AiDetailsHotel, { Trip } from "./AiDetailsHotel";
-import Itinerary from "./Itinerary";
 
 const AiTripDetails = () => {
   const [aiTripDetails, setAiTripDetails] = useState<Trip | null>(null);
@@ -38,7 +37,6 @@ const AiTripDetails = () => {
         {/* Recommended Hotels */}
         <AiDetailsHotel trip={aiTripDetails} />
         {/* Daily plan  */}
-        <Itinerary />
         {/* tips */}
       </div>
       <Footer />
