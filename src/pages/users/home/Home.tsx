@@ -7,6 +7,7 @@ import Footer from "@/components/user/Footer";
 import { RootState } from "@/redux/store/store";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import home2 from "../../../assets/home2.jpg";
 
 const Home = () => {
   const controls = useAnimation();
@@ -120,7 +121,7 @@ const Home = () => {
                 whileHover={{ scale: 1.05 }}
               />
               <motion.img
-                src="/public/images/home2.jpg"
+                src={home2}
                 alt="Japanese castle"
                 className="w-full h-40 md:h-64 object-cover rounded-md"
                 whileHover={{ scale: 1.05 }}
@@ -150,7 +151,7 @@ const Home = () => {
             variants={itemVariants}
           >
             <img
-              src='images/home/homeAi.png'
+              src="images/home/homeAi.png"
               alt="Plan your trip"
               className="w-full h-full object-cover"
             />
