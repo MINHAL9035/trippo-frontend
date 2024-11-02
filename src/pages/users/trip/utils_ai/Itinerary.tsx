@@ -1,12 +1,11 @@
-
-const Itinerary = ({trip}) => {
+const Itinerary = () => {
   return (
-   <>
-   <div>
-    <h2>Places to visit</h2>
-   </div>
-   </>
-  )
-}
+    <>
+      <div>
+        <h2>Places to visit</h2>
+      </div>
+    </>
+  );
+};
 
-export default Itinerary
+export default Itinerary;

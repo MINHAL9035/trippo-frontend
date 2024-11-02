@@ -1,4 +1,3 @@
-import adminImage from "../../../assets/images/admin/adminLogin.png";
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
 import AdminLoginForm from "./utils/AdminLoginForm";
 
@@ -32,7 +31,11 @@ const AdminLogin = () => {
             animationData={adminAnimation}
             loop={true}
           /> */}
-          <img className="w-80 m-8" src={adminImage} alt="adminImage" />
+          <img
+            className="w-80 m-8"
+            src="images/admin/adminLogin.png"
+            alt="adminImage"
+          />
         </div>
         <div className="flex items-center justify-center p-4 sm:p-8 w-full sm:w-1/2">
           <AdminLoginForm />

@@ -38,7 +38,7 @@ const AiTripDetails = () => {
         {/* Recommended Hotels */}
         <AiDetailsHotel trip={aiTripDetails} />
         {/* Daily plan  */}
-        <Itinerary trip={aiTripDetails}/>
+        <Itinerary />
         {/* tips */}
       </div>
       <Footer />
