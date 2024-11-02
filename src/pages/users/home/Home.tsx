@@ -7,6 +7,7 @@ import Footer from "@/components/user/Footer";
 import { RootState } from "@/redux/store/store";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import homeImage1 from "../../../assets/images/home/homeAi.png";
 
 const Home = () => {
   const controls = useAnimation();
@@ -150,7 +151,7 @@ const Home = () => {
             variants={itemVariants}
           >
             <img
-              src="src/assets/images/home/homeAi.png"
+              src={homeImage1}
               alt="Plan your trip"
               className="w-full h-full object-cover"
             />
