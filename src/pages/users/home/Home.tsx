@@ -115,7 +115,7 @@ const Home = () => {
           >
             <div className="space-y-4">
               <motion.img
-                src="/public/images/home1.jpg"
+                src="images/home1.jpg"
                 alt="Coastal road with boat"
                 className="w-full h-40 md:h-64 object-cover rounded-md"
                 whileHover={{ scale: 1.05 }}
@@ -129,7 +129,7 @@ const Home = () => {
             </div>
             <motion.div className="flex items-center">
               <motion.img
-                src="/public/images/home3.jpg"
+                src="images/home3.jpg"
                 alt="Snowy landscape with person"
                 className="w-full h-full object-cover rounded-md"
                 whileHover={{ scale: 1.05 }}
