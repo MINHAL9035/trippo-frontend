@@ -26,6 +26,7 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const currentUser = userInfo.userId;
   const navigate = useNavigate();
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -50,7 +51,7 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
 
   // liking the post
   useEffect(() => {
-    const newSocket = io("http://localhost:3000");
+    const newSocket = io(backend_url);
     setSocket(newSocket);
 
     newSocket.on("post_liked", (data) => {
@@ -62,7 +63,7 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
     return () => {
       newSocket.disconnect();
     };
-  }, [post._id]);
+  }, [backend_url, post._id]);
 
   const handleLike = () => {
     if (socket) {

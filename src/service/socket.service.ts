@@ -6,10 +6,12 @@ interface IGroup {
   members: string[];
   createdAt: Date;
 }
+
 class SocketService {
   private socket: Socket | null = null;
+  backend_url = import.meta.env.VITE_BACKEND_URL;
   connect() {
-    this.socket = io("http://localhost:3000");
+    this.socket = io(this.backend_url);
     this.socket.on("connect", () => {
       console.log("Connected to WebSocket");
     });
