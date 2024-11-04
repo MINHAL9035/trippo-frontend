@@ -11,7 +11,7 @@ const Hotel = () => {
           <div className="p-7 md:px-20 lg:px-32 xl:px-20">
             <img
               className="h-[290px] w-full object-cover rounded-md"
-              src="/src/assets/images/explore.jpg"
+              src="images/explore.jpg"
               alt=""
             />
             <SearchHotelBar />
