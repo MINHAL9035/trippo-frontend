@@ -10,13 +10,14 @@ import { CreateTripResponse } from "@/interface/user/ITripCreation";
 import { getTripDetails } from "@/service/api/trip";
 import { useAsyncList } from "@react-stately/data";
 import { useInView } from "react-intersection-observer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TripCard from "./TripCard";
 import CreateTripForm from "./CreateTripForm";
 
 const TripList = () => {
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const [open, setOpen] = useState(false);
+  const navigate=useNavigate()
   const showDrawer = () => {
     setOpen(true);
   };
@@ -56,6 +57,9 @@ const TripList = () => {
     }
   }, [inView]);
 
+  const handleClick = ()=>{
+    navigate("/ai-create-trip");
+  }
   return (
     <>
       <NavBar />
@@ -83,6 +87,12 @@ const TripList = () => {
           >
             <Plus className="mr-2" size={20} /> Create a new trip
           </button>
+          <button
+            onClick={handleClick}
+            className="flex items-center justify-center p-4 border border-gray-300 rounded-lg hover:text-yellow-400"
+          >
+            <Plus className="mr-2" size={20} /> Create a trip with ai
+           </button>
         </div>
         <div className="space-y-9">
           {list.items.length ? (

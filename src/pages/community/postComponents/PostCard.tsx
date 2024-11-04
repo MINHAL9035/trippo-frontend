@@ -49,7 +49,6 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
   };
 
   // liking the post
-
   useEffect(() => {
     const newSocket = io("http://localhost:3000");
     setSocket(newSocket);

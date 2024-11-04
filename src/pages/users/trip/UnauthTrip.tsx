@@ -63,7 +63,7 @@ const UnauthTrip = () => {
           <div className="w-full max-w-md rounded-sm shadow-lg overflow-hidden">
             <div>
               <img
-                src="src/assets/images/aiTripCreate.jpg"
+                src="images/aiTripCreate.jpg"
                 alt="AI Trip Planning"
                 className="w-full h-60 object-cover "
               />
@@ -85,7 +85,7 @@ const UnauthTrip = () => {
           <div className="w-full max-w-md  rounded-sm shadow-lg overflow-hidden">
             <div>
               <img
-                src="src/assets/images/buildTripScratch.jpg"
+                src="images/buildTripScratch.jpg"
                 alt="Build Your Trip"
                 className="w-full h-60 object-cover"
               />

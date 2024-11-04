@@ -56,7 +56,7 @@ export const HeroParallax = ({
   return (
     <div
       ref={ref}
-      className="md:h-[200vh] lg:h-[220vh] xl:h-[260vh]  py-40 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+      className="md:h-[200vh] lg:h-[220vh] xl:h-[300vh]  py-40 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
     >
       <Header />
       <motion.div
@@ -139,7 +139,7 @@ export const ProductCard = ({
       whileHover={{
         y: -20,
       }}
-      className="group/product h-96 w-[35rem] relative flex-shrink-0"
+      className="group/product h-80 w-[32rem] relative flex-shrink-0"
     >
       <Link to={product.link} className="block group-hover/product:shadow-2xl ">
         <img

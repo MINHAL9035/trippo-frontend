@@ -12,8 +12,8 @@ const NotificationDrawer = ({
   return (
     <>
       <div
-        className={`fixed left-24 top-0 h-full bg-white shadow-md border-gray-200 transition-all duration-300 z-10 ${
-          isNotificationOpen ? "w-80" : "w-0"
+        className={`fixed left-28 top-0 h-full   transition-all duration-300 z-10 ${
+          isNotificationOpen ? "w-80 border-r" : "w-0"
         } overflow-hidden`}
       >
         <div className="p-4">
@@ -26,8 +26,8 @@ const NotificationDrawer = ({
               <X className="w-5 h-5" />
             </button>
           </div>
-          <div className="relative">slzm</div>
-          <div className="mt-4">;asdkf,m</div>
+          <div className="relative"></div>
+          <div className="mt-4"></div>
         </div>
       </div>
     </>

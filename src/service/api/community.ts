@@ -91,6 +91,8 @@ export const getMessages = async (
 };
 
 export const getUserMessageList = async (userId: string) => {
+  console.log("hi",userId);
+  
   try {
     const response = await Api.get(socketEndpoints.userMessageList, {
       params: { userId },
