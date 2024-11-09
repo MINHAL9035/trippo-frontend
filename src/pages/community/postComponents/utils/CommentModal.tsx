@@ -28,7 +28,11 @@ const CommentModal: React.FC<CommentModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      // Fetch existing comments when modal opens
+      socket.connect();
+      socket.on("connect", () => {
+        console.log("Socket connected");
+      });
+
       socket.emit(
         "get-comments",
         { postId: post._id },
@@ -47,6 +51,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
 
     return () => {
       socket.off("new_comment");
+      socket.disconnect();
     };
   }, [isOpen, post._id]);
 
