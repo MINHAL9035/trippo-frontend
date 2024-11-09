@@ -1,25 +1,5 @@
-import { Link } from "react-router-dom";
-interface HotelOption {
-  hotelName: string;
-  hotelAddress: string;
-  price: string;
-  rating: number;
-}
-
-interface UserInput {
-  place: string;
-  days: number;
-  budget: string;
-}
-
-interface TripData {
-  hotelOptions: HotelOption[];
-}
-
-export interface Trip {
-  tripData: TripData;
-  userInput: UserInput;
-}
+import { Trip } from "@/interface/user/aitripListing.interface";
+import HotelCardItem from "./HotelCardItem";
 
 const AiDetailsHotel: React.FC<{ trip: Trip | null }> = ({ trip }) => {
   if (!trip) {
@@ -33,34 +13,7 @@ const AiDetailsHotel: React.FC<{ trip: Trip | null }> = ({ trip }) => {
 
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4  gap-5 ">
           {trip.tripData.hotelOptions.map((item, index) => (
-            <Link
-              to={
-                `https://www.google.com/maps/search/?api=1&query=` +
-                item.hotelName +
-                "," +
-                item.hotelAddress
-              }
-              target="_blank"
-            >
-              <div
-                key={index}
-                className="hover:scale-105 transition-all cursor-pointer"
-              >
-                <img
-                  className="rounded-xl"
-                  src="/src/assets/images/home1.jpg"
-                  alt=""
-                />
-                <div className="my-2 flex flex-col">
-                  <h2 className="font-medium">{item.hotelName}</h2>
-                  <h2 className="text-xs text-gray-400">
-                    📌 {item.hotelAddress}
-                  </h2>
-                  <h2 className="text-sm font-semibold">💵 {item.price}</h2>
-                  <h2 className="text-sm">⭐ {item.rating} stars</h2>
-                </div>
-              </div>
-            </Link>
+            <HotelCardItem item={item} index={index} />
           ))}
         </div>
       </div>

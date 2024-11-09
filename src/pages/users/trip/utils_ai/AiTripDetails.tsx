@@ -5,7 +5,9 @@ import handleError from "@/utils/errorHandler";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AiDetailsInfo from "./AiDetailsInfo";
-import AiDetailsHotel, { Trip } from "./AiDetailsHotel";
+import AiDetailsHotel from "./AiDetailsHotel";
+import PlacesToVisit from "./PlacesToVisit";
+import { Trip } from "@/interface/user/aitripListing.interface";
 
 const AiTripDetails = () => {
   const [aiTripDetails, setAiTripDetails] = useState<Trip | null>(null);
@@ -37,7 +39,7 @@ const AiTripDetails = () => {
         {/* Recommended Hotels */}
         <AiDetailsHotel trip={aiTripDetails} />
         {/* Daily plan  */}
-        {/* tips */}
+        <PlacesToVisit trip={aiTripDetails} />
       </div>
       <Footer />
     </>

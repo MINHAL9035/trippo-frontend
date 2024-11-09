@@ -1,6 +1,5 @@
 import Api from "@/config/axiosConfig";
 import communityEndpoints from "@/endpoints/communityEndpoints";
-import socketEndpoints from "@/endpoints/socketEndpoints";
 import apiHandler from "@/utils/apiHandler";
 
 export const createPost = async (formData: FormData) => {
@@ -20,8 +19,6 @@ export const createPost = async (formData: FormData) => {
 export const getPosts = async () => {
   try {
     const response = await Api.get(communityEndpoints.getPosts);
-    console.log("mfsjf", response);
-
     return response;
   } catch (error) {
     apiHandler(error);
@@ -75,42 +72,14 @@ export const getSearchedUserDetail = async (userName: string | undefined) => {
   }
 };
 
-export const getMessages = async (
-  senderId: string,
-  receiverId: string | undefined
-) => {
+export const getGroupDetails = async (groupId: string | undefined) => {
   try {
-    const response = await Api.get(
-      `${communityEndpoints.getMessages}/${senderId}/${receiverId}`
-    );
-    return response;
-  } catch (error) {
-    apiHandler(error);
-    return Promise.reject();
-  }
-};
-
-export const getUserMessageList = async (userId: string) => {
-  console.log("hi",userId);
-  
-  try {
-    const response = await Api.get(socketEndpoints.userMessageList, {
-      params: { userId },
+    const response = await Api.get(communityEndpoints.groupDetails, {
+      params: { groupId },
     });
     return response;
   } catch (error) {
     apiHandler(error);
     return Promise.reject();
-  }
-};
-
-export const getNotifications = async (userId: string) => {
-  try {
-    const response = await Api.get(socketEndpoints.getNofications, {
-      params: { userId },
-    });
-    return response;
-  } catch (error) {
-    apiHandler(error);
   }
 };

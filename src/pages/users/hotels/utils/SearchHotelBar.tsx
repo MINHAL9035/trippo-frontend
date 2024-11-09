@@ -82,7 +82,7 @@ const SearchHotelBar = () => {
   };
 
   return (
-    <div className="absolute left-1/2 -translate-x-1/2 bottom-5 translate-y-1/2 w-[100%] max-w-6xl z-50">
+    <div className="absolute left-1/2 -translate-x-1/2 translate-y-1/2 w-[100%] max-w-6xl z-50">
       <div className="bg-white rounded-lg shadow-md p-3 relative">
         <div className="flex flex-col md:flex-row items-center gap-4">
           {/* Location Search */}

@@ -3,72 +3,70 @@ import { Send } from "lucide-react";
 import { IUser } from "@/interface/user/IUser.interface";
 import { RootState } from "@/redux/store/store";
 import { useSelector } from "react-redux";
-import { getMessages } from "@/service/api/community";
-import handleError from "@/utils/errorHandler";
-import { socketService } from "@/service/socket.service";
+import { IMessage } from "@/interface/community/message.interface";
+import socket from "@/service/socket.service";
+
 export interface ChatInterfaceProps {
   userData: IUser | null;
 }
-export interface IMessage {
-  senderId: string;
-  receiverId: string | undefined;
-  content: string;
-}
+
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ userData }) => {
   const [message, setMessage] = useState<IMessage[]>([]);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const [inputMessage, setInputMessage] = useState("");
   const currentUserId = userInfo.userId;
+
+  useEffect(() => {
+    if (!userData?._id || !currentUserId) return;
+
+    socket.emit("initializeChat", {
+      currentUserId,
+      otherUserId: userData._id,
+    });
+
+    const handlePreviousMessages = (previousMessages: IMessage[]) => {
+      setMessage(previousMessages);
+    };
+
+    const handleNewMessage = (newMessage: IMessage) => {
+      setMessage((prevMessages) => [...prevMessages, newMessage]);
+    };
+
+    socket.on("previousMessages", handlePreviousMessages);
+    socket.on("receiveMessage", handleNewMessage);
+
+    return () => {
+      socket.emit("leaveChat", {
+        currentUserId,
+        otherUserId: userData._id,
+      });
+      socket.off("previousMessages", handlePreviousMessages);
+      socket.off("receiveMessage", handleNewMessage);
+    };
+  }, [userData?._id, currentUserId]);
+
   const handleSendMessage = useCallback(() => {
-    if (inputMessage.trim()) {
-      const newMessage: IMessage = {
-        senderId: currentUserId,
-        receiverId: userData?._id,
-        content: inputMessage,
-      };
-      socketService.sendMessage(newMessage);
-      setInputMessage("");
-    }
-  }, [currentUserId, inputMessage, userData?._id]);
+    const messageData = {
+      senderId: currentUserId,
+      receiverId: userData?._id,
+      content: inputMessage.trim(),
+    };
+
+    socket.emit("sendMessage", messageData);
+    setInputMessage("");
+  }, [inputMessage, currentUserId, userData?._id]);
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
   };
-  useEffect(() => {
-    socketService.connect();
-    socketService.register(currentUserId);
-    socketService.onNewMessage((message: IMessage) => {
-      if (
-        (message.senderId === currentUserId &&
-          message.receiverId === userData?._id) ||
-        (message.senderId === userData?._id &&
-          message.receiverId === currentUserId)
-      ) {
-        setMessage((prevMessages) => [...prevMessages, message]);
-      }
-    });
-    const fetchMessages = async () => {
-      try {
-        if (!userData?._id) return;
-        const response = await getMessages(currentUserId, userData._id);
-        setMessage(response.data);
-      } catch (error) {
-        handleError(error);
-      }
-    };
-    if (userData) {
-      fetchMessages();
-    }
-    return () => {
-      socketService.disconnect();
-    };
-  }, [currentUserId, userData]);
+
   return (
-    <div className="h-screen flex flex-col bg-white">
+    <div className="h-screen flex flex-col ">
       {/* Chat Header */}
-      <div className="border-b border-gray-200 p-4 flex items-center">
+      <div className="border-b  p-4 flex items-center">
         <div className="h-10 w-10 rounded-full overflow-hidden mr-3">
           <img
             src={userData?.image}
@@ -124,29 +122,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ userData }) => {
           </div>
         </div>
       </div>
-      {/* Message Input Area */}
-      {/* <div className="border-t border-gray-200 p-4">
-        <div className="flex items-center gap-3">
-          <div className="flex-1 bg-gray-200 rounded-md px-4 py-2 flex items-center gap-2">
-            <input
-              type="text"
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              placeholder="Message..."
-              className="flex-1 bg-transparent outline-none"
-            />
-            <button type="button">
-              <Heart className="w-6 h-6 text-gray-500" />
-            </button>
-            <button type="button">
-              <ImageIcon className="w-6 h-6 text-gray-500" />
-            </button>
-            <button type="button">
-              <Mic className="w-6 h-6 text-gray-500" />
-            </button>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };

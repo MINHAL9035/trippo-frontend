@@ -1,7 +1,26 @@
-import { Trip } from "./AiDetailsHotel";
+import { Trip } from "@/interface/user/aitripListing.interface";
+import { GetPlaceDetails, PHOTO_REF_URL } from "@/service/GoogleApi";
+import { useEffect, useState } from "react";
 
 const AiDetailsInfo: React.FC<{ trip: Trip | null }> = ({ trip }) => {
-  console.log("hi", trip);
+  const [photoUrl, setPhotoUrl] = useState("");
+  useEffect(() => {
+    trip && GetPlacePhoto();
+  }, [trip]);
+
+  const GetPlacePhoto = async () => {
+    const data = {
+      textQuery: trip?.userInput.place,
+    };
+    await GetPlaceDetails(data).then((res) => {
+      const PhotoUrl = PHOTO_REF_URL.replace(
+        "{NAME}",
+        res.data.places[0].photos[3].name
+      );
+      setPhotoUrl(PhotoUrl);
+    });
+  };
+
   if (!trip) {
     return <div>Loading...</div>;
   }
@@ -11,7 +30,7 @@ const AiDetailsInfo: React.FC<{ trip: Trip | null }> = ({ trip }) => {
       <div>
         <img
           className="h-[340px] w-full object-cover rounded-xl"
-          src="/src/assets/images/explore.jpg"
+          src={photoUrl}
           alt=""
         />
         <div>

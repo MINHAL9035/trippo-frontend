@@ -6,17 +6,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Edit } from "lucide-react";
+import { Edit, UsersRound } from "lucide-react";
 import { searchUsers } from "@/service/api/community";
 import { IUser } from "@/interface/user/IUser.interface";
 import handleError from "@/utils/errorHandler";
 import SearchResult from "./SearchResult";
 import { useNavigate } from "react-router-dom";
-import CreateGroupChat from "./CreateGroupChat";
+import CreateGroupDropdown from "./CreateGroupDropdown";
 const MessageDropdown = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<IUser[]>([]);
+  const [createGroupVisible, setCreateGroupVisible] = useState(false);
   const navigate = useNavigate();
+
   const performSearch = useCallback(async (searchQuery: string) => {
     try {
       if (!searchQuery) {
@@ -31,6 +33,7 @@ const MessageDropdown = () => {
       handleError(error);
     }
   }, []);
+
   const debounceSearch = useCallback(
     (input: string) => {
       const timer = setTimeout(() => performSearch(input), 500);
@@ -38,16 +41,24 @@ const MessageDropdown = () => {
     },
     [performSearch]
   );
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newQuery = e.target.value;
     setSearchQuery(newQuery);
   };
+
   useEffect(() => {
     if (searchQuery) debounceSearch(searchQuery);
   }, [searchQuery, debounceSearch]);
+
   const handleUserClick = (userName: string) => {
     navigate(`/${userName}`);
   };
+
+  const handleCreateGroup = () => {
+    setCreateGroupVisible(!createGroupVisible);
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -61,25 +72,35 @@ const MessageDropdown = () => {
       </PopoverTrigger>
       <PopoverContent className="w-80 p-3 h-96" align="start">
         <div className="space-y-3">
-          <Input
-            type="search"
-            placeholder="Search messages..."
-            value={searchQuery}
-            onChange={handleSearch}
-            className="w-full"
-          />
-          {/* <Button
+          {!createGroupVisible && (
+            <Input
+              type="search"
+              placeholder="Search messages..."
+              value={searchQuery}
+              onChange={handleSearch}
+              className="w-full"
+            />
+          )}
+
+          <Button
             className=" flex items-center justify-center gap-2"
             variant="outline"
+            onClick={handleCreateGroup}
           >
             <UsersRound className="w-4 h-4" />
             Create New Group
-          </Button> */}
-          <CreateGroupChat />
-          <SearchResult
-            searchResults={searchResults}
-            onUserClick={handleUserClick}
-          />
+          </Button>
+          {createGroupVisible && (
+            <CreateGroupDropdown onClose={() => setCreateGroupVisible(false)} />
+          )}
+          {!createGroupVisible && (
+            <div className="h-64 overflow-y-auto custom-scrollbar">
+              <SearchResult
+                searchResults={searchResults}
+                onUserClick={handleUserClick}
+              />
+            </div>
+          )}
         </div>
       </PopoverContent>
     </Popover>

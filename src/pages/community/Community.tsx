@@ -1,4 +1,4 @@
-import { Home, Search, MessageCircle, Heart, PlusSquare } from "lucide-react";
+import { Home, Search, MessageCircle, PlusSquare } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import PostCard from "./postComponents/PostCard";
 import EmptyState from "./postComponents/EmptyState";
@@ -52,10 +52,10 @@ const Community = () => {
     setIsCollapsed(false);
   };
 
-  const handleNotificationClick = () => {
-    setNotificationOpen(true);
-    setIsCollapsed(true);
-  };
+  // const handleNotificationClick = () => {
+  //   setNotificationOpen(true);
+  //   setIsCollapsed(true);
+  // };
 
   const handleNotificationClose = () => {
     setNotificationOpen(false);
@@ -74,11 +74,11 @@ const Community = () => {
       label: "Messages",
       onClick: () => navigate("/message"),
     },
-    {
-      icon: <Heart className="w-6 h-6" />,
-      label: "Notifications",
-      onClick: handleNotificationClick,
-    },
+    // {
+    //   icon: <Heart className="w-6 h-6" />,
+    //   label: "Notifications",
+    //   onClick: handleNotificationClick,
+    // },
     {
       icon: <PlusSquare className="w-6 h-6" />,
       label: "Create",
@@ -91,7 +91,7 @@ const Community = () => {
       <div className="flex min-h-screen ">
         {/* Left Sidebar */}
         <div
-          className={`fixed left-0 h-full border-r border-gray-00 p-4 transition-all duration-300 ${
+          className={`fixed left-0 h-full border-r  p-4 transition-all duration-300 ${
             isCollapsed ? "w-28" : "w-64"
           }`}
         >
@@ -102,7 +102,11 @@ const Community = () => {
                 isCollapsed ? "justify-center text-lg" : ""
               }`}
             >
-              <div className={`flex items-center ${isCollapsed && "ml-5 text-3xl"}`}>
+              <div
+                className={`flex items-center ${
+                  isCollapsed && "ml-5 text-3xl"
+                }`}
+              >
                 {isCollapsed ? "T" : "Trippo"}
                 {!isCollapsed && (
                   <span className="text-yellow-400 ml-1">Community</span>

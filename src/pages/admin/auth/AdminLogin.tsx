@@ -33,7 +33,7 @@ const AdminLogin = () => {
           /> */}
           <img
             className="w-80 m-8"
-            src="images/admin/adminLogin.png"
+            src="/images/admin/adminLogin.png"
             alt="adminImage"
           />
         </div>

@@ -1,23 +1,27 @@
-import { Link, useNavigate } from "react-router-dom";
-import { Home, Search, MessageCircle, PlusSquare } from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Home, Search, MessageCircle, Heart, PlusSquare } from "lucide-react";
 import { useEffect, useState } from "react";
 import SearchDrawer from "./SearchDrawer";
 import { RootState } from "@/redux/store/store";
 import { useSelector } from "react-redux";
-import MessageDropdown from "./MessageDropdown";
-import ToggleTheme from "@/components/user/ToggleTheme";
 import socket from "@/service/socket.service";
+import ToggleTheme from "@/components/user/ToggleTheme";
 import {
   IGroup,
   IMessageListUser,
 } from "@/interface/community/message.interface";
+import GroupChatInterface from "./GroupChatInterface";
+import handleError from "@/utils/errorHandler";
+import { getGroupDetails } from "@/service/api/community";
 
-const CommunityMessage = () => {
+const GroupMessage = () => {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [userList, setUserList] = useState<IMessageListUser[]>([]);
   const [groupList, setGroupList] = useState<IGroup[]>([]);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
+  const { groupId } = useParams<{ groupId: string }>();
+  const [groupDetails, setGroupDetails] = useState<IGroup | null>(null);
 
   useEffect(() => {
     socket.connect();
@@ -45,9 +49,28 @@ const CommunityMessage = () => {
       socket.off("disconnect");
       socket.off("messageList");
       socket.off("userList");
+      socket.off("groupList");
       socket.disconnect();
     };
   }, [userInfo.userId]);
+
+  console.log("my groups", groupList);
+
+  useEffect(() => {
+    const fetchGroupDetails = async () => {
+      try {
+        const response = await getGroupDetails(groupId);
+        if (response.status === 200) {
+          setGroupDetails(response.data);
+        }
+      } catch (error) {
+        handleError(error);
+      }
+    };
+    fetchGroupDetails();
+  }, [groupId]);
+
+  console.log("gushdsj", groupDetails);
 
   const handleSearchClick = () => {
     setIsSearchOpen(true);
@@ -59,9 +82,6 @@ const CommunityMessage = () => {
 
   const handleMessageListClick = (userName: string) => {
     navigate(`/message/${userName}`);
-  };
-  const handleGroupListClick = (groupId: string) => {
-    navigate(`/group/${groupId}`);
   };
 
   const sidebarItems = [
@@ -79,7 +99,7 @@ const CommunityMessage = () => {
       icon: <MessageCircle className="w-6 h-6" />,
       label: "Messages",
     },
-    // { icon: <Heart className="w-6 h-6" />, label: "Notifications" },
+    { icon: <Heart className="w-6 h-6" />, label: "Notifications" },
     { icon: <PlusSquare className="w-6 h-6" />, label: "Create" },
   ];
 
@@ -96,7 +116,6 @@ const CommunityMessage = () => {
             <ToggleTheme />
           </div>
         </div>
-
         <nav className="space-y-4">
           {sidebarItems.map((item, index) => (
             <button
@@ -109,16 +128,14 @@ const CommunityMessage = () => {
           ))}
         </nav>
       </div>
-
       {/* Drawer */}
-      <div className="fixed left-32 h-full border-r transition-all duration-300 z-10 w-80">
+      <div className="fixed left-32 h-full border-r  transition-all duration-300 z-10 w-80">
         <div className="p-4 h-full overflow-y-auto">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Messages</h2>
-            <MessageDropdown />
+            {/* <MessageDropdown /> */}
           </div>
-
-          <div className="space-y-4 overflow-y-auto scrollbar-hide">
+          <div className="space-y-4">
             {userList.length > 0 ? (
               userList.map((user) => (
                 <div
@@ -148,7 +165,6 @@ const CommunityMessage = () => {
                 <h3 className="text-lg font-semibold mt-6">Groups</h3>
                 {groupList.map((group) => (
                   <div
-                    onClick={() => handleGroupListClick(group.groupId)}
                     key={group._id}
                     className="flex items-center space-x-4 p-2 rounded-lg hover:bg-gray-100 cursor-pointer"
                   >
@@ -175,19 +191,10 @@ const CommunityMessage = () => {
       <SearchDrawer isSearchOpen={isSearchOpen} onClose={handleCloseSearch} />
 
       {/* Main Content */}
-      <main className="flex-1 transition-all duration-300 ml-[416px] p-4">
-        <div className="max-w-xl mx-auto mt-14 flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
-          <div className="rounded-full bg-gray-100 p-8 mb-6">
-            <MessageCircle className="w-12 h-12 text-gray-400" />
-          </div>
-          <h1 className="text-2xl font-semibold mb-3">Your messages</h1>
-          <p className="text-gray-600 text-center">
-            Send private photos and messages to a friend or group.
-          </p>
-        </div>
+      <main className="flex-1 transition-all duration-300 ml-[450px]">
+        <GroupChatInterface groupData={groupDetails} />
       </main>
     </div>
   );
 };
-
-export default CommunityMessage;
+export default GroupMessage;

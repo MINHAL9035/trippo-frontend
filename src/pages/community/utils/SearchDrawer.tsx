@@ -60,7 +60,7 @@ const SearchDrawer = ({ isSearchOpen, onClose }: SearchDrawerProps) => {
 
   return (
     <div
-      className={`fixed left-28 top-0 h-full  transition-all duration-300 z-10 ${
+      className={`fixed left-28 top-0 h-full  transition-all duration-300 z-50 ${
         isSearchOpen ? "w-80 border-r " : "w-0"
       } overflow-hidden`}
     >

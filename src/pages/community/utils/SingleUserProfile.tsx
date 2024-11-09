@@ -18,7 +18,6 @@ import {
   Heart,
   PlusSquare,
   Mail,
-  UserPlus,
 } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -178,10 +177,10 @@ const SingleUserProfile = () => {
                           <Mail className="w-4 h-4 mr-2" />
                           Message
                         </Button>
-                        <Button variant="outline">
+                        {/* <Button variant="outline">
                           <UserPlus className="w-4 h-4 mr-2" />
                           Follow
-                        </Button>
+                        </Button> */}
                       </div>
                     )}
                   </div>
@@ -193,10 +192,10 @@ const SingleUserProfile = () => {
                       posts
                     </div>
                     <div>
-                      <span className="font-bold">2.5k</span> followers
+                      {/* <span className="font-bold">2.5k</span> followers */}
                     </div>
                     <div>
-                      <span className="font-bold">1.2k</span> following
+                      {/* <span className="font-bold">1.2k</span> following */}
                     </div>
                   </div>
                 </div>

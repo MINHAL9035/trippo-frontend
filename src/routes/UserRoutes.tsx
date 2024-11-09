@@ -26,6 +26,7 @@ import AiTripCreate from "@/pages/users/trip/AiTripCreate";
 import CommunityMessage from "@/pages/community/utils/CommunityMessage";
 import MessagePage from "@/pages/community/utils/MessagePage";
 import AiTripDetails from "@/pages/users/trip/utils_ai/AiTripDetails";
+import GroupMessage from "@/pages/community/utils/GroupMessage";
 
 const LandingPage = lazy(() => import("@/pages/users/home/LandingPage"));
 const communityPage = lazy(() => import("@/pages/community/Community"));
@@ -86,6 +87,10 @@ const UserRoutes = () => {
         <Route
           path="/message/:userName"
           element={<WithAuth component={MessagePage} />}
+        />
+        <Route
+          path="/group/:groupId"
+          element={<WithAuth component={GroupMessage} />}
         />
         <Route path="/bookingDetails/:bookingId" element={<BookingDetails />} />
         <Route path="/ai-trip-details/:tripId" element={<AiTripDetails />} />

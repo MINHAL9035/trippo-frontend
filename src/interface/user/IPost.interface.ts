@@ -1,7 +1,7 @@
 import { IUser } from "./IUser.interface";
 
 export interface IPostInterface {
-  comments: any;
+  comments: unknown;
   createdAt: string;
   _id: string;
   userId: IUser;

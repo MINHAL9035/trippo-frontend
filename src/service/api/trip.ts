@@ -76,3 +76,14 @@ export const getAiCreatedTrip = async (tripId: string | undefined) => {
     apiHandler(error);
   }
 };
+
+export const getFullTripDetails=async (id:string|undefined)=>{
+  try {
+    const response = await Api.get(tripEndpoints.getMyTripDetails, {
+      params: { id },
+    });
+    return response;
+  } catch (error) {
+    apiHandler(error);
+  }
+}

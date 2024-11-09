@@ -1,154 +1,200 @@
-import React, {  useState } from "react";
-import { Send } from "lucide-react";
-import { IUser } from "@/interface/user/IUser.interface";
-// import { socketService } from "@/service/socket.service";
-import { RootState } from "@/redux/store/store";
-import { useSelector } from "react-redux";
-import { useSocketContext } from "@/context/utils/useSocketContext";
-// import { getMessages } from "@/service/api/community";
-// import handleError from "@/utils/errorHandler";
-
-export interface ChatInterfaceProps {
-  userData: IUser | null;
+{
+  "location_id": "8861049",
+  "name": "Arabian Hut",
+  "latitude": "11.146265",
+  "longitude": "75.895775",
+  "num_reviews": "3",
+  "timezone": "Asia/Kolkata",
+  "location_string": "Malappuram, Malappuram District, Kerala",
+  "photo": {
+      "images": {
+          "small": {
+              "width": "150",
+              "url": "https://media-cdn.tripadvisor.com/media/photo-l/0f/c6/e1/82/photo0jpg.jpg",
+              "height": "150"
+          },
+          "thumbnail": {
+              "width": "50",
+              "url": "https://media-cdn.tripadvisor.com/media/photo-t/0f/c6/e1/82/photo0jpg.jpg",
+              "height": "50"
+          },
+          "original": {
+              "width": "1536",
+              "url": "https://media-cdn.tripadvisor.com/media/photo-o/0f/c6/e1/82/photo0jpg.jpg",
+              "height": "2048"
+          },
+          "large": {
+              "width": "550",
+              "url": "https://media-cdn.tripadvisor.com/media/photo-p/0f/c6/e1/82/photo0jpg.jpg",
+              "height": "733"
+          },
+          "medium": {
+              "width": "338",
+              "url": "https://media-cdn.tripadvisor.com/media/photo-s/0f/c6/e1/82/photo0jpg.jpg",
+              "height": "450"
+          }
+      },
+      "is_blessed": true,
+      "uploaded_date": "2017-07-05T00:52:44-0400",
+      "caption": "",
+      "id": "264692098",
+      "helpful_votes": "1",
+      "published_date": "2017-07-05T00:52:44-0400",
+      "user": {
+          "user_id": null,
+          "member_id": "0",
+          "type": "user"
+      }
+  },
+  "awards": [],
+  "doubleclick_zone": "as.india.kerala",
+  "preferred_map_engine": "default",
+  "raw_ranking": "2.9577479362487793",
+  "ranking_geo": "Malappuram",
+  "ranking_geo_id": "1156216",
+  "ranking_position": "23",
+  "ranking_denominator": "26",
+  "ranking_category": "restaurant",
+  "ranking": "#23 of 77 Restaurants in Malappuram",
+  "distance": "1.0968148710745098",
+  "distance_string": "1.1 km",
+  "bearing": "southeast",
+  "rating": "3.5",
+  "is_closed": false,
+  "open_now_text": "Open Now",
+  "is_long_closed": false,
+  "price_level": "$",
+  "price": "$100 - $500",
+  "ride_providers": [
+      "olaCabs"
+  ],
+  "description": "",
+  "web_url": "https://www.tripadvisor.com/Restaurant_Review-g1156216-d8861049-Reviews-Arabian_Hut-Malappuram_Malappuram_District_Kerala.html",
+  "write_review": "https://www.tripadvisor.com/UserReview-g1156216-d8861049-Arabian_Hut-Malappuram_Malappuram_District_Kerala.html",
+  "ancestors": [
+      {
+          "subcategory": [
+              {
+                  "key": "city",
+                  "name": "City"
+              }
+          ],
+          "name": "Malappuram",
+          "abbrv": null,
+          "location_id": "1156216"
+      },
+      {
+          "subcategory": [
+              {
+                  "key": "district",
+                  "name": "District"
+              }
+          ],
+          "name": "Malappuram District",
+          "abbrv": null,
+          "location_id": "12375142"
+      },
+      {
+          "subcategory": [
+              {
+                  "key": "state",
+                  "name": "State"
+              }
+          ],
+          "name": "Kerala",
+          "abbrv": null,
+          "location_id": "297631"
+      },
+      {
+          "subcategory": [
+              {
+                  "key": "country",
+                  "name": "Country"
+              }
+          ],
+          "name": "India",
+          "abbrv": null,
+          "location_id": "293860"
+      }
+  ],
+  "category": {
+      "key": "restaurant",
+      "name": "Restaurant"
+  },
+  "subcategory": [
+      {
+          "key": "fast_food",
+          "name": "Fast food"
+      }
+  ],
+  "parent_display_name": "Malappuram",
+  "is_jfy_enabled": false,
+  "nearest_metro_station": [],
+  "phone": "+91 91422 77772",
+  "website": "https://www.facebook.com/Arabianhut",
+  "address_obj": {
+      "street1": "Kakkanchery",
+      "street2": "13th Mile",
+      "city": "Malappuram",
+      "state": "Kerala",
+      "country": "India",
+      "postalcode": "673635"
+  },
+  "address": "Kakkanchery 13th Mile, Malappuram 673635 India",
+  "hours": {
+      "week_ranges": [
+          [
+              {
+                  "open_time": 720,
+                  "close_time": 1440
+              }
+          ],
+          [
+              {
+                  "open_time": 720,
+                  "close_time": 1440
+              }
+          ],
+          [
+              {
+                  "open_time": 720,
+                  "close_time": 1440
+              }
+          ],
+          [
+              {
+                  "open_time": 720,
+                  "close_time": 1440
+              }
+          ],
+          [
+              {
+                  "open_time": 720,
+                  "close_time": 1440
+              }
+          ],
+          [
+              {
+                  "open_time": 720,
+                  "close_time": 1440
+              }
+          ],
+          [
+              {
+                  "open_time": 720,
+                  "close_time": 1440
+              }
+          ]
+      ],
+      "timezone": "Asia/Kolkata"
+  },
+  "is_candidate_for_contact_info_suppression": false,
+  "cuisine": [],
+  "dietary_restrictions": [],
+  "establishment_types": [
+      {
+          "key": "10591",
+          "name": "Restaurants"
+      }
+  ]
 }
-
-export interface IMessage {
-  senderId: string;
-  receiverId: string | undefined;
-  content: string;
-}
-
-const ChatInterface: React.FC<ChatInterfaceProps> = ({ userData }) => {
-  // const [message, setMessage] = useState<IMessage[]>([]);
-  const userInfo = useSelector((state: RootState) => state.auth.userInfo);
-  const [inputMessage, setInputMessage] = useState("");
-  const { chat } = useSocketContext();
-
-  const currentUserId = userInfo.userId;
-
-  // const handleSendMessage = useCallback(() => {
-  //   if (inputMessage.trim()) {
-  //     const newMessage: IMessage = {
-  //       senderId: currentUserId,
-  //       receiverId: userData?._id,
-  //       content: inputMessage,
-  //     };
-  //     socketService.sendMessage(newMessage);
-  //     setInputMessage("");
-  //   }
-  // }, [currentUserId, inputMessage, userData?._id]);
-
-  const handleSendMessage = () => {
-    if (inputMessage.trim()) {
-      chat.sendMessage(inputMessage);
-      setInputMessage("");
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
-  // useEffect(() => {
-  //   socketService.connect();
-  //   socketService.register(currentUserId);
-
-  //   socketService.onNewMessage((message: IMessage) => {
-  //     if (
-  //       (message.senderId === currentUserId &&
-  //         message.receiverId === userData?._id) ||
-  //       (message.senderId === userData?._id &&
-  //         message.receiverId === currentUserId)
-  //     ) {
-  //       setMessage((prevMessages) => [...prevMessages, message]);
-  //     }
-  //   });
-
-  //   const fetchMessages = async () => {
-  //     try {
-  //       if (!userData?._id) return;
-  //       const response = await getMessages(currentUserId, userData._id);
-  //       setMessage(response.data);
-  //     } catch (error) {
-  //       handleError(error);
-  //     }
-  //   };
-
-  //   if (userData) {
-  //     fetchMessages();
-  //   }
-
-  //   return () => {
-  //     socketService.disconnect();
-  //   };
-  // }, [currentUserId, userData]);
-
-  return (
-    <div className="h-screen flex flex-col ">
-      {/* Chat Header */}
-      <div className="border-b border-gray-200 p-4 flex items-center">
-        <div className="h-10 w-10 rounded-full overflow-hidden mr-3">
-          <img
-            src={userData?.image}
-            alt="dsh"
-            className="h-full w-full object-cover"
-          />
-        </div>
-        <div className="flex-1">
-          <h2 className="font-semibold">{userData?.userName}</h2>
-        </div>
-      </div>
-
-      {/* Chat Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {chat.messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`flex ${
-              msg.senderId === currentUserId ? "justify-end" : "justify-start"
-            }`}
-          >
-            <div
-              className={`max-w-[70%] rounded-2xl px-4 py-2 ${
-                msg.senderId === currentUserId
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-100 text-gray-900"
-              }`}
-            >
-              <p>{msg.content}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="border-t border-gray-200 p-4">
-        <div className="flex items-center gap-3">
-          <div className="flex-1 bg-gray-200 rounded-md px-4 py-2 flex items-center gap-2">
-            <input
-              type="text"
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyDown={handleKeyPress}
-              placeholder="Message..."
-              className="flex-1 bg-transparent outline-none"
-            />
-            {inputMessage.trim() && (
-              <button
-                type="button"
-                onClick={handleSendMessage}
-                className="text-blue-500 hover:text-blue-600 transition-colors"
-              >
-                <Send className="w-6 h-6" />
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ChatInterface;

@@ -4,29 +4,59 @@ import { useEffect, useState } from "react";
 import SearchDrawer from "./SearchDrawer";
 import { RootState } from "@/redux/store/store";
 import { useSelector } from "react-redux";
-import {
-  getSearchedUserDetail,
-  getUserMessageList,
-} from "@/service/api/community";
+import { getSearchedUserDetail } from "@/service/api/community";
 import handleError from "@/utils/errorHandler";
-import { format, isToday, isYesterday, differenceInDays } from "date-fns";
 import ChatInterface from "./ChatInterface";
 import { IUser } from "@/interface/user/IUser.interface";
-// import MessageDropdown from "./MessageDropdown";
-export interface IMessageList {
-  _id: string;
-  name: string;
-  image: string;
-  lastMessage: string;
-  lastMessageDate: string;
-}
+import socket from "@/service/socket.service";
+import ToggleTheme from "@/components/user/ToggleTheme";
+import {
+  IGroup,
+  IMessageListUser,
+} from "@/interface/community/message.interface";
+
 const MessagePage = () => {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [messageList, setMessageList] = useState<IMessageList[]>([]);
+  const [userList, setUserList] = useState<IMessageListUser[]>([]);
+  const [groupList, setGroupList] = useState<IGroup[]>([]);
   const userInfo = useSelector((state: RootState) => state.auth.userInfo);
   const { userName } = useParams<{ userName: string }>();
   const [userProfile, setUserProfile] = useState<IUser | null>(null);
+
+  useEffect(() => {
+    socket.connect();
+    socket.on("connect", () => {
+      console.log("Socket connected");
+      socket.emit("getGroups", { userId: userInfo.userId });
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Socket disconnected");
+    });
+
+    socket.emit("getUserMessageList", { userId: userInfo.userId });
+
+    socket.on("userList", (users) => {
+      setUserList(users);
+    });
+
+    socket.on("groupList", (groups) => {
+      setGroupList(groups);
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("messageList");
+      socket.off("userList");
+      socket.off("groupList");
+      socket.disconnect();
+    };
+  }, [userInfo.userId]);
+
+  console.log("my groups", groupList);
+
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -41,39 +71,21 @@ const MessagePage = () => {
     };
     fetchProfileData();
   }, [userName]);
-  const formatLastMessageDate = (dateString: string) => {
-    const date = new Date(dateString);
-    if (isToday(date)) {
-      return format(date, "p");
-    } else if (isYesterday(date)) {
-      return "Yesterday";
-    } else if (differenceInDays(new Date(), date) < 7) {
-      return format(date, "EEEE");
-    } else {
-      return format(date, "MM/dd/yyyy");
-    }
-  };
+
   const handleSearchClick = () => {
     setIsSearchOpen(true);
   };
+
   const handleCloseSearch = () => {
     setIsSearchOpen(false);
   };
-  useEffect(() => {
-    const UserMessageList = async () => {
-      try {
-        const response = await getUserMessageList(userInfo.userId);
-        if (response.status === 200) {
-          setMessageList(response.data);
-        }
-      } catch (error) {
-        handleError(error);
-      }
-    };
-    UserMessageList();
-  }, [userInfo.userId]);
+
   const handleMessageListClick = (userName: string) => {
     navigate(`/message/${userName}`);
+  };
+
+  const handleGroupListClick = (groupId: string) => {
+    navigate(`/group/${groupId}`);
   };
   const sidebarItems = [
     {
@@ -93,13 +105,20 @@ const MessagePage = () => {
     { icon: <Heart className="w-6 h-6" />, label: "Notifications" },
     { icon: <PlusSquare className="w-6 h-6" />, label: "Create" },
   ];
+
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex min-h-screen ">
       {/* Sidebar */}
-      <div className="fixed left-0 h-full border-r border-gray-200 p-4 transition-all duration-300 w-24 bg-white z-20">
-        <Link to="/home">
-          <div className="mb-8 font-bold text-center text-lg">T</div>
-        </Link>
+      <div className="fixed left-0 h-full border-r  p-4 transition-all duration-300 w-28 ">
+        <div className="flex items-center mb-8 font-bold">
+          <Link to="/home" className="flex items-center justify-center text-lg">
+            <div className="flex items-center ml-5 text-3xl">T</div>
+          </Link>
+          <div className="ml-3">
+            {" "}
+            <ToggleTheme />
+          </div>
+        </div>
         <nav className="space-y-4">
           {sidebarItems.map((item, index) => (
             <button
@@ -113,46 +132,70 @@ const MessagePage = () => {
         </nav>
       </div>
       {/* Drawer */}
-      <div className="fixed left-24 h-full border-r border-gray-200 bg-white transition-all duration-300 z-10 w-80">
+      <div className="fixed left-32 h-full border-r  transition-all duration-300 z-10 w-80">
         <div className="p-4 h-full overflow-y-auto">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Messages</h2>
             {/* <MessageDropdown /> */}
           </div>
           <div className="space-y-4">
-            {messageList.length > 0 ? (
-              messageList.map((message) => (
+            {userList.length > 0 ? (
+              userList.map((user) => (
                 <div
-                  key={message._id}
-                  onClick={() => handleMessageListClick(message.name)}
-                  className="flex items-center p-4 hover:bg-gray-50 rounded-lg cursor-pointer"
+                  onClick={() => handleMessageListClick(user.userName)}
+                  key={user._id}
+                  className="flex items-center space-x-4 p-2 rounded-lg hover:bg-gray-100 cursor-pointer"
                 >
-                  <div className="h-12 w-12 rounded-full mr-3 overflow-hidden">
-                    <img
-                      src={message.image}
-                      alt={message.name}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
+                  <img
+                    src={user.image}
+                    alt={user.fullName}
+                    className="w-12 h-12 rounded-full"
+                  />
                   <div>
-                    <div className="font-medium text-base">{message.name}</div>
-                    <div className="text-sm text-gray-500">
-                      Last message:{" "}
-                      {formatLastMessageDate(message.lastMessageDate)}
-                    </div>
+                    <h3 className="font-medium">{user.fullName}</h3>
+                    <p className="text-gray-500">{user.userName}</p>
                   </div>
                 </div>
               ))
             ) : (
-              <div className="text-center text-gray-500 py-4">No messages</div>
+              <div className="text-center text-gray-500 py-4">
+                No messages or groups
+              </div>
+            )}
+
+            {groupList.length > 0 && (
+              <>
+                <h3 className="text-lg font-semibold mt-6">Groups</h3>
+                {groupList.map((group) => (
+                  <div
+                    onClick={() => handleGroupListClick(group.groupId)}
+                    key={group._id}
+                    className="flex items-center space-x-4 p-2 rounded-lg hover:bg-gray-100 cursor-pointer"
+                  >
+                    <img
+                      src="/images/groupImage.jpg"
+                      alt={group.name}
+                      className="w-12 h-12 rounded-full"
+                    />
+                    <div>
+                      <h3 className="font-medium">{group.name}</h3>
+                      <p className="text-gray-500">
+                        {group.members.length} members
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </>
             )}
           </div>
         </div>
       </div>
+
       {/* Search Drawer */}
       <SearchDrawer isSearchOpen={isSearchOpen} onClose={handleCloseSearch} />
+
       {/* Main Content */}
-      <main className="flex-1 transition-all duration-300 ml-[416px]">
+      <main className="flex-1 transition-all duration-300 ml-[450px]">
         <ChatInterface userData={userProfile} />
       </main>
     </div>

@@ -69,10 +69,10 @@ const TripList = () => {
           <Link to="/hotels" className="hover:text-yellow-500 hover:underline">
             Hotels
           </Link>
-          <Link to="" className="hover:text-yellow-500 hover:underline">
-            Things to Do
+          <Link to="/explore" className="hover:text-yellow-500 hover:underline">
+            Attractions
           </Link>
-          <Link to="" className="hover:text-yellow-500 hover:underline">
+          <Link to="/explore" className="hover:text-yellow-500 hover:underline">
             Restaurants
           </Link>
         </nav>

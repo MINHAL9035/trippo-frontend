@@ -1,84 +1,122 @@
 import Footer from "@/components/user/Footer";
 import NavBar from "@/components/user/NavBar";
-import { Search, RotateCcw, Tag, Heart } from "lucide-react";
+import { Search, RotateCcw, Tag } from "lucide-react";
+import List from "./utils/List";
+import { useEffect, useState } from "react";
+import { getPlacesData } from "@/service/api/explore";
+import {
+  Bounds,
+  Coordinates,
+  IExplorePlaces,
+} from "@/interface/user/explore.interface";
+import { Autocomplete } from "@react-google-maps/api";
+import Map from "./utils/Map";
 
-const destinationsData = [
-  { name: "London", image: "/src/assets/images/explore.jpg" },
-  { name: "Paris", image: "/src/assets/images/explore.jpg" },
-  { name: "Rome", image: "/src/assets/images/explore.jpg" },
-  { name: "New York City", image: "/src/assets/images/explore.jpg" },
-  { name: "New York City", image: "/src/assets/images/explore.jpg" },
-  { name: "New York City", image: "/src/assets/images/explore.jpg" },
-  { name: "New York City", image: "/src/assets/images/explore.jpg" },
-  { name: "New York City", image: "/src/assets/images/explore.jpg" },
-  { name: "New York City", image: "/src/assets/images/explore.jpg" },
-  { name: "New York City", image: "/src/assets/images/explore.jpg" },
-];
-
-const experiencesData = [
-  {
-    name: "Chicago Architecture River Cruise",
-    image: "/src/assets/images/explore.jpg",
-  },
-  {
-    name: "History and Hauntings of Salem Guided Walking Tour",
-    image: "/src/assets/images/explore.jpg",
-  },
-  {
-    name: "Pompeii Small Group Tour with an Archaeologist",
-    image: "/src/assets/images/explore.jpg",
-  },
-  {
-    name: "Best DMZ Tour Korea from Seoul (Red Suspension Bridge Optional)",
-    image: "/src/assets/images/explore.jpg",
-  },
-];
+// Define types for the Autocomplete
+type AutocompleteType = google.maps.places.Autocomplete | null;
 
 const Explore = () => {
+  const [places, setPlaces] = useState<IExplorePlaces[]>([]);
+  const [filteredPlaces, setFilteredPlaces] = useState<IExplorePlaces[]>([]);
+  const [coords, setCoords] = useState<Coordinates>({ lat: 0, lng: 0 });
+  const [bounds, setBounds] = useState<Bounds | null>(null);
+  const [type, setType] = useState("restaurants");
+  const [rating, setRating] = useState("all");
+  const [isLoading, setIsLoading] = useState(false);
+  const [autocomplete, setAutocomplete] = useState<AutocompleteType>(null);
+
+  const onLoad = (autoC: google.maps.places.Autocomplete): void => {
+    setAutocomplete(autoC);
+  };
+
+  const onPlaceChanged = () => {
+    if (autocomplete !== null) {
+      const place = autocomplete.getPlace();
+      if (place.geometry && place.geometry.location) {
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        setCoords({ lat, lng });
+      }
+    }
+  };
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      ({ coords: { latitude, longitude } }) => {
+        setCoords({ lat: latitude, lng: longitude });
+      }
+    );
+  }, []);
+
+  useEffect(() => {
+    const filtered = places.filter((place) => place.rating > rating);
+    setFilteredPlaces(filtered);
+  }, [places, rating]);
+
+  useEffect(() => {
+    if (bounds) {
+      setIsLoading(true);
+      getPlacesData(type, bounds).then((data) => {
+        setPlaces(data);
+        setFilteredPlaces([]);
+        setIsLoading(false);
+      });
+    }
+  }, [bounds, coords, type]);
+
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <NavBar />
+      {/* Hero Section */}
       <div className="relative">
         <img
-          className="h-[300px] sm:h-[400px] md:h-[500px] w-full object-cover"
-          src="/src/assets/images/explore.jpg"
+          className="h-[300px] sm:h-[400px] md:h-[400px] w-full object-cover"
+          src="images/explore.jpg"
           alt="Explore background"
         />
         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-white px-4">
           <h1 className="text-xl sm:text-2xl md:text-4xl font-bold mb-4 text-center">
             Wander, Explore, and Find Your <br className="hidden md:block" />
-            Next Destination.
+            Next Destination
           </h1>
           <div className="w-full max-w-xs sm:max-w-md md:max-w-2xl px-4">
             <div className="relative">
-              <input
-                type="text"
-                placeholder="Search by destination, attraction or activity"
-                className="w-full py-2 sm:py-3 px-3 sm:px-4 pr-10 rounded-md bg-white text-black text-sm sm:text-base transition-all duration-300"
-              />
-              <Search
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
-              />
+              <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Search by destination, attraction or activity"
+                    className="w-full py-2 sm:py-3 px-3 sm:px-4 pr-10 rounded-md bg-white text-black text-sm sm:text-base"
+                  />
+                  <Search
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={20}
+                  />
+                </div>
+              </Autocomplete>
             </div>
           </div>
-          <div className="flex flex-wrap justify-center mt-4 sm:mt-8 w-full">
+
+          <div className="flex flex-wrap justify-center mt-4 sm:mt-8 gap-24">
             {[
               {
                 icon: Search,
-                text: "See what people loved with real reviews on almost everything.",
+                text: "See what people loved with real reviews",
               },
               {
                 icon: RotateCcw,
-                text: "Most experiences can be cancelled up to 24 hours before.",
+                text: "24-hour cancellation available",
               },
-              { icon: Tag, text: "Do fun stuff without breaking the bank" },
+              {
+                icon: Tag,
+                text: "Budget-friendly options",
+              },
             ].map((item, index) => (
               <div
                 key={index}
-                className="flex flex-col items-center mx-2 sm:mx-4 max-w-[120px] sm:max-w-[200px] mb-4 hover:text-yellow-400"
+                className="flex flex-col items-center w-24 sm:w-32"
               >
-                <div className="bg-white rounded-full p-2 sm:p-3 mb-2 hover:bg-yellow-400">
+                <div className="bg-white rounded-full p-2 sm:p-3 mb-2 hover:bg-yellow-400 transition-colors">
                   <item.icon className="text-black" size={16} />
                 </div>
                 <p className="text-center text-xs sm:text-sm">{item.text}</p>
@@ -88,55 +126,27 @@ const Explore = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8 sm:py-12">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold mb-4">
-            Top global destinations
-          </h2>
-          <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide">
-            {destinationsData.map((destination, index) => (
-              <div key={index} className="flex-none w-48 sm:w-64 relative">
-                <img
-                  src={destination.image}
-                  alt={destination.name}
-                  className="w-full h-32 sm:h-40 object-cover rounded-lg"
-                />
-                <Heart
-                  className="absolute top-2 right-2 text-white"
-                  size={16}
-                />
-                <p className="mt-2 font-semibold text-sm sm:text-base">
-                  {destination.name}
-                </p>
-              </div>
-            ))}
-          </div>
+      {/* Main Content */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
+        {/* List Section */}
+        <div className="order-2 lg:order-1 overflow-y-auto">
+          <List
+            isLoading={isLoading}
+            type={type}
+            setType={setType}
+            rating={rating}
+            setRating={setRating}
+            places={filteredPlaces.length ? filteredPlaces : places}
+          />
+        </div>
 
-          <h2 className="text-xl sm:text-2xl font-bold mt-8 sm:mt-12 mb-4">
-            Top experiences worldwide
-          </h2>
-          <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide">
-            {experiencesData.map((experience, index) => (
-              <div key={index} className="flex-none w-48 sm:w-64 relative">
-                <img
-                  src={experience.image}
-                  alt={experience.name}
-                  className="w-full h-32 sm:h-40 object-cover rounded-lg"
-                />
-                <Heart
-                  className="absolute top-2 right-2 text-white"
-                  size={16}
-                />
-                <p className="mt-2 font-semibold text-sm sm:text-base line-clamp-2">
-                  {experience.name}
-                </p>
-              </div>
-            ))}
-          </div>
+        {/* Map Section */}
+        <div className="order-1 m-5 rounded-md lg:order-2 min-h-[400px] lg:min-h-full sticky top-0">
+          <Map setBounds={setBounds} setCoords={setCoords} coords={coords} />
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
