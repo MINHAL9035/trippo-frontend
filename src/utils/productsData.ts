@@ -62,7 +62,7 @@ export const products = [
   {
     title: "Community",
     link: "https://trippo-frontend.vercel.app/home",
-    thumbnail: "images/LPImages/LP11.jpg",
+    thumbnail: "images/LPImages/LP8.jpg",
   },
   {
     title: "Explore",

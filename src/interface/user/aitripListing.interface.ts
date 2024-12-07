@@ -17,10 +17,10 @@ interface HotelOption {
   }
   
   interface Place {
-    placeName: string;
+    placeName?: string;
     placeDetails: string;
-    placeImageUrl: string;
-    geoCoordinates: string;
+    placeImageUrl?: string;
+    geoCoordinates?: string;
     ticketPricing: string;
     time: string;
   }

@@ -81,7 +81,7 @@ const PlacesToVisit: React.FC<{ trip: Trip | null }> = ({ trip }) => {
                   return (
                     <Card key={timeOfDay} className="overflow-hidden">
                       <div className="relative h-48">
-                        {placeData.placeImageUrl &&
+                        {placeData?.placeImageUrl &&
                           photoUrls[day]?.[timeOfDay] && (
                             <img
                               src={photoUrls[day][timeOfDay]}
@@ -92,24 +92,24 @@ const PlacesToVisit: React.FC<{ trip: Trip | null }> = ({ trip }) => {
                       </div>
                       <CardContent className="p-4 space-y-3">
                         <h4 className="font-semibold capitalize">
-                          {timeOfDay}: {placeData.placeName}
+                          {timeOfDay}: {placeData?.placeName} 
                         </h4>
                         <p className="text-sm text-gray-600">
-                          {placeData.placeDetails}
+                          {placeData?.placeDetails}
                         </p>
                         <div className="flex items-center gap-2 text-sm text-gray-500">
                           <Clock size={16} />
-                          {placeData.time}
+                          {placeData?.time}
                         </div>
-                        {placeData.geoCoordinates && (
+                        {placeData?.geoCoordinates && (
                           <div className="flex items-center gap-2 text-sm text-gray-500">
                             <MapPin size={16} />
-                            {placeData.geoCoordinates}
+                            {placeData?.geoCoordinates}
                           </div>
                         )}
-                        {placeData.ticketPricing && (
+                        {placeData?.ticketPricing && (
                           <p className="text-sm font-medium">
-                            Entry: {placeData.ticketPricing}
+                            Entry: {placeData?.ticketPricing}
                           </p>
                         )}
                       </CardContent>

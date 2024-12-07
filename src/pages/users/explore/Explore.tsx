@@ -71,7 +71,7 @@ const Explore = () => {
       <div className="relative">
         <img
           className="h-[300px] sm:h-[400px] md:h-[400px] w-full object-cover"
-          src="images/explore.jpg"
+          src="images/tripImages/explore.jpg"
           alt="Explore background"
         />
         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-white px-4">

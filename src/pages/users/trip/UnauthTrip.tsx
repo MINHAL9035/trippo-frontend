@@ -60,10 +60,10 @@ const UnauthTrip = () => {
         </div>
 
         <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-12 mt-12">
-          <div className="w-full max-w-md rounded-sm shadow-lg overflow-hidden">
+          <div className="w-full max-w-md rounded-lg shadow-md overflow-hidden">
             <div>
               <img
-                src="images/aiTripCreate.jpg"
+                src="images/tripImages/aiTripCreate.jpg"
                 alt="AI Trip Planning"
                 className="w-full h-60 object-cover "
               />
@@ -82,10 +82,10 @@ const UnauthTrip = () => {
               </div>
             </div>
           </div>
-          <div className="w-full max-w-md  rounded-sm shadow-lg overflow-hidden">
+          <div className="w-full max-w-md rounded-lg shadow-md overflow-hidden">
             <div>
               <img
-                src="images/buildTripScratch.jpg"
+                src="images/tripImages/buildTripScratch.jpg"
                 alt="Build Your Trip"
                 className="w-full h-60 object-cover"
               />
